@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Scholar's Notes</title>
+  <!-- v12 asset mapping:
+    cat-angry.png = 最近文章第一张，已换成“手托脸/无聊小猫”
+    cat-smile.png = 最近文章第三张，嘴巴已补红色
+    paper-left-edge.png = 近期更新左侧撕纸打孔边
+    其余猫猫和 tape-pink 已使用透明处理版本
+  -->
   <!-- v10: small icons enlarged -->
   <!--
     图片对照表：不要改文件名
@@ -744,11 +750,11 @@
     }
 
     .tags-card .side-cat {
-      right: -12px;
-      top: -8px;
-      width: 100px;
-      height: 76px;
-      z-index: 7;
+      right: -18px;
+      top: -14px;
+      width: 112px;
+      height: 84px;
+      z-index: 8;
     }
 
     .tag-cloud {
@@ -806,7 +812,7 @@
 
     .recent-card {
       position: relative;
-      padding: 22px 22px 18px 42px;
+      padding: 22px 24px 18px 46px;
       border-radius: 12px;
       background: rgba(255,253,246,.97);
       clip-path: none;
@@ -816,21 +822,27 @@
     .recent-card::after {
       content: "";
       position: absolute;
-      left: -2px;
-      top: 52px;
-      width: 18px;
-      height: calc(100% - 72px);
-      background: radial-gradient(circle, rgba(140,128,115,.22) 0 4.5px, transparent 5px) center top / 18px 28px repeat-y;
+      left: -26px;
+      top: 34px;
+      width: 58px;
+      height: calc(100% - 44px);
+      background: url("./assets/paper-left-edge.png") left top / 100% 100% no-repeat;
+      pointer-events: none;
+      opacity: .95;
+      z-index: 0;
     }
 
     .recent-card .side-cat {
-      right: 8px;
-      top: 10px;
-      width: 82px;
-      height: 62px;
+      right: 0px;
+      top: 4px;
+      width: 92px;
+      height: 70px;
+      z-index: 5;
     }
 
     .recent-list {
+      position: relative;
+      z-index: 2;
       display: grid;
       gap: 10px;
       list-style: none;
@@ -956,13 +968,13 @@
     }
 
     .footer-left-cat {
-      width: 94px;
-      height: 70px;
+      width: 108px;
+      height: 78px;
     }
 
     .footer-right-cat {
-      width: 112px;
-      height: 72px;
+      width: 124px;
+      height: 82px;
     }
 
     .footer-tape {
