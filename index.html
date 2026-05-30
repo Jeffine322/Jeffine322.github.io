@@ -4,6 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Scholar's Notes</title>
+  <!-- v10: small icons enlarged -->
+  <!--
+    图片对照表：不要改文件名
+    logo-cat.png          = 左上角 logo
+    cat-small.png         = 顶部 Keep Learning 便签小猫
+    hero-cat.png          = 首页大标题右侧写字猫
+    cat-angry.png         = 最近文章 1
+    cat-cry.png           = 最近文章 2
+    cat-smile.png         = 最近文章 3
+    cat-note.png          = Note to self 右下角
+    cat-alert.png         = 主题 Tags 右上角小猫
+    cat-mini.png          = 近期更新右上角小猫
+    cat-head.png          = 页脚 Stay curious 左侧小猫
+    cat-peek.png          = hero 区右上角小装饰
+    footer-ribbon-cat.png = 页脚粉色胶带右侧小猫
+  -->
+
 
   <!-- 线上字体：先不用额外下载字体；如果加载失败，会自动回退到系统字体 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -108,6 +125,7 @@
       width: min(1500px, calc(100% - 40px));
       min-width: 1180px;
       margin: 0 auto;
+      padding-top: 14px;
       padding-bottom: 28px;
     }
 
@@ -116,7 +134,7 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      height: 76px;
+      height: 88px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -140,8 +158,8 @@
     }
 
     .brand img {
-      width: 58px;
-      height: 48px;
+      width: 74px;
+      height: 60px;
       object-fit: contain;
       filter: drop-shadow(0 3px 4px rgba(80,60,45,.12));
     }
@@ -202,10 +220,10 @@
 
     .top-note img {
       position: absolute;
-      right: -8px;
-      top: -22px;
-      width: 62px;
-      height: 42px;
+      right: -14px;
+      top: -34px;
+      width: 98px;
+      height: 68px;
       object-fit: contain;
       filter: drop-shadow(0 3px 4px rgba(80,60,45,.14));
     }
@@ -258,8 +276,8 @@
 
     /* hero */
     .hero {
-      min-height: 348px;
-      padding: 52px 40px 22px;
+      min-height: 358px;
+      padding: 56px 42px 22px;
     }
 
     .hero::before {
@@ -277,21 +295,21 @@
     .hero-inner {
       position: relative;
       display: grid;
-      grid-template-columns: 1fr 300px;
+      grid-template-columns: minmax(0, 1fr) 255px;
       align-items: center;
       min-height: 205px;
       z-index: 5;
     }
 
     .hero-copy {
-      padding-left: 60px;
+      padding-left: 52px;
     }
 
     .hero-title {
       position: relative;
       display: inline-block;
       font-family: var(--font-title);
-      font-size: 86px;
+      font-size: 78px;
       line-height: 1;
       letter-spacing: 9px;
       color: #3a2617;
@@ -314,14 +332,14 @@
     }
 
     .hero-sub {
-      margin: 26px 0 0 118px;
+      margin: 26px 0 0 96px;
       font-size: 21px;
       color: #5f554d;
       letter-spacing: 2px;
     }
 
     .hero-en {
-      margin: 14px 0 0 158px;
+      margin: 14px 0 0 132px;
       font-family: var(--font-logo);
       font-size: 28px;
       font-weight: 700;
@@ -329,12 +347,26 @@
       letter-spacing: 1px;
     }
 
-    .hero-cat {
-      width: 295px;
-      height: 235px;
+    .hero-peek-cat {
+      position: absolute;
+      right: 20px;
+      top: 74px;
+      width: 84px;
+      height: 64px;
       object-fit: contain;
+      z-index: 9;
+      filter: drop-shadow(0 3px 4px rgba(80,60,45,.13));
+      transform: rotate(-4deg);
+      pointer-events: none;
+    }
+
+    .hero-cat {
+      width: 245px;
+      height: 218px;
+      object-fit: contain;
+      object-position: center;
       filter: drop-shadow(0 10px 12px rgba(80,60,45,.17));
-      transform: translateY(6px);
+      transform: translate(-10px, 8px);
     }
 
     .doodle {
@@ -688,61 +720,64 @@
       position: absolute;
       right: 18px;
       top: 17px;
-      width: 64px;
-      height: 48px;
+      width: 92px;
+      height: 70px;
       object-fit: contain;
       filter: drop-shadow(0 3px 4px rgba(80,60,45,.12));
-      z-index: 4;
+      z-index: 6;
     }
 
     .tags-card {
-      padding: 22px 22px 20px;
-      min-height: 220px;
+      padding: 22px 24px 22px;
+      min-height: 230px;
+      overflow: visible;
     }
 
     .tags-card .side-title {
       font-size: 30px;
-      margin-bottom: 20px;
-      padding-right: 82px;
+      margin-bottom: 22px;
+      padding-right: 96px;
     }
 
     .tags-card .side-title::after {
-      right: 18px;
+      right: 12px;
     }
 
     .tags-card .side-cat {
-      right: 18px;
-      top: 16px;
-      width: 64px;
-      height: 48px;
+      right: -12px;
+      top: -8px;
+      width: 100px;
+      height: 76px;
+      z-index: 7;
     }
 
     .tag-cloud {
       display: grid;
-      grid-template-columns: 112px 112px;
-      gap: 16px 20px;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 16px;
       justify-content: start;
       align-items: start;
-      padding-left: 8px;
+      padding: 2px 4px 0 2px;
     }
 
     .tag-cloud a {
       position: relative;
-      width: 112px;
-      height: 46px;
+      min-width: 0;
+      height: 54px;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0;
+      padding: 0 14px;
       text-align: center;
-      border-radius: 8px;
+      border-radius: 10px;
       border: 2px dashed currentColor;
       font-family: var(--font-title);
       font-size: 22px;
-      letter-spacing: 4px;
-      box-shadow: 0 5px 10px rgba(82,62,38,.08);
+      letter-spacing: 3px;
+      box-shadow: 0 6px 12px rgba(82,62,38,.08);
       transition: transform .18s ease, box-shadow .18s ease;
       background-clip: padding-box;
+      background-image: linear-gradient(rgba(255,255,255,.28), rgba(255,255,255,.05));
     }
 
     .tag-cloud a:hover {
@@ -752,71 +787,97 @@
     .tag-cloud a::before {
       content: "";
       position: absolute;
-      top: -8px;
-      left: 50%;
-      width: 38px;
-      height: 11px;
-      transform: translateX(-50%) rotate(-4deg);
+      inset: 6px;
+      border-radius: 8px;
+      border: 1px dashed rgba(255,255,255,.85);
+      pointer-events: none;
       opacity: .9;
-      background-size: cover;
-      background-position: center;
-      filter: drop-shadow(0 2px 2px rgba(82,62,38,.06));
     }
 
-    .tag-cloud a:nth-child(1) { transform: rotate(-2deg); }
+    .tag-cloud a:nth-child(1) { transform: rotate(-3deg); }
     .tag-cloud a:nth-child(2) { transform: rotate(2deg); }
-    .tag-cloud a:nth-child(3) { transform: rotate(-1.5deg); }
-    .tag-cloud a:nth-child(4) { transform: rotate(1.5deg); }
+    .tag-cloud a:nth-child(3) { transform: rotate(-2deg); }
+    .tag-cloud a:nth-child(4) { transform: rotate(2deg); }
 
-    .tag-cloud a:nth-child(1)::before { background-image: url("./assets/tape-pink.png"); }
-    .tag-cloud a:nth-child(2)::before { background-image: url("./assets/tape-blue.png"); }
-    .tag-cloud a:nth-child(3)::before { background-image: url("./assets/tape-yellow.png"); }
-    .tag-cloud a:nth-child(4)::before { background-image: url("./assets/tape-purple.png"); }
-
-    .tag-cloud a:hover:nth-child(1) { transform: rotate(-2deg) translateY(-2px) scale(1.03); }
+    .tag-cloud a:hover:nth-child(1) { transform: rotate(-3deg) translateY(-2px) scale(1.03); }
     .tag-cloud a:hover:nth-child(2) { transform: rotate(2deg) translateY(-2px) scale(1.03); }
-    .tag-cloud a:hover:nth-child(3) { transform: rotate(-1.5deg) translateY(-2px) scale(1.03); }
-    .tag-cloud a:hover:nth-child(4) { transform: rotate(1.5deg) translateY(-2px) scale(1.03); }
+    .tag-cloud a:hover:nth-child(3) { transform: rotate(-2deg) translateY(-2px) scale(1.03); }
+    .tag-cloud a:hover:nth-child(4) { transform: rotate(2deg) translateY(-2px) scale(1.03); }
 
     .recent-card {
-      border-radius: 15px;
-      clip-path: polygon(0 3%, 100% 0, 100% 96%, 97% 98%, 90% 96%, 84% 99%, 77% 96%, 70% 98%, 62% 96%, 55% 99%, 48% 96%, 41% 98%, 34% 96%, 27% 99%, 20% 96%, 13% 98%, 6% 96%, 0 98%);
+      position: relative;
+      padding: 22px 22px 18px 42px;
+      border-radius: 12px;
+      background: rgba(255,253,246,.97);
+      clip-path: none;
+      overflow: visible;
+    }
+
+    .recent-card::after {
+      content: "";
+      position: absolute;
+      left: -2px;
+      top: 52px;
+      width: 18px;
+      height: calc(100% - 72px);
+      background: radial-gradient(circle, rgba(140,128,115,.22) 0 4.5px, transparent 5px) center top / 18px 28px repeat-y;
+    }
+
+    .recent-card .side-cat {
+      right: 8px;
+      top: 10px;
+      width: 82px;
+      height: 62px;
     }
 
     .recent-list {
       display: grid;
-      gap: 11px;
+      gap: 10px;
       list-style: none;
+      padding-right: 6px;
     }
 
     .recent-list li {
       display: grid;
       grid-template-columns: 17px minmax(0, 1fr) auto;
-      gap: 7px;
-      align-items: center;
+      gap: 8px;
+      align-items: start;
       padding-bottom: 10px;
       border-bottom: 1.5px dashed rgba(80,60,45,.14);
       font-size: 14px;
       color: #5f574f;
+      line-height: 1.55;
+    }
+
+    .recent-list li span {
+      display: block;
+      white-space: normal;
+      overflow: visible;
+      word-break: break-word;
     }
 
     .recent-list li::before {
       content: "○";
       color: var(--pink);
       font-weight: 900;
+      line-height: 1.2;
+      margin-top: 2px;
     }
 
     .recent-list time {
       color: #8a8077;
       font-size: 12px;
+      line-height: 1.6;
+      padding-left: 4px;
     }
 
     .note-card {
       min-height: 215px;
-      padding: 32px 28px 26px;
+      padding: 30px 26px 24px;
       background: rgba(255,226,226,.92);
       border-radius: 0;
       clip-path: polygon(0 4%, 96% 0, 100% 8%, 98% 92%, 88% 96%, 77% 94%, 66% 98%, 54% 94%, 42% 98%, 30% 94%, 18% 97%, 7% 94%, 0 96%);
+      overflow: hidden;
     }
 
     .note-card::before {
@@ -824,25 +885,43 @@
     }
 
     .note-card .side-title {
+      display: inline-block;
       margin-bottom: 18px;
+      font-family: var(--font-logo);
+      font-size: 33px;
+      line-height: 1;
+      color: #2b2119;
+      letter-spacing: 1px;
+      transform: rotate(-2deg);
+    }
+
+    .note-card .side-title::after {
+      left: -2px;
+      right: -12px;
+      bottom: -7px;
+      height: 6px;
+      background: rgba(239,157,168,.72);
     }
 
     .note-card p {
       position: relative;
       z-index: 2;
+      max-width: 210px;
+      padding-top: 2px;
       font-family: var(--font-title);
-      font-size: 24px;
-      line-height: 1.9;
+      font-size: 20px;
+      line-height: 1.85;
       letter-spacing: 2px;
       color: #8c4b4e;
+      white-space: nowrap;
     }
 
     .note-cat {
       position: absolute;
       right: 10px;
-      bottom: 6px;
-      width: 128px;
-      height: 118px;
+      bottom: 8px;
+      width: 118px;
+      height: 106px;
       object-fit: contain;
       filter: drop-shadow(0 4px 5px rgba(80,60,45,.12));
       z-index: 1;
@@ -877,13 +956,13 @@
     }
 
     .footer-left-cat {
-      width: 58px;
-      height: 44px;
+      width: 94px;
+      height: 70px;
     }
 
     .footer-right-cat {
-      width: 75px;
-      height: 48px;
+      width: 112px;
+      height: 72px;
     }
 
     .footer-tape {
@@ -958,7 +1037,20 @@
         font-size: 16px;
       }
 
-      .hero-cat {
+      .hero-peek-cat {
+      position: absolute;
+      right: 20px;
+      top: 74px;
+      width: 84px;
+      height: 64px;
+      object-fit: contain;
+      z-index: 9;
+      filter: drop-shadow(0 3px 4px rgba(80,60,45,.13));
+      transform: rotate(-4deg);
+      pointer-events: none;
+    }
+
+    .hero-cat {
         display: none;
       }
 
@@ -995,7 +1087,7 @@
       </nav>
 
       <div class="top-note">
-        <img src="./assets/cat-alert.png" alt="">
+        <img src="./assets/cat-small.png" alt="">
         <span>Keep<br>Learning!</span>
       </div>
     </header>
@@ -1012,6 +1104,7 @@
           <img class="tape topic-tape-blue" src="./assets/tape-blue.png" alt="">
           <img class="tape topic-tape-yellow" src="./assets/tape-yellow.png" alt="">
           <img class="tape topic-tape-purple" src="./assets/tape-purple.png" alt="">
+          <img class="hero-peek-cat" src="./assets/cat-peek.png" alt="">
 
           <div class="hero-inner">
             <div class="hero-copy">
@@ -1114,7 +1207,7 @@
         </section>
 
         <section class="side-card recent-card">
-          <img class="side-cat" src="./assets/cat-peek.png" alt="" onerror="this.style.display='none'">
+          <img class="side-cat" src="./assets/cat-mini.png" alt="" onerror="this.style.display='none'">
           <h2 class="side-title">近期更新</h2>
           <ul class="recent-list">
             <li><span>第一次整理免杀学习路线</span><time>05/12</time></li>
@@ -1126,7 +1219,7 @@
         </section>
 
         <section id="about" class="side-card note-card">
-          <h2 class="side-title">Note to self ♥</h2>
+          <h2 class="side-title">Note to self ❤</h2>
           <p>慢慢来，比较快。<br>每天进步一点点，<br>未来会感谢现在的自己！</p>
           <img class="note-cat" src="./assets/cat-note.png" alt="">
         </section>
@@ -1135,7 +1228,7 @@
 
     <footer class="footer" id="archive">
       <span>
-        <img class="footer-left-cat" src="./assets/cat-mini.png" alt="">
+        <img class="footer-left-cat" src="./assets/cat-head.png" alt="">
         Stay curious · Keep learning.
       </span>
       <span>© 2026 Scholar's Notes · 个人学习博客</span>
@@ -1148,3 +1241,4 @@
   </div>
 </body>
 </html>
+
