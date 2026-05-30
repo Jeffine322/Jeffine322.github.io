@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     /*
-      Scholar's Notes v15
+      Scholar's Notes v18
       只需要把这个 index.html 放在仓库根目录。
       图片全部读取 ./assets/ 里的固定文件名：
       cat-alert.png / cat-angry.png / cat-cry.png / cat-head.png / cat-mini.png
@@ -18,6 +18,12 @@
       footer-ribbon-cat.png / hero-cat.png / keep-note-sticker.png / logo-cat.png
       note-self-bg.png / paper-left-edge.png / sidebar-updates-bg.png
       tape-pink.png / tape-blue.png / tape-yellow.png / tape-purple.png
+
+      本版调整：
+      1. 最近文章三张卡片顶部仍使用 clip-pink / clip-blue / clip-yellow。
+      2. 首页四个主题入口改为直接使用 topic-paper-pink/blue/yellow/purple 四张手撕纸素材。
+      3. 近期更新与 Note to self 继续读取对应背景图 assets/sidebar-updates-bg.png 与 assets/note-self-bg.png。
+      4. 提高“近期更新”文字可读性，增加柔和底色。
     */
 
     :root{
@@ -318,53 +324,56 @@
     .topic-grid{
       display:grid;
       grid-template-columns:repeat(4,1fr);
-      gap:27px;
-      margin:24px 12px 0 36px;
+      gap:26px;
+      margin:22px 10px 0 34px;
       position:relative;
       z-index:4;
     }
     .topic-card{
       position:relative;
-      height:88px;
+      height:106px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      padding:0 26px;
-      border-radius:8px;
-      border:1.5px dashed rgba(80,60,45,.12);
-      font-family:var(--font-title);
-      font-size:42px;
-      letter-spacing:7px;
-      box-shadow:0 10px 18px rgba(90,70,42,.10);
-      transition:transform .18s ease, box-shadow .18s ease;
+      padding:12px 24px 16px 30px;
+      border:none;
+      border-radius:0;
+      background-repeat:no-repeat;
+      background-position:center;
+      background-size:100% 100%;
+      box-shadow:none;
       overflow:visible;
+      font-family:var(--font-title);
+      font-size:40px;
+      letter-spacing:7px;
+      transition:transform .18s ease, filter .18s ease;
+      filter:drop-shadow(0 12px 15px rgba(86,66,42,.12));
     }
     .topic-card:hover{
       transform:translateY(-5px) rotate(-1deg);
-      box-shadow:0 16px 28px rgba(90,70,42,.15);
+      filter:drop-shadow(0 18px 20px rgba(86,66,42,.16));
     }
-    .topic-card::before{
-      content:"";
-      position:absolute;
-      top:-31px;
-      left:50%;
-      width:56px;
-      height:78px;
-      transform:translateX(-50%) rotate(-7deg);
-      background:center/contain no-repeat;
-      z-index:5;
-      opacity:.94;
-      filter:drop-shadow(0 5px 6px rgba(80,60,45,.10));
-      pointer-events:none;
+    .topic-card.kill{
+      color:#c96a78;
+      background-image:url("./assets/topic-paper-pink.png");
     }
-    .topic-card.kill{background:rgba(255,232,235,.88);color:#c96a78}
-    .topic-card.pentest{background:rgba(229,241,255,.90);color:#5d94cf}
-    .topic-card.open{background:rgba(255,241,185,.90);color:#b48a1d}
-    .topic-card.other{background:rgba(238,227,255,.92);color:#8f74be}
-    .topic-card.kill::before{background-image:url("./assets/clip-pink.png")}
-    .topic-card.pentest::before{background-image:url("./assets/clip-blue.png");transform:translateX(-50%) rotate(6deg)}
-    .topic-card.open::before{background-image:url("./assets/clip-yellow.png");transform:translateX(-50%) rotate(-4deg)}
-    .topic-card.other::before{background-image:url("./assets/clip-purple.png");transform:translateX(-50%) rotate(6deg)}
+    .topic-card.pentest{
+      color:#5d94cf;
+      background-image:url("./assets/topic-paper-blue.png");
+    }
+    .topic-card.open{
+      color:#b48a1d;
+      background-image:url("./assets/topic-paper-yellow.png");
+    }
+    .topic-card.other{
+      color:#8f74be;
+      background-image:url("./assets/topic-paper-purple.png");
+    }
+    .topic-card span{
+      position:relative;
+      z-index:2;
+      text-shadow:0 1px 0 rgba(255,255,255,.75);
+    }
     .topic-card .arrow{
       width:42px;
       height:42px;
@@ -374,9 +383,10 @@
       place-items:center;
       font-family:sans-serif;
       font-size:25px;
-      opacity:.58;
+      opacity:.62;
       letter-spacing:0;
       transform:rotate(-4deg);
+      background:rgba(255,255,255,.18);
     }
     .hero-note{
       margin-top:22px;
@@ -593,13 +603,14 @@
     .recent-card{
       min-height:300px;
       padding:42px 34px 30px 58px;
-      background:transparent;
+      background:#fffdf7;
+      border-radius:24px;
       box-shadow:none;
     }
     .recent-card::before{
       content:"";
       position:absolute;
-      inset:-22px -18px -18px -34px;
+      inset:-26px -22px -22px -38px;
       background:url("./assets/sidebar-updates-bg.png") center/100% 100% no-repeat;
       z-index:0;
       pointer-events:none;
@@ -626,18 +637,22 @@
       display:grid;
       gap:9px;
       list-style:none;
+      padding:8px 10px 8px 6px;
       padding-right:6px;
+      border-radius:14px;
+      background:rgba(255,252,248,.62);
+      box-shadow:inset 0 0 0 1px rgba(120,95,65,.05);
     }
     .recent-list li{
       display:grid;
       grid-template-columns:18px minmax(0,1fr) 48px;
-      gap:8px;
+      gap:10px;
       align-items:start;
-      padding-bottom:9px;
-      border-bottom:1px dashed rgba(80,60,45,.12);
-      font-size:14px;
-      color:#574f48;
-      line-height:1.55;
+      padding-bottom:10px;
+      border-bottom:1px dashed rgba(80,60,45,.14);
+      font-size:15px;
+      color:#433930;
+      line-height:1.68;
     }
     .recent-list li::before{
       content:"○";
@@ -651,14 +666,15 @@
     }
     .recent-list time{
       text-align:right;
-      color:#7d746b;
-      font-size:12px;
+      color:#70665d;
+      font-size:13px;
+      font-weight:700;
     }
 
     .self-card{
       min-height:238px;
       padding:35px 30px 28px;
-      background:transparent;
+      background:#fdecef;
       box-shadow:none;
     }
     .self-card::before{
@@ -686,7 +702,8 @@
       line-height:1.85;
       letter-spacing:4px;
       color:#8a4d55;
-      max-width:240px;
+      max-width:250px;
+      text-shadow:0 1px 0 rgba(255,255,255,.55);
     }
     .note-cat{
       position:absolute;
