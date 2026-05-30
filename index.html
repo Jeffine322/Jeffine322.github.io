@@ -4,1101 +4,787 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Scholar's Notes</title>
-  <!-- v14: top-left logo-cat enlarged. v13: title spacing fixed + top width expanded. v12 asset mapping:
-    cat-angry.png = 最近文章第一张，已换成“手托脸/无聊小猫”
-    cat-smile.png = 最近文章第三张，嘴巴已补红色
-    paper-left-edge.png = 近期更新左侧撕纸打孔边
-    其余猫猫和 tape-pink 已使用透明处理版本
-  -->
-  <!-- v10: small icons enlarged -->
-  <!--
-    图片对照表：不要改文件名
-    logo-cat.png          = 左上角 logo
-    cat-small.png         = 顶部 Keep Learning 便签小猫
-    hero-cat.png          = 首页大标题右侧写字猫
-    cat-angry.png         = 最近文章 1
-    cat-cry.png           = 最近文章 2
-    cat-smile.png         = 最近文章 3
-    cat-note.png          = Note to self 右下角
-    cat-alert.png         = 主题 Tags 右上角小猫
-    cat-mini.png          = 近期更新右上角小猫
-    cat-head.png          = 页脚 Stay curious 左侧小猫
-    cat-peek.png          = hero 区右上角小装饰
-    footer-ribbon-cat.png = 页脚粉色胶带右侧小猫
-  -->
-
-
-  <!-- 线上字体：先不用额外下载字体；如果加载失败，会自动回退到系统字体 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     /*
-      目录结构必须是：
-      index.html
-      assets/
-        cat-alert.png
-        cat-angry.png
-        cat-head.png
-        cat-mini.png
-        cat-note.png
-        cat-peek.png
-        cat-small.png
-        cat-smile.png
-        cat-cry.png
-        footer-ribbon-cat.png
-        hero-cat.png
-        logo-cat.png
-        tape-blue.png
-        tape-pink.png
-        tape-purple.png
-        tape-yellow.png
+      Scholar's Notes v15
+      只需要把这个 index.html 放在仓库根目录。
+      图片全部读取 ./assets/ 里的固定文件名：
+      cat-alert.png / cat-angry.png / cat-cry.png / cat-head.png / cat-mini.png
+      cat-note.png / cat-peek.png / cat-small.png / cat-smile.png
+      clip-pink.png / clip-blue.png / clip-yellow.png / clip-purple.png
+      footer-ribbon-cat.png / hero-cat.png / keep-note-sticker.png / logo-cat.png
+      note-self-bg.png / paper-left-edge.png / sidebar-updates-bg.png
+      tape-pink.png / tape-blue.png / tape-yellow.png / tape-purple.png
     */
 
-    :root {
-      --bg: #f8f2e7;
-      --paper: #fffdf6;
-      --paper-2: #fbf4e8;
-      --ink: #2b2119;
-      --muted: #7c6f62;
-
-      --pink: #ef9da8;
-      --pink-soft: #ffe1e2;
-
-      --blue: #6f9ed2;
-      --blue-soft: #dcecff;
-
-      --yellow: #e8bd4f;
-      --yellow-soft: #fff1bd;
-
-      --purple: #9b82c7;
-      --purple-soft: #eadff7;
-
-      --shadow: 0 14px 30px rgba(82, 62, 38, .15);
-      --soft-shadow: 0 8px 18px rgba(82, 62, 38, .11);
-
-      --font-logo: "Caveat", "Comic Sans MS", cursive;
-      --font-title: "Ma Shan Zheng", "ZCOOL KuaiLe", "Microsoft YaHei", cursive;
-      --font-hand: "ZCOOL KuaiLe", "Ma Shan Zheng", "Microsoft YaHei", cursive;
-      --font-body: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    :root{
+      --bg:#f8f2e8;
+      --paper:#fffdf6;
+      --ink:#2c2118;
+      --muted:#786d60;
+      --line:#eadfcc;
+      --pink:#e88d9d;
+      --pink-soft:#ffe8eb;
+      --blue:#6fa1d9;
+      --blue-soft:#e5f1ff;
+      --yellow:#d9ac2f;
+      --yellow-soft:#fff1b9;
+      --purple:#9a7bd1;
+      --purple-soft:#eee3ff;
+      --shadow:0 14px 28px rgba(86,66,42,.12);
+      --font-title:"Ma Shan Zheng","Long Cang","ZCOOL XiaoWei",cursive;
+      --font-hand:"Caveat","Long Cang","Ma Shan Zheng",cursive;
+      --font-body:"ZCOOL XiaoWei","Microsoft YaHei","PingFang SC",sans-serif;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      min-height: 100vh;
-      color: var(--ink);
-      font-family: var(--font-body);
-      background:
-        radial-gradient(circle at 10% 8%, rgba(239,157,168,.16), transparent 26%),
-        radial-gradient(circle at 92% 18%, rgba(111,158,210,.13), transparent 26%),
-        linear-gradient(90deg, rgba(111,158,210,.08) 1px, transparent 1px),
-        linear-gradient(rgba(111,158,210,.08) 1px, transparent 1px),
-        var(--bg);
-      background-size: auto, auto, 30px 30px, 30px 30px, auto;
-      overflow-x: auto;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background:
-        radial-gradient(circle at 20% 20%, rgba(93, 69, 41, .035) 0 1px, transparent 1px),
-        radial-gradient(circle at 80% 40%, rgba(93, 69, 41, .03) 0 1px, transparent 1px);
-      background-size: 7px 7px, 11px 11px;
-      mix-blend-mode: multiply;
-      opacity: .75;
-      z-index: 100;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .site {
-      width: min(1680px, calc(100% - 24px));
-      min-width: 1180px;
-      margin: 0 auto;
-      padding-top: 14px;
-      padding-bottom: 28px;
-    }
-
-    /* 顶部导航 */
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      height: 96px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 42px;
-      background: rgba(255,253,246,.86);
-      backdrop-filter: blur(14px);
-      border-bottom: 1.5px dashed rgba(120, 150, 175, .42);
-      box-shadow: 0 7px 22px rgba(80, 60, 40, .06);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      font-family: var(--font-logo);
-      font-size: 43px;
-      font-weight: 700;
-      line-height: 1;
-      transform: rotate(-1deg);
-      white-space: nowrap;
-    }
-
-    .brand img {
-      width: 92px;
-      height: 74px;
-      object-fit: contain;
-      filter: drop-shadow(0 3px 4px rgba(80,60,45,.12));
-    }
-
-    .nav {
-      display: flex;
-      gap: 58px;
-      align-items: center;
-      font-size: 21px;
-      font-weight: 700;
-    }
-
-    .nav a {
-      position: relative;
-      padding: 10px 0;
-    }
-
-    .nav a.active::after,
-    .nav a:hover::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      bottom: 2px;
-      width: 54px;
-      height: 5px;
-      border-radius: 999px;
-      background: rgba(239,157,168,.85);
-      transform: translateX(-50%) rotate(-2deg);
-    }
-
-    .top-note {
-      position: relative;
-      width: 145px;
-      height: 64px;
-      display: grid;
-      place-items: center;
-      font-family: var(--font-logo);
-      font-size: 22px;
-      line-height: .95;
-      color: #9e4e58;
-      background: rgba(255,253,246,.78);
-      border: 1px solid rgba(239,157,168,.36);
-      box-shadow: 0 6px 12px rgba(80,60,45,.09);
-      transform: rotate(-4deg);
-    }
-
-    .top-note::before {
-      content: "";
-      position: absolute;
-      left: 12px;
-      top: -11px;
-      width: 76px;
-      height: 22px;
-      background: rgba(239,157,168,.52);
-      background-image: repeating-linear-gradient(45deg, rgba(255,255,255,.25) 0 7px, transparent 7px 14px);
-      transform: rotate(4deg);
-    }
-
-    .top-note img {
-      position: absolute;
-      right: -8px;
-      top: -30px;
-      width: 96px;
-      height: 66px;
-      object-fit: contain;
-      filter: drop-shadow(0 3px 4px rgba(80,60,45,.14));
-    }
-
-    /* 页面左右布局 */
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 360px;
-      gap: 26px;
-      margin-top: 24px;
-      align-items: start;
-    }
-
-    .main {
-      min-width: 0;
-    }
-
-    .paper {
-      position: relative;
-      background-color: rgba(255,253,246,.94);
-      border: 1px solid rgba(86, 70, 50, .08);
-      box-shadow: var(--shadow);
-      overflow: visible;
-    }
-
-    .grid-paper {
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      min-height:100vh;
+      color:var(--ink);
+      font-family:var(--font-body);
+      background-color:var(--bg);
       background-image:
-        linear-gradient(90deg, rgba(111,158,210,.12) 1px, transparent 1px),
-        linear-gradient(rgba(111,158,210,.11) 1px, transparent 1px);
-      background-size: 28px 28px;
+        radial-gradient(circle at 12px 12px, rgba(120,95,65,.07) 1.2px, transparent 1.3px),
+        linear-gradient(90deg, rgba(111,153,206,.12) 1px, transparent 1px),
+        linear-gradient(rgba(111,153,206,.10) 1px, transparent 1px),
+        radial-gradient(circle at 12% 12%, rgba(232,141,157,.13), transparent 28%),
+        radial-gradient(circle at 90% 18%, rgba(111,153,206,.10), transparent 28%);
+      background-size:18px 18px, 28px 28px, 28px 28px, auto, auto;
+      overflow-x:auto;
+    }
+    a{color:inherit;text-decoration:none}
+    img{display:block;max-width:100%}
+
+    .site{
+      width:min(1680px,calc(100% - 24px));
+      min-width:1180px;
+      margin:0 auto;
+      padding:14px 0 28px;
     }
 
-    .torn-hero {
-      clip-path: polygon(
-        0 2%, 2% 0, 5% 2%, 8% .4%, 12% 2%, 16% .3%, 20% 2%, 24% .2%, 29% 1.9%, 34% .3%,
-        39% 2.1%, 44% .2%, 50% 1.9%, 55% .4%, 60% 2.2%, 66% .2%, 72% 2%, 78% .3%, 84% 2.1%,
-        90% .3%, 96% 2%, 100% .5%,
-        100% 95.2%, 97% 97.5%, 93% 95.6%, 89% 97.8%, 84% 95.5%, 80% 97.6%, 75% 95.5%,
-        70% 97.8%, 65% 95.6%, 60% 97.5%, 55% 95.3%, 50% 97.6%, 45% 95.7%, 40% 97.9%,
-        35% 95.4%, 30% 97.4%, 25% 95.6%, 20% 97.8%, 15% 95.3%, 10% 97.6%, 5% 95.5%, 0 97.2%
+    /* 顶部 */
+    .topbar{
+      height:96px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 42px;
+      position:relative;
+      z-index:20;
+      background:rgba(255,253,246,.82);
+      border-bottom:1.5px dashed rgba(85,70,50,.18);
+      backdrop-filter:blur(12px);
+      box-shadow:0 7px 18px rgba(84,68,45,.08);
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      font-family:var(--font-hand);
+      font-size:43px;
+      font-weight:700;
+      letter-spacing:1px;
+      transform:rotate(-1.2deg);
+    }
+    .brand img{
+      width:92px;
+      height:74px;
+      object-fit:contain;
+      filter:drop-shadow(0 3px 4px rgba(80,60,45,.12));
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      gap:54px;
+      margin-left:80px;
+      font-size:22px;
+      font-weight:800;
+      letter-spacing:2px;
+    }
+    .nav a{
+      position:relative;
+      padding:12px 2px;
+    }
+    .nav a::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      bottom:4px;
+      width:0;
+      height:6px;
+      border-radius:999px;
+      background:rgba(232,141,157,.78);
+      transform:translateX(-50%) rotate(-2deg);
+      transition:.2s ease;
+    }
+    .nav a:hover::after,.nav a.active::after{width:64%}
+
+    .top-note{
+      position:relative;
+      width:178px;
+      height:82px;
+      margin-right:22px;
+      background:rgba(255,253,246,.78);
+      border:1.3px solid rgba(232,141,157,.38);
+      transform:rotate(-3deg);
+      box-shadow:0 9px 16px rgba(92,72,48,.08);
+    }
+    .top-note::before{
+      content:"";
+      position:absolute;
+      left:10px;
+      top:-18px;
+      width:112px;
+      height:30px;
+      background:url("./assets/tape-pink.png") center/cover no-repeat;
+      opacity:.88;
+      transform:rotate(2deg);
+      z-index:1;
+    }
+    .top-note img{
+      position:absolute;
+      right:-8px;
+      top:-30px;
+      width:96px;
+      height:66px;
+      object-fit:contain;
+      z-index:3;
+      filter:drop-shadow(0 3px 4px rgba(80,60,45,.12));
+    }
+    .top-note span{
+      position:absolute;
+      left:33px;
+      top:21px;
+      font-family:var(--font-hand);
+      font-size:25px;
+      line-height:.9;
+      color:#a65a63;
+      z-index:2;
+      transform:rotate(-2deg);
+    }
+
+    /* 主体布局 */
+    .layout{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 380px;
+      gap:30px;
+      margin-top:30px;
+      align-items:start;
+    }
+    .main{min-width:0}
+    .sidebar{
+      display:flex;
+      flex-direction:column;
+      gap:26px;
+      min-width:0;
+    }
+
+    /* 通用纸张 */
+    .paper{
+      position:relative;
+      background:rgba(255,253,246,.94);
+      box-shadow:var(--shadow);
+    }
+    .torn{
+      clip-path:polygon(
+        0 2%,3% 0,6% 2%,9% .5%,12% 2%,16% .2%,20% 2%,24% .4%,28% 1.8%,32% .2%,36% 2%,
+        40% .4%,44% 1.9%,48% .3%,52% 2%,56% .3%,60% 1.8%,64% .2%,68% 2%,72% .4%,
+        76% 1.8%,80% .3%,84% 2%,88% .4%,92% 1.8%,96% .2%,100% 2%,
+        100% 94.5%,96% 97%,92% 95%,88% 97.5%,84% 95.2%,80% 97%,76% 95%,72% 97.4%,
+        68% 95.3%,64% 97%,60% 95%,56% 97.4%,52% 95.2%,48% 97%,44% 95%,40% 97.5%,
+        36% 95.3%,32% 97%,28% 95%,24% 97.3%,20% 95.2%,16% 97%,12% 95%,8% 97.3%,4% 95.4%,0 97%
       );
     }
 
-    .torn-card {
-      clip-path: polygon(
-        0 7%, 8% 2%, 16% 5%, 25% 1%, 35% 4%, 46% 0, 57% 4%, 68% 1%, 78% 5%, 88% 1%, 100% 4%,
-        98% 92%, 88% 96%, 78% 93%, 68% 97%, 57% 94%, 46% 98%, 35% 94%, 25% 97%, 15% 94%, 6% 97%, 0 93%
-      );
-    }
-
-    /* hero */
-    .hero {
-      min-height: 358px;
-      padding: 56px 42px 22px;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      left: 16px;
-      top: 54px;
-      width: 14px;
-      height: 226px;
-      background:
-        radial-gradient(circle, rgba(110, 95, 80, .22) 0 6px, transparent 6.6px) 0 0 / 14px 34px repeat-y;
-      z-index: 3;
-    }
-
-    .hero-inner {
-      position: relative;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 250px;
-      align-items: center;
-      min-height: 205px;
-      z-index: 5;
-    }
-
-    .hero-copy {
-      padding-left: 42px;
-    }
-
-    .hero-title {
-      position: relative;
-      display: inline-block;
-      font-family: var(--font-title);
-      font-size: 78px;
-      line-height: 1;
-      letter-spacing: 3px;
-      color: #3a2617;
-      transform: rotate(-1.2deg);
-      white-space: nowrap;
-      text-shadow: 0 2px 0 rgba(255,255,255,.85);
-    }
-
-    .hero-title::after {
-      content: "";
-      position: absolute;
-      left: -10px;
-      right: 4px;
-      bottom: -8px;
-      height: 13px;
-      border-radius: 999px;
-      background: rgba(239,157,168,.67);
-      transform: rotate(-1.5deg);
-      z-index: -1;
-    }
-
-    .hero-sub {
-      margin: 26px 0 0 96px;
-      font-size: 21px;
-      color: #5f554d;
-      letter-spacing: 2px;
-    }
-
-    .hero-en {
-      margin: 14px 0 0 132px;
-      font-family: var(--font-logo);
-      font-size: 28px;
-      font-weight: 700;
-      color: #4c4038;
-      letter-spacing: 1px;
-    }
-
-    .hero-peek-cat {
-      position: absolute;
-      right: 20px;
-      top: 74px;
-      width: 84px;
-      height: 64px;
-      object-fit: contain;
-      z-index: 9;
-      filter: drop-shadow(0 3px 4px rgba(80,60,45,.13));
-      transform: rotate(-4deg);
-      pointer-events: none;
-    }
-
-    .hero-cat {
-      width: 245px;
-      height: 218px;
-      object-fit: contain;
-      object-position: center;
-      filter: drop-shadow(0 10px 12px rgba(80,60,45,.17));
-      transform: translate(-10px, 8px);
-    }
-
-    .doodle {
-      position: absolute;
-      color: var(--pink);
-      font-family: var(--font-logo);
-      font-size: 28px;
-      font-weight: 700;
-      z-index: 10;
-      pointer-events: none;
-    }
-
-    .d1 { left: 385px; top: 34px; transform: rotate(-12deg); }
-    .d2 { right: 282px; top: 74px; transform: rotate(12deg); }
-    .d3 { left: 298px; bottom: 54px; transform: rotate(-8deg); }
-
-    .tape {
-      position: absolute;
-      z-index: 8;
-      object-fit: cover;
-      pointer-events: none;
-      opacity: .86;
-      filter: drop-shadow(0 3px 3px rgba(80,60,45,.08));
-    }
-
-    .tape.hero-pink {
-      left: -20px;
-      top: 38px;
-      width: 172px;
-      height: 32px;
-      transform: rotate(-13deg);
-    }
-
-    .topic-tape-blue {
-      left: 350px;
-      bottom: 102px;
-      width: 112px;
-      height: 27px;
-      transform: rotate(6deg);
-    }
-
-    .topic-tape-yellow {
-      right: 313px;
-      bottom: 102px;
-      width: 112px;
-      height: 27px;
-      transform: rotate(-4deg);
-    }
-
-    .topic-tape-purple {
-      right: 126px;
-      bottom: 102px;
-      width: 112px;
-      height: 27px;
-      transform: rotate(5deg);
-    }
-
-    .topics {
-      position: relative;
-      z-index: 6;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 28px;
-      padding: 4px 20px 12px;
-    }
-
-    .topic-card {
-      position: relative;
-      min-height: 108px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 28px 18px;
-      font-family: var(--font-title);
-      font-size: 45px;
-      letter-spacing: 6px;
-      box-shadow: var(--soft-shadow);
-      border: 1px dashed rgba(80,60,45,.14);
-      transition: transform .18s ease, box-shadow .18s ease;
-    }
-
-    .topic-card:hover {
-      transform: translateY(-5px) rotate(-1deg);
-      box-shadow: 0 16px 28px rgba(82,62,38,.16);
-    }
-
-    .topic-card::before {
-      content: "";
-      position: absolute;
-      top: -14px;
-      left: 50%;
-      width: 82px;
-      height: 22px;
-      background-size: cover;
-      background-position: center;
-      transform: translateX(-50%) rotate(2deg);
-      opacity: .88;
-    }
-
-    .topic-card.kill {
-      background: var(--pink-soft);
-      color: #c35e6d;
-    }
-    .topic-card.kill::before { background-image: url("./assets/tape-pink.png"); }
-
-    .topic-card.pentest {
-      background: var(--blue-soft);
-      color: #4a88c3;
-    }
-    .topic-card.pentest::before { background-image: url("./assets/tape-blue.png"); }
-
-    .topic-card.open {
-      background: var(--yellow-soft);
-      color: #ae7d12;
-    }
-    .topic-card.open::before { background-image: url("./assets/tape-yellow.png"); }
-
-    .topic-card.other {
-      background: var(--purple-soft);
-      color: #7662a9;
-    }
-    .topic-card.other::before { background-image: url("./assets/tape-purple.png"); }
-
-    .topic-arrow {
-      width: 38px;
-      height: 38px;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      border: 3px solid currentColor;
-      font-family: Arial, sans-serif;
-      font-size: 22px;
-      font-weight: 900;
-      opacity: .68;
-    }
-
-    .hero-note {
-      position: relative;
-      z-index: 5;
-      padding: 10px 0 16px;
-      text-align: center;
-      color: #665d55;
-      font-size: 18px;
-      letter-spacing: 2px;
-    }
-
-    .hero-note::after {
-      content: "";
-      position: absolute;
-      left: 260px;
-      right: 260px;
-      bottom: 9px;
-      height: 2px;
-      border-bottom: 2px dashed rgba(239,157,168,.55);
-    }
-
-    /* 最近文章 */
-    .section-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 28px 0 16px;
-      padding: 0 10px;
-    }
-
-    .section-title {
-      position: relative;
-      font-family: var(--font-title);
-      font-size: 32px;
-      letter-spacing: 5px;
-      transform: rotate(-1deg);
-    }
-
-    .section-title::after {
-      content: "";
-      position: absolute;
-      left: -6px;
-      right: -8px;
-      bottom: -6px;
-      height: 7px;
-      border-radius: 999px;
-      background: rgba(239,157,168,.72);
-      z-index: -1;
-    }
-
-    .more {
-      font-size: 15px;
-      color: var(--muted);
-      letter-spacing: 1px;
-    }
-
-    .post-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 20px;
-    }
-
-    .post {
-      position: relative;
-      min-height: 176px;
-      display: grid;
-      grid-template-columns: 125px minmax(0, 1fr);
-      gap: 14px;
-      align-items: center;
-      padding: 22px 20px 18px;
-      background: rgba(255,253,246,.92);
-      border: 1px solid rgba(80,60,45,.08);
-      border-radius: 18px;
-      box-shadow: var(--soft-shadow);
-      overflow: visible;
-      transition: transform .18s ease, box-shadow .18s ease;
-    }
-
-    .post:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 14px 26px rgba(82,62,38,.14);
-    }
-
-    .post::before {
-      content: "";
-      position: absolute;
-      left: 18px;
-      top: -12px;
-      width: 90px;
-      height: 26px;
-      background-size: cover;
-      background-position: center;
-      transform: rotate(-7deg);
-      opacity: .88;
-      z-index: 2;
-    }
-
-    .post:nth-child(1)::before { background-image: url("./assets/tape-pink.png"); }
-    .post:nth-child(2)::before { background-image: url("./assets/tape-blue.png"); }
-    .post:nth-child(3)::before { background-image: url("./assets/tape-yellow.png"); }
-
-    .post-img {
-      width: 118px;
-      height: 118px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: visible;
-    }
-
-    .post-img img {
-      max-width: 118px;
-      max-height: 118px;
-      object-fit: contain;
-      filter: drop-shadow(0 5px 6px rgba(80,60,45,.15));
-    }
-
-    .post-body {
-      min-width: 0;
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 48px;
-      padding: 4px 12px;
-      margin-bottom: 8px;
-      border-radius: 7px;
-      color: #fff;
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .tag.kill { background: #f09aa5; }
-    .tag.pentest { background: #7facde; }
-    .tag.open { background: #e3b238; }
-
-    .post h3 {
-      font-size: 20px;
-      line-height: 1.4;
-      margin-bottom: 7px;
-      letter-spacing: 1px;
-    }
-
-    .post p {
-      font-size: 14px;
-      line-height: 1.75;
-      color: #5f574f;
-    }
-
-    .post-foot {
-      margin-top: 10px;
-      display: flex;
-      justify-content: space-between;
-      color: #8b8178;
-      font-size: 13px;
-    }
-
-    /* 右侧栏 */
-    .sidebar {
-      display: grid;
-      gap: 20px;
-    }
-
-    .side-card {
-      position: relative;
-      padding: 26px 24px 24px;
-      min-height: 145px;
-      background: rgba(255,253,246,.92);
-      border: 1px solid rgba(80,60,45,.08);
-      border-radius: 18px;
-      box-shadow: var(--soft-shadow);
-      overflow: visible;
-    }
-
-    .side-card::before {
-      content: "";
-      position: absolute;
-      top: -13px;
-      right: 42px;
-      width: 104px;
-      height: 28px;
-      background-image: url("./assets/tape-pink.png");
-      background-size: cover;
-      background-position: center;
-      transform: rotate(7deg);
-      opacity: .88;
-      z-index: 3;
-    }
-
-    .side-title {
-      position: relative;
-      display: inline-block;
-      margin-bottom: 22px;
-      font-family: var(--font-logo);
-      font-size: 33px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      transform: rotate(-1deg);
-    }
-
-    .side-title::after {
-      content: "";
-      position: absolute;
-      left: -4px;
-      right: -7px;
-      bottom: -5px;
-      height: 6px;
-      border-radius: 999px;
-      background: rgba(239,157,168,.7);
-      z-index: -1;
-    }
-
-    .side-cat {
-      position: absolute;
-      right: 18px;
-      top: 17px;
-      width: 92px;
-      height: 70px;
-      object-fit: contain;
-      filter: drop-shadow(0 3px 4px rgba(80,60,45,.12));
-      z-index: 6;
-    }
-
-    .tags-card {
-      padding: 22px 24px 22px;
-      min-height: 230px;
-      overflow: visible;
-    }
-
-    .tags-card .side-title {
-      font-size: 30px;
-      margin-bottom: 22px;
-      padding-right: 96px;
-    }
-
-    .tags-card .side-title::after {
-      right: 12px;
-    }
-
-    .tags-card .side-cat {
-      right: -18px;
-      top: -14px;
-      width: 112px;
-      height: 84px;
-      z-index: 8;
-    }
-
-    .tag-cloud {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px 16px;
-      justify-content: start;
-      align-items: start;
-      padding: 2px 4px 0 2px;
-    }
-
-    .tag-cloud a {
-      position: relative;
-      min-width: 0;
-      height: 54px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 14px;
-      text-align: center;
-      border-radius: 10px;
-      border: 2px dashed currentColor;
-      font-family: var(--font-title);
-      font-size: 22px;
-      letter-spacing: 3px;
-      box-shadow: 0 6px 12px rgba(82,62,38,.08);
-      transition: transform .18s ease, box-shadow .18s ease;
-      background-clip: padding-box;
-      background-image: linear-gradient(rgba(255,255,255,.28), rgba(255,255,255,.05));
-    }
-
-    .tag-cloud a:hover {
-      box-shadow: 0 8px 14px rgba(82,62,38,.12);
-    }
-
-    .tag-cloud a::before {
-      content: "";
-      position: absolute;
-      inset: 6px;
-      border-radius: 8px;
-      border: 1px dashed rgba(255,255,255,.85);
-      pointer-events: none;
-      opacity: .9;
-    }
-
-    .tag-cloud a:nth-child(1) { transform: rotate(-3deg); }
-    .tag-cloud a:nth-child(2) { transform: rotate(2deg); }
-    .tag-cloud a:nth-child(3) { transform: rotate(-2deg); }
-    .tag-cloud a:nth-child(4) { transform: rotate(2deg); }
-
-    .tag-cloud a:hover:nth-child(1) { transform: rotate(-3deg) translateY(-2px) scale(1.03); }
-    .tag-cloud a:hover:nth-child(2) { transform: rotate(2deg) translateY(-2px) scale(1.03); }
-    .tag-cloud a:hover:nth-child(3) { transform: rotate(-2deg) translateY(-2px) scale(1.03); }
-    .tag-cloud a:hover:nth-child(4) { transform: rotate(2deg) translateY(-2px) scale(1.03); }
-
-    .recent-card {
-      position: relative;
-      padding: 22px 24px 18px 46px;
-      border-radius: 12px;
-      background: rgba(255,253,246,.97);
-      clip-path: none;
-      overflow: visible;
-    }
-
-    .recent-card::after {
-      content: "";
-      position: absolute;
-      left: -26px;
-      top: 34px;
-      width: 58px;
-      height: calc(100% - 44px);
-      background: url("./assets/paper-left-edge.png") left top / 100% 100% no-repeat;
-      pointer-events: none;
-      opacity: .95;
-      z-index: 0;
-    }
-
-    .recent-card .side-cat {
-      right: 0px;
-      top: 4px;
-      width: 92px;
-      height: 70px;
-      z-index: 5;
-    }
-
-    .recent-list {
-      position: relative;
-      z-index: 2;
-      display: grid;
-      gap: 10px;
-      list-style: none;
-      padding-right: 6px;
-    }
-
-    .recent-list li {
-      display: grid;
-      grid-template-columns: 17px minmax(0, 1fr) auto;
-      gap: 8px;
-      align-items: start;
-      padding-bottom: 10px;
-      border-bottom: 1.5px dashed rgba(80,60,45,.14);
-      font-size: 14px;
-      color: #5f574f;
-      line-height: 1.55;
-    }
-
-    .recent-list li span {
-      display: block;
-      white-space: normal;
-      overflow: visible;
-      word-break: break-word;
-    }
-
-    .recent-list li::before {
-      content: "○";
-      color: var(--pink);
-      font-weight: 900;
-      line-height: 1.2;
-      margin-top: 2px;
-    }
-
-    .recent-list time {
-      color: #8a8077;
-      font-size: 12px;
-      line-height: 1.6;
-      padding-left: 4px;
-    }
-
-    .note-card {
-      min-height: 215px;
-      padding: 30px 26px 24px;
-      background: rgba(255,226,226,.92);
-      border-radius: 0;
-      clip-path: polygon(0 4%, 96% 0, 100% 8%, 98% 92%, 88% 96%, 77% 94%, 66% 98%, 54% 94%, 42% 98%, 30% 94%, 18% 97%, 7% 94%, 0 96%);
-      overflow: hidden;
-    }
-
-    .note-card::before {
-      display: none;
-    }
-
-    .note-card .side-title {
-      display: inline-block;
-      margin-bottom: 18px;
-      font-family: var(--font-logo);
-      font-size: 33px;
-      line-height: 1;
-      color: #2b2119;
-      letter-spacing: 1px;
-      transform: rotate(-2deg);
-    }
-
-    .note-card .side-title::after {
-      left: -2px;
-      right: -12px;
-      bottom: -7px;
-      height: 6px;
-      background: rgba(239,157,168,.72);
-    }
-
-    .note-card p {
-      position: relative;
-      z-index: 2;
-      max-width: 210px;
-      padding-top: 2px;
-      font-family: var(--font-title);
-      font-size: 20px;
-      line-height: 1.85;
-      letter-spacing: 2px;
-      color: #8c4b4e;
-      white-space: nowrap;
-    }
-
-    .note-cat {
-      position: absolute;
-      right: 10px;
-      bottom: 8px;
-      width: 118px;
-      height: 106px;
-      object-fit: contain;
-      filter: drop-shadow(0 4px 5px rgba(80,60,45,.12));
-      z-index: 1;
-    }
-
-    /* footer */
-    .footer {
-      margin-top: 30px;
-      min-height: 86px;
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      gap: 20px;
-      align-items: center;
-      padding: 0 28px;
-      font-family: var(--font-logo);
-      font-size: 23px;
-      font-weight: 700;
-      color: #466c9c;
-      border-top: 1px dashed rgba(111,158,210,.42);
-    }
-
-    .footer span {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .footer img {
-      object-fit: contain;
-      filter: drop-shadow(0 3px 4px rgba(80,60,45,.13));
-    }
-
-    .footer-left-cat {
-      width: 108px;
-      height: 78px;
-    }
-
-    .footer-right-cat {
-      width: 124px;
-      height: 82px;
-    }
-
-    .footer-tape {
-      display: inline-flex;
-      min-width: 295px;
-      height: 38px;
-      align-items: center;
-      justify-content: center;
-      padding: 0 18px;
-      background-image: url("./assets/tape-pink.png");
-      background-size: cover;
-      background-position: center;
-      color: #354f75;
-      transform: rotate(-1deg);
-    }
-
-    @media (max-width: 900px) {
-      .site {
-        min-width: 0;
-        width: min(100% - 18px, 1500px);
-      }
-
-      .topbar {
-        height: auto;
-        min-height: 72px;
-        flex-wrap: wrap;
-        gap: 10px;
-        padding: 12px 16px;
-      }
-
-      .brand {
-        font-size: 32px;
-      }
-
-      .nav {
-        width: 100%;
-        justify-content: space-around;
-        gap: 8px;
-        font-size: 17px;
-      }
-
-      .top-note {
-        display: none;
-      }
-
-      .layout {
-        grid-template-columns: 1fr;
-      }
-
-      .hero {
-        min-height: auto;
-        padding: 38px 18px 24px;
-      }
-
-      .hero-inner {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-copy {
-        padding-left: 28px;
-      }
-
-      .hero-title {
-        font-size: 48px;
-        letter-spacing: 4px;
-        white-space: normal;
-      }
-
-      .hero-sub,
-      .hero-en {
-        margin-left: 24px;
-        font-size: 16px;
-      }
-
-      .hero-peek-cat {
-      position: absolute;
-      right: 20px;
-      top: 74px;
-      width: 84px;
-      height: 64px;
-      object-fit: contain;
-      z-index: 9;
-      filter: drop-shadow(0 3px 4px rgba(80,60,45,.13));
-      transform: rotate(-4deg);
-      pointer-events: none;
-    }
-
-    .hero-cat {
-        display: none;
-      }
-
-      .topics {
-        grid-template-columns: 1fr;
-      }
-
-      .post-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .footer {
-        grid-template-columns: 1fr;
-        font-size: 18px;
-      }
+    /* Hero */
+    .hero{
+      min-height:470px;
+      padding:58px 42px 30px 48px;
+      overflow:visible;
+      background-color:rgba(255,253,246,.95);
+      background-image:
+        linear-gradient(90deg,rgba(111,153,206,.13) 1px,transparent 1px),
+        linear-gradient(rgba(111,153,206,.11) 1px,transparent 1px);
+      background-size:28px 28px;
+    }
+    .hero::before{
+      content:"";
+      position:absolute;
+      left:19px;
+      top:70px;
+      width:18px;
+      height:300px;
+      background:radial-gradient(circle,rgba(95,85,70,.23) 0 6px,transparent 6.5px) center top/18px 44px repeat-y;
+      z-index:2;
+    }
+    .hero::after{
+      content:"";
+      position:absolute;
+      left:-15px;
+      top:34px;
+      width:190px;
+      height:34px;
+      background:url("./assets/tape-pink.png") center/cover no-repeat;
+      opacity:.82;
+      transform:rotate(-12deg);
+      z-index:4;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 250px;
+      gap:10px;
+      align-items:start;
+      position:relative;
+      z-index:3;
+    }
+    .hero-copy{
+      padding-left:42px;
+      text-align:center;
+      min-width:0;
+    }
+    .hero-title{
+      display:inline-block;
+      margin-top:26px;
+      font-family:var(--font-title);
+      font-size:82px;
+      line-height:1;
+      letter-spacing:3px;
+      white-space:nowrap;
+      color:#3a261a;
+      transform:rotate(-1.2deg);
+      position:relative;
+      text-shadow:0 2px 0 rgba(255,255,255,.9);
+    }
+    .hero-title::after{
+      content:"";
+      position:absolute;
+      left:-10px;
+      right:4px;
+      bottom:-11px;
+      height:12px;
+      border-radius:99px;
+      background:rgba(232,141,157,.55);
+      transform:rotate(-2deg);
+      z-index:-1;
+    }
+    .hero-desc{
+      margin-top:25px;
+      font-size:20px;
+      color:#5c554e;
+      letter-spacing:2px;
+    }
+    .hero-en{
+      margin-top:18px;
+      font-family:var(--font-hand);
+      font-size:27px;
+      color:#4f463e;
+      letter-spacing:1px;
+    }
+    .hero-cat{
+      width:285px;
+      height:245px;
+      object-fit:contain;
+      margin-top:8px;
+      margin-left:-35px;
+      filter:drop-shadow(0 10px 10px rgba(80,60,45,.13));
+    }
+    .hero-peek{
+      position:absolute;
+      right:25px;
+      top:105px;
+      width:74px;
+      height:54px;
+      object-fit:contain;
+      z-index:6;
+      transform:rotate(4deg);
+      filter:drop-shadow(0 3px 5px rgba(80,60,45,.1));
+    }
+    .doodle{
+      position:absolute;
+      font-family:var(--font-hand);
+      color:rgba(232,141,157,.8);
+      z-index:6;
+      user-select:none;
+      pointer-events:none;
+    }
+    .doodle.d1{left:380px;top:55px;font-size:35px;transform:rotate(-8deg)}
+    .doodle.d2{right:315px;top:88px;font-size:36px;transform:rotate(12deg)}
+    .doodle.d3{left:338px;bottom:76px;font-size:35px;transform:rotate(-10deg)}
+
+    .topic-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:27px;
+      margin:24px 12px 0 36px;
+      position:relative;
+      z-index:4;
+    }
+    .topic-card{
+      position:relative;
+      height:88px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 26px;
+      border-radius:8px;
+      border:1.5px dashed rgba(80,60,45,.12);
+      font-family:var(--font-title);
+      font-size:42px;
+      letter-spacing:7px;
+      box-shadow:0 10px 18px rgba(90,70,42,.10);
+      transition:transform .18s ease, box-shadow .18s ease;
+      overflow:visible;
+    }
+    .topic-card:hover{
+      transform:translateY(-5px) rotate(-1deg);
+      box-shadow:0 16px 28px rgba(90,70,42,.15);
+    }
+    .topic-card::before{
+      content:"";
+      position:absolute;
+      top:-31px;
+      left:50%;
+      width:56px;
+      height:78px;
+      transform:translateX(-50%) rotate(-7deg);
+      background:center/contain no-repeat;
+      z-index:5;
+      opacity:.94;
+      filter:drop-shadow(0 5px 6px rgba(80,60,45,.10));
+      pointer-events:none;
+    }
+    .topic-card.kill{background:rgba(255,232,235,.88);color:#c96a78}
+    .topic-card.pentest{background:rgba(229,241,255,.90);color:#5d94cf}
+    .topic-card.open{background:rgba(255,241,185,.90);color:#b48a1d}
+    .topic-card.other{background:rgba(238,227,255,.92);color:#8f74be}
+    .topic-card.kill::before{background-image:url("./assets/clip-pink.png")}
+    .topic-card.pentest::before{background-image:url("./assets/clip-blue.png");transform:translateX(-50%) rotate(6deg)}
+    .topic-card.open::before{background-image:url("./assets/clip-yellow.png");transform:translateX(-50%) rotate(-4deg)}
+    .topic-card.other::before{background-image:url("./assets/clip-purple.png");transform:translateX(-50%) rotate(6deg)}
+    .topic-card .arrow{
+      width:42px;
+      height:42px;
+      border:3px solid currentColor;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      font-family:sans-serif;
+      font-size:25px;
+      opacity:.58;
+      letter-spacing:0;
+      transform:rotate(-4deg);
+    }
+    .hero-note{
+      margin-top:22px;
+      text-align:center;
+      font-size:20px;
+      color:#5a5048;
+      letter-spacing:4px;
+    }
+
+    /* 标题 */
+    .section-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin:32px 6px 18px;
+    }
+    .section-title,.side-title{
+      display:inline-block;
+      position:relative;
+      font-family:var(--font-title);
+      font-size:35px;
+      letter-spacing:6px;
+      transform:rotate(-1.2deg);
+    }
+    .section-title::after,.side-title::after{
+      content:"";
+      position:absolute;
+      left:-6px;
+      right:-10px;
+      bottom:-7px;
+      height:7px;
+      border-radius:999px;
+      background:rgba(232,141,157,.68);
+      z-index:-1;
+    }
+    .more{
+      font-size:16px;
+      color:#746a61;
+    }
+
+    /* 文章 */
+    .post-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:24px;
+    }
+    .post{
+      position:relative;
+      min-height:165px;
+      display:grid;
+      grid-template-columns:145px minmax(0,1fr);
+      gap:12px;
+      padding:24px 22px 20px;
+      border-radius:16px;
+      background:rgba(255,253,246,.93);
+      box-shadow:0 10px 22px rgba(86,66,42,.10);
+      border:1px solid rgba(80,60,45,.07);
+      overflow:visible;
+      transition:.18s ease;
+    }
+    .post:hover{transform:translateY(-4px)}
+    .post::before{
+      content:"";
+      position:absolute;
+      left:54px;
+      top:-42px;
+      width:58px;
+      height:82px;
+      background:center/contain no-repeat;
+      opacity:.96;
+      z-index:3;
+      pointer-events:none;
+      filter:drop-shadow(0 6px 7px rgba(80,60,45,.12));
+    }
+    .post:nth-child(1)::before{
+      background-image:url("./assets/clip-pink.png");
+      transform:rotate(-8deg);
+    }
+    .post:nth-child(2)::before{
+      background-image:url("./assets/clip-blue.png");
+      transform:rotate(7deg);
+    }
+    .post:nth-child(3)::before{
+      background-image:url("./assets/clip-yellow.png");
+      transform:rotate(-6deg);
+    }
+    .post-img{
+      width:128px;
+      height:118px;
+      object-fit:contain;
+      align-self:center;
+      justify-self:center;
+      filter:drop-shadow(0 6px 5px rgba(80,60,45,.12));
+    }
+    .post-body{min-width:0}
+    .tag{
+      display:inline-block;
+      padding:5px 13px;
+      border-radius:7px;
+      color:#fff;
+      font-size:14px;
+      font-weight:800;
+      margin-bottom:8px;
+    }
+    .tag.kill{background:#ec91a0}
+    .tag.pentest{background:#77aadb}
+    .tag.open{background:#dbad30}
+    .post h3{
+      font-size:21px;
+      line-height:1.42;
+      letter-spacing:1px;
+      margin-bottom:8px;
+    }
+    .post p{
+      font-size:15px;
+      color:#5e554e;
+      line-height:1.75;
+    }
+    .post-foot{
+      display:flex;
+      justify-content:space-between;
+      margin-top:13px;
+      color:#80766d;
+      font-size:13px;
+    }
+
+    /* 分类区块：保证卡片点击能动 */
+    .topic-sections{
+      margin-top:34px;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:18px;
+    }
+    .topic-section{
+      position:relative;
+      min-height:118px;
+      padding:18px 18px 16px;
+      border-radius:16px;
+      background:rgba(255,253,246,.78);
+      border:1.5px dashed rgba(80,60,45,.13);
+      box-shadow:0 8px 18px rgba(86,66,42,.08);
+      scroll-margin-top:120px;
+    }
+    .topic-section h3{
+      font-family:var(--font-title);
+      font-size:30px;
+      letter-spacing:4px;
+      margin-bottom:8px;
+    }
+    .topic-section p{
+      color:#635950;
+      font-size:14px;
+      line-height:1.7;
+    }
+
+    /* 侧边栏 */
+    .side-card{
+      position:relative;
+      overflow:visible;
+      padding:26px 28px;
+      border-radius:18px;
+      background:rgba(255,253,246,.94);
+      box-shadow:var(--shadow);
+    }
+
+    .tags-card{
+      min-height:246px;
+    }
+    .tags-card .side-title{
+      font-size:32px;
+      padding-right:90px;
+      margin-bottom:25px;
+    }
+    .tags-card .side-cat{
+      position:absolute;
+      right:-18px;
+      top:-18px;
+      width:112px;
+      height:84px;
+      object-fit:contain;
+      z-index:8;
+      filter:drop-shadow(0 4px 5px rgba(80,60,45,.12));
+    }
+    .tag-cloud{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:15px 16px;
+    }
+    .tag-cloud a{
+      height:54px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:11px;
+      border:2px dashed currentColor;
+      font-family:var(--font-title);
+      font-size:23px;
+      letter-spacing:4px;
+      background:rgba(255,255,255,.35);
+      position:relative;
+      box-shadow:0 6px 12px rgba(82,62,38,.08);
+      transition:.18s ease;
+    }
+    .tag-cloud a:hover{transform:translateY(-2px) rotate(-1deg)}
+    .tag-cloud a::after{
+      content:"";
+      position:absolute;
+      inset:6px;
+      border:1px dashed rgba(255,255,255,.9);
+      border-radius:8px;
+      pointer-events:none;
+    }
+
+    .recent-card{
+      min-height:300px;
+      padding:42px 34px 30px 58px;
+      background:transparent;
+      box-shadow:none;
+    }
+    .recent-card::before{
+      content:"";
+      position:absolute;
+      inset:-22px -18px -18px -34px;
+      background:url("./assets/sidebar-updates-bg.png") center/100% 100% no-repeat;
+      z-index:0;
+      pointer-events:none;
+      filter:drop-shadow(0 14px 18px rgba(86,66,42,.13));
+    }
+    .recent-card .side-title,.recent-list,.recent-card .side-cat{
+      position:relative;
+      z-index:2;
+    }
+    .recent-card .side-title{
+      font-size:33px;
+      margin-bottom:22px;
+    }
+    .recent-card .side-cat{
+      position:absolute;
+      right:14px;
+      top:30px;
+      width:84px;
+      height:62px;
+      object-fit:contain;
+      filter:drop-shadow(0 4px 5px rgba(80,60,45,.12));
+    }
+    .recent-list{
+      display:grid;
+      gap:9px;
+      list-style:none;
+      padding-right:6px;
+    }
+    .recent-list li{
+      display:grid;
+      grid-template-columns:18px minmax(0,1fr) 48px;
+      gap:8px;
+      align-items:start;
+      padding-bottom:9px;
+      border-bottom:1px dashed rgba(80,60,45,.12);
+      font-size:14px;
+      color:#574f48;
+      line-height:1.55;
+    }
+    .recent-list li::before{
+      content:"○";
+      color:var(--pink);
+      font-weight:900;
+      margin-top:1px;
+    }
+    .recent-list span{
+      white-space:normal;
+      word-break:break-word;
+    }
+    .recent-list time{
+      text-align:right;
+      color:#7d746b;
+      font-size:12px;
+    }
+
+    .self-card{
+      min-height:238px;
+      padding:35px 30px 28px;
+      background:transparent;
+      box-shadow:none;
+    }
+    .self-card::before{
+      content:"";
+      position:absolute;
+      inset:-20px -20px -24px -20px;
+      background:url("./assets/note-self-bg.png") center/100% 100% no-repeat;
+      z-index:0;
+      pointer-events:none;
+      filter:drop-shadow(0 15px 20px rgba(86,66,42,.12));
+    }
+    .self-card .side-title,.self-card p,.note-cat{
+      position:relative;
+      z-index:2;
+    }
+    .self-card .side-title{
+      font-family:var(--font-hand);
+      font-size:37px;
+      letter-spacing:1px;
+      margin-bottom:20px;
+    }
+    .self-card p{
+      font-family:var(--font-title);
+      font-size:23px;
+      line-height:1.85;
+      letter-spacing:4px;
+      color:#8a4d55;
+      max-width:240px;
+    }
+    .note-cat{
+      position:absolute;
+      right:10px;
+      bottom:12px;
+      width:128px;
+      height:112px;
+      object-fit:contain;
+      filter:drop-shadow(0 5px 6px rgba(80,60,45,.14));
+    }
+
+    /* 页脚 */
+    .footer{
+      margin-top:44px;
+      height:88px;
+      display:grid;
+      grid-template-columns:1fr auto 1fr;
+      gap:18px;
+      align-items:center;
+      border-top:1.5px dashed rgba(111,153,206,.33);
+      font-family:var(--font-hand);
+      color:#355f91;
+      font-size:21px;
+      letter-spacing:2px;
+      position:relative;
+      overflow:visible;
+    }
+    .footer::after{
+      content:"";
+      position:absolute;
+      right:38px;
+      top:19px;
+      width:330px;
+      height:44px;
+      background:url("./assets/tape-pink.png") center/100% 100% no-repeat;
+      opacity:.78;
+      z-index:-1;
+      transform:rotate(-1deg);
+    }
+    .footer-left,.footer-right{
+      display:flex;
+      align-items:center;
+      gap:18px;
+    }
+    .footer-left img{
+      width:108px;
+      height:78px;
+      object-fit:contain;
+      filter:drop-shadow(0 4px 4px rgba(80,60,45,.1));
+    }
+    .footer-right{
+      justify-content:flex-end;
+    }
+    .footer-right img{
+      width:124px;
+      height:82px;
+      object-fit:contain;
+      filter:drop-shadow(0 4px 4px rgba(80,60,45,.1));
+    }
+    .copyright{
+      text-align:center;
+      font-size:19px;
+    }
+
+    @media (max-width: 900px){
+      .site{min-width:0;width:calc(100% - 20px)}
+      .topbar{height:auto;min-height:92px;padding:16px;gap:18px;flex-wrap:wrap}
+      .brand{font-size:32px}
+      .nav{order:3;width:100%;justify-content:center;margin:0;gap:30px}
+      .top-note{display:none}
+      .layout{grid-template-columns:1fr}
+      .hero-grid{grid-template-columns:1fr}
+      .hero-title{font-size:54px;white-space:normal}
+      .hero-cat{margin:10px auto 0}
+      .topic-grid,.post-grid,.topic-sections{grid-template-columns:1fr}
+      .sidebar{display:grid;grid-template-columns:1fr;gap:18px}
+      .footer{grid-template-columns:1fr;height:auto;padding:20px 0;text-align:center}
+      .footer-left,.footer-right{justify-content:center}
     }
   </style>
 </head>
-
 <body>
   <div class="site">
 
     <header class="topbar">
-      <a class="brand" href="#">
-        <img src="./assets/logo-cat.png" alt="Scholar's Notes logo">
+      <a class="brand" href="#top" id="top">
+        <img src="./assets/logo-cat.png" alt="logo cat">
         <span>Scholar's Notes</span>
       </a>
 
-      <nav class="nav">
-        <a class="active" href="#">首页</a>
+      <nav class="nav" aria-label="主导航">
+        <a class="active" href="#top">首页</a>
         <a href="#posts">文章</a>
         <a href="#about">关于</a>
         <a href="#archive">归档</a>
       </nav>
 
-      <div class="top-note">
+      <div class="top-note" aria-hidden="true">
         <img src="./assets/cat-small.png" alt="">
         <span>Keep<br>Learning!</span>
       </div>
@@ -1107,44 +793,26 @@
     <div class="layout">
       <main class="main">
 
-        <section class="hero paper grid-paper torn-hero">
+        <section class="hero paper torn">
           <span class="doodle d1">♡</span>
           <span class="doodle d2">〃</span>
           <span class="doodle d3">♡</span>
+          <img class="hero-peek" src="./assets/cat-peek.png" alt="peek cat">
 
-          <img class="tape hero-pink" src="./assets/tape-pink.png" alt="">
-          <img class="tape topic-tape-blue" src="./assets/tape-blue.png" alt="">
-          <img class="tape topic-tape-yellow" src="./assets/tape-yellow.png" alt="">
-          <img class="tape topic-tape-purple" src="./assets/tape-purple.png" alt="">
-          <img class="hero-peek-cat" src="./assets/cat-peek.png" alt="">
-
-          <div class="hero-inner">
+          <div class="hero-grid">
             <div class="hero-copy">
               <h1 class="hero-title">思考·记录·成长</h1>
-              <p class="hero-sub">记录学习路上的点滴，也记录每一次理解与卡住。</p>
+              <p class="hero-desc">记录学习路上的点滴，也记录每一次理解与卡住。</p>
               <p class="hero-en">Ch.1 —— My Learning Blog / 个人学习簿 ♡</p>
             </div>
-
-            <img class="hero-cat" src="./assets/hero-cat.png" alt="写字猫猫">
+            <img class="hero-cat" src="./assets/hero-cat.png" alt="hero cat">
           </div>
 
-          <div class="topics">
-            <a class="topic-card kill torn-card" href="#kill">
-              <span>免杀</span>
-              <span class="topic-arrow">→</span>
-            </a>
-            <a class="topic-card pentest torn-card" href="#pentest">
-              <span>渗透</span>
-              <span class="topic-arrow">→</span>
-            </a>
-            <a class="topic-card open torn-card" href="#open">
-              <span>开源</span>
-              <span class="topic-arrow">→</span>
-            </a>
-            <a class="topic-card other torn-card" href="#other">
-              <span>其他</span>
-              <span class="topic-arrow">→</span>
-            </a>
+          <div class="topic-grid">
+            <a class="topic-card kill" href="#kill"><span>免杀</span><span class="arrow">→</span></a>
+            <a class="topic-card pentest" href="#pentest"><span>渗透</span><span class="arrow">→</span></a>
+            <a class="topic-card open" href="#open"><span>开源</span><span class="arrow">→</span></a>
+            <a class="topic-card other" href="#other"><span>其他</span><span class="arrow">→</span></a>
           </div>
 
           <p class="hero-note">♡ 点击进入各主题，开始记录我的学习过程</p>
@@ -1153,73 +821,76 @@
         <section id="posts">
           <div class="section-head">
             <h2 class="section-title">最近文章</h2>
-            <a class="more" href="#">查看更多 〉</a>
+            <a class="more" href="#archive">查看更多 〉</a>
           </div>
 
           <div class="post-grid">
             <article class="post">
-              <div class="post-img">
-                <img src="./assets/cat-angry.png" alt="">
-              </div>
+              <img class="post-img" src="./assets/cat-angry.png" alt="">
               <div class="post-body">
                 <span class="tag kill">免杀</span>
                 <h3>第一次整理免杀学习路线</h3>
                 <p>从基础概念到常见方法，整理一条适合自己的学习路径。</p>
-                <div class="post-foot">
-                  <time>2024-05-12</time>
-                  <span>💬 12</span>
-                </div>
+                <div class="post-foot"><time>2024-05-12</time><span>💬 12</span></div>
               </div>
             </article>
 
             <article class="post">
-              <div class="post-img">
-                <img src="./assets/cat-cry.png" alt="">
-              </div>
+              <img class="post-img" src="./assets/cat-cry.png" alt="">
               <div class="post-body">
                 <span class="tag pentest">渗透</span>
                 <h3>信息收集阶段的笔记</h3>
                 <p>整理信息收集的常用技巧与工具，打好渗透测试的第一步。</p>
-                <div class="post-foot">
-                  <time>2024-05-10</time>
-                  <span>💬 18</span>
-                </div>
+                <div class="post-foot"><time>2024-05-10</time><span>💬 18</span></div>
               </div>
             </article>
 
             <article class="post">
-              <div class="post-img">
-                <img src="./assets/cat-smile.png" alt="">
-              </div>
+              <img class="post-img" src="./assets/cat-smile.png" alt="">
               <div class="post-body">
                 <span class="tag open">开源</span>
                 <h3>最近在看的几个安全开源项目</h3>
-                <p>记录近期关注的几个安全相关开源项目及核心功能。</p>
-                <div class="post-foot">
-                  <time>2024-05-08</time>
-                  <span>💬 15</span>
-                </div>
+                <p>记录近期关注的几个安全开源项目及核心功能。</p>
+                <div class="post-foot"><time>2024-05-08</time><span>💬 15</span></div>
               </div>
             </article>
           </div>
-        </section>
 
+          <div class="topic-sections" id="archive">
+            <section class="topic-section" id="kill">
+              <h3 style="color:#c96a78">免杀</h3>
+              <p>记录免杀相关学习路线、基础概念、实验记录和踩坑复盘。</p>
+            </section>
+            <section class="topic-section" id="pentest">
+              <h3 style="color:#5d94cf">渗透</h3>
+              <p>记录信息收集、资产梳理、漏洞理解和日常练习笔记。</p>
+            </section>
+            <section class="topic-section" id="open">
+              <h3 style="color:#b48a1d">开源</h3>
+              <p>整理看过的安全开源项目、工具用法和源码阅读想法。</p>
+            </section>
+            <section class="topic-section" id="other">
+              <h3 style="color:#8f74be">其他</h3>
+              <p>放一些暂时没分类的想法、资料摘录、博客搭建记录。</p>
+            </section>
+          </div>
+        </section>
       </main>
 
       <aside class="sidebar">
         <section class="side-card tags-card">
-          <img class="side-cat" src="./assets/cat-alert.png" alt="" onerror="this.style.display='none'">
+          <img class="side-cat" src="./assets/cat-alert.png" alt="">
           <h2 class="side-title">主题 Tags ♥</h2>
           <div class="tag-cloud">
-            <a href="#kill" style="color:#c86672;background:#ffe1e2;">免杀</a>
-            <a href="#pentest" style="color:#4f8ecb;background:#dcecff;">渗透</a>
-            <a href="#open" style="color:#b58518;background:#fff1bd;">开源</a>
-            <a href="#other" style="color:#8068b4;background:#eadff7;">其他</a>
+            <a href="#kill" style="color:#c96a78;background:#ffe8eb;">免杀</a>
+            <a href="#pentest" style="color:#5d94cf;background:#e5f1ff;">渗透</a>
+            <a href="#open" style="color:#b48a1d;background:#fff1b9;">开源</a>
+            <a href="#other" style="color:#8f74be;background:#eee3ff;">其他</a>
           </div>
         </section>
 
         <section class="side-card recent-card">
-          <img class="side-cat" src="./assets/cat-mini.png" alt="" onerror="this.style.display='none'">
+          <img class="side-cat" src="./assets/cat-head.png" alt="">
           <h2 class="side-title">近期更新</h2>
           <ul class="recent-list">
             <li><span>第一次整理免杀学习路线</span><time>05/12</time></li>
@@ -1230,27 +901,25 @@
           </ul>
         </section>
 
-        <section id="about" class="side-card note-card">
-          <h2 class="side-title">Note to self ❤</h2>
-          <p>慢慢来<br>每天进步一点点，<br>未来会感谢现在的自己！</p>
+        <section id="about" class="side-card self-card">
+          <h2 class="side-title">Note to self ♥</h2>
+          <p>慢慢来，比较快。<br>每天进步一点点，<br>未来会感谢现在的自己！</p>
           <img class="note-cat" src="./assets/cat-note.png" alt="">
         </section>
       </aside>
     </div>
 
-    <footer class="footer" id="archive">
-      <span>
-        <img class="footer-left-cat" src="./assets/cat-head.png" alt="">
-        Stay curious · Keep learning.
-      </span>
-      <span>© 2026 Scholar's Notes · 个人学习博客</span>
-      <span class="footer-tape">
-        Progress, not perfection.
-        <img class="footer-right-cat" src="./assets/footer-ribbon-cat.png" alt="">
-      </span>
+    <footer class="footer">
+      <div class="footer-left">
+        <img src="./assets/footer-ribbon-cat.png" alt="">
+        <span>Stay curious · Keep learning.</span>
+      </div>
+      <div class="copyright">© 2026 Scholar's Notes · 个人学习博客</div>
+      <div class="footer-right">
+        <span>Progress, not perfection.</span>
+        <img src="./assets/cat-mini.png" alt="">
+      </div>
     </footer>
-
   </div>
 </body>
 </html>
-
