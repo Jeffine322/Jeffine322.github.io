@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Scholar's Notes</title>
-  <!-- v12 asset mapping:
+  <!-- v14: top-left logo-cat enlarged. v13: title spacing fixed + top width expanded. v12 asset mapping:
     cat-angry.png = 最近文章第一张，已换成“手托脸/无聊小猫”
     cat-smile.png = 最近文章第三张，嘴巴已补红色
     paper-left-edge.png = 近期更新左侧撕纸打孔边
@@ -128,7 +128,7 @@
     }
 
     .site {
-      width: min(1500px, calc(100% - 40px));
+      width: min(1680px, calc(100% - 24px));
       min-width: 1180px;
       margin: 0 auto;
       padding-top: 14px;
@@ -140,11 +140,11 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      height: 88px;
+      height: 96px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 30px;
+      padding: 0 42px;
       background: rgba(255,253,246,.86);
       backdrop-filter: blur(14px);
       border-bottom: 1.5px dashed rgba(120, 150, 175, .42);
@@ -154,7 +154,7 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 18px;
       font-family: var(--font-logo);
       font-size: 43px;
       font-weight: 700;
@@ -164,8 +164,8 @@
     }
 
     .brand img {
-      width: 74px;
-      height: 60px;
+      width: 92px;
+      height: 74px;
       object-fit: contain;
       filter: drop-shadow(0 3px 4px rgba(80,60,45,.12));
     }
@@ -226,10 +226,10 @@
 
     .top-note img {
       position: absolute;
-      right: -14px;
-      top: -34px;
-      width: 98px;
-      height: 68px;
+      right: -8px;
+      top: -30px;
+      width: 96px;
+      height: 66px;
       object-fit: contain;
       filter: drop-shadow(0 3px 4px rgba(80,60,45,.14));
     }
@@ -301,14 +301,14 @@
     .hero-inner {
       position: relative;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 255px;
+      grid-template-columns: minmax(0, 1fr) 250px;
       align-items: center;
       min-height: 205px;
       z-index: 5;
     }
 
     .hero-copy {
-      padding-left: 52px;
+      padding-left: 42px;
     }
 
     .hero-title {
@@ -317,7 +317,7 @@
       font-family: var(--font-title);
       font-size: 78px;
       line-height: 1;
-      letter-spacing: 9px;
+      letter-spacing: 3px;
       color: #3a2617;
       transform: rotate(-1.2deg);
       white-space: nowrap;
@@ -327,8 +327,8 @@
     .hero-title::after {
       content: "";
       position: absolute;
-      left: -16px;
-      right: 10px;
+      left: -10px;
+      right: 4px;
       bottom: -8px;
       height: 13px;
       border-radius: 999px;
@@ -1120,7 +1120,7 @@
 
           <div class="hero-inner">
             <div class="hero-copy">
-              <h1 class="hero-title">思考 · 记录 · 成长</h1>
+              <h1 class="hero-title">思考·记录·成长</h1>
               <p class="hero-sub">记录学习路上的点滴，也记录每一次理解与卡住。</p>
               <p class="hero-en">Ch.1 —— My Learning Blog / 个人学习簿 ♡</p>
             </div>
@@ -1232,7 +1232,7 @@
 
         <section id="about" class="side-card note-card">
           <h2 class="side-title">Note to self ❤</h2>
-          <p>慢慢来，比较快。<br>每天进步一点点，<br>未来会感谢现在的自己！</p>
+          <p>慢慢来<br>每天进步一点点，<br>未来会感谢现在的自己！</p>
           <img class="note-cat" src="./assets/cat-note.png" alt="">
         </section>
       </aside>
