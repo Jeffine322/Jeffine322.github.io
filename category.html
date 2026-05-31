@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>分类笔记 - Scholar's Notes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f8f2e8;
+      --paper:#fffdf6;
+      --ink:#2c2118;
+      --muted:#786d60;
+      --pink:#e88d9d;
+      --font-title:"Ma Shan Zheng","Long Cang","Microsoft YaHei",cursive;
+      --font-body:"Microsoft YaHei","PingFang SC","Noto Sans SC",Arial,sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      min-height:100vh;
+      color:var(--ink);
+      font-family:var(--font-body);
+      background-color:var(--bg);
+      background-image:
+        radial-gradient(circle at 12px 12px, rgba(120,95,65,.07) 1.2px, transparent 1.3px),
+        linear-gradient(90deg, rgba(111,153,206,.12) 1px, transparent 1px),
+        linear-gradient(rgba(111,153,206,.10) 1px, transparent 1px);
+      background-size:18px 18px, 28px 28px, 28px 28px;
+      padding:28px 16px 50px;
+    }
+    .wrap{max-width:980px;margin:0 auto}
+    .top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:22px;
+      color:#5b5048;
+    }
+    .top a{
+      color:inherit;
+      text-decoration:none;
+      border-bottom:3px solid rgba(232,141,157,.55);
+      padding-bottom:3px;
+    }
+    .paper{
+      position:relative;
+      background:rgba(255,253,246,.94);
+      border-radius:24px;
+      padding:42px 46px;
+      box-shadow:0 14px 28px rgba(86,66,42,.12);
+      overflow:hidden;
+    }
+    .paper::before{
+      content:"";
+      position:absolute;
+      left:34px;
+      top:20px;
+      width:180px;
+      height:34px;
+      background:url("./assets/tape-pink.png") center/100% 100% no-repeat;
+      opacity:.68;
+      transform:rotate(-4deg);
+    }
+    h1{
+      position:relative;
+      display:inline-block;
+      margin:20px 0 24px;
+      font-family:var(--font-title);
+      font-size:46px;
+      letter-spacing:6px;
+      z-index:1;
+    }
+    h1::after{
+      content:"";
+      position:absolute;
+      left:-6px;
+      right:-12px;
+      bottom:0;
+      height:8px;
+      background:rgba(232,141,157,.58);
+      border-radius:999px;
+      z-index:-1;
+    }
+    .hint{
+      margin-bottom:20px;
+      color:#766a60;
+      line-height:1.8;
+      font-size:16px;
+    }
+    .note-list{
+      display:grid;
+      gap:14px;
+      margin-top:18px;
+    }
+    .note{
+      display:grid;
+      grid-template-columns:88px minmax(0,1fr) 82px;
+      gap:18px;
+      align-items:center;
+      padding:18px 20px;
+      background:rgba(255,248,237,.76);
+      border:1px solid rgba(120,95,65,.08);
+      border-radius:18px;
+      text-decoration:none;
+      color:inherit;
+      box-shadow:0 8px 16px rgba(86,66,42,.08);
+      transition:.18s ease;
+    }
+    .note:hover{transform:translateY(-3px)}
+    .note img{
+      width:78px;
+      height:70px;
+      object-fit:contain;
+    }
+    .note h2{
+      font-size:22px;
+      margin-bottom:6px;
+      line-height:1.45;
+    }
+    .note p{
+      color:#5d5148;
+      line-height:1.7;
+      font-size:15px;
+    }
+    .note time{
+      text-align:right;
+      color:#7a6b60;
+      font-family:"Times New Roman", Times, serif;
+      font-weight:700;
+    }
+    .empty{
+      padding:30px 0 10px;
+      color:#7c7168;
+      line-height:1.9;
+    }
+    .empty code{
+      background:#f3eadc;
+      padding:2px 6px;
+      border-radius:5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <a href="./index.html">← 返回首页</a>
+      <span>Scholar's Notes</span>
+    </div>
+
+    <section class="paper">
+      <h1 id="pageTitle">分类笔记</h1>
+      <p class="hint" id="pageHint">这里会按你上传到 posts 文件夹里的笔记自动更新。</p>
+      <div class="note-list" id="noteList"></div>
+    </section>
+  </div>
+
+  <script>
+    const BLOG_CONFIG = {
+      owner: "Jeffine322",
+      repo: "Jeffine322.github.io",
+      branch: "main",
+      postsDir: "posts"
+    };
+
+    const TAG_COVER = {
+      "免杀": "./assets/cat-angry.png",
+      "渗透": "./assets/cat-cry.png",
+      "开源": "./assets/cat-smile.png",
+      "其他": "./assets/cat-note.png"
+    };
+
+    function escapeHTML(text){
+      return String(text ?? "").replace(/[&<>"']/g, s => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+      }[s]));
+    }
+    function normalizeTag(tag){
+      const raw = String(tag || "").trim();
+      if(["免杀","bypass","Bypass","免杀学习"].includes(raw)) return "免杀";
+      if(["渗透","渗透测试","SRC","src","信息收集","Web","web"].includes(raw)) return "渗透";
+      if(["开源","项目","工具","工具项目"].includes(raw)) return "开源";
+      return raw || "其他";
+    }
+    function postTime(post){
+      const t = new Date(post.date || 0).getTime();
+      return Number.isNaN(t) ? 0 : t;
+    }
+    function formatDate(date){
+      if(!date) return "";
+      const d = new Date(date);
+      if(Number.isNaN(d.getTime())) return String(date);
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    }
+    function parseFrontMatter(markdown, file){
+      const text = markdown || "";
+      const meta = {};
+      let body = text;
+      const fm = text.match(/^---\s*([\s\S]*?)\s*---\s*/);
+      if(fm){
+        fm[1].split(/\r?\n/).forEach(line => {
+          const idx = line.indexOf(":");
+          if(idx > -1){
+            const key = line.slice(0, idx).trim();
+            const value = line.slice(idx + 1).trim().replace(/^["']|["']$/g, "");
+            meta[key] = value;
+          }
+        });
+        body = text.slice(fm[0].length);
+      }
+      const firstTitle = body.match(/^#\s+(.+)$/m);
+      const title = meta.title || (firstTitle ? firstTitle[1].trim() : file.name.replace(/\.(md|markdown|html?)$/i, ""));
+      const tag = normalizeTag(meta.tag || meta.category || "其他");
+      const summary = meta.summary || meta.description || body
+        .replace(/^# .+$/m, "")
+        .replace(/```[\s\S]*?```/g, "")
+        .replace(/[#>*_\-\[\]()`]/g, "")
+        .trim()
+        .slice(0, 90) || "";
+      return {
+        title,
+        date: meta.date || file.name.match(/\d{4}-\d{2}-\d{2}/)?.[0] || "",
+        tag,
+        summary,
+        cover: meta.cover || TAG_COVER[tag] || TAG_COVER["其他"],
+        url: file.download_url ? `post.html?src=${encodeURIComponent(file.download_url)}` : "#"
+      };
+    }
+    async function loadPostsFromGitHub(){
+      const api = `https://api.github.com/repos/${BLOG_CONFIG.owner}/${BLOG_CONFIG.repo}/contents/${BLOG_CONFIG.postsDir}?ref=${BLOG_CONFIG.branch}`;
+      const res = await fetch(api, {headers: {"Accept":"application/vnd.github+json"}});
+      if(!res.ok) return [];
+      const files = await res.json();
+      const articleFiles = files.filter(file => file.type === "file" && /\.(md|markdown|html?)$/i.test(file.name)).slice(0, 100);
+      const posts = await Promise.all(articleFiles.map(async file => {
+        if(/\.(html?)$/i.test(file.name)){
+          const tag = normalizeTag(file.name.split("-")[0]);
+          return {
+            title: file.name.replace(/\.(html?)$/i, ""),
+            date: file.name.match(/\d{4}-\d{2}-\d{2}/)?.[0] || "",
+            tag,
+            summary: "",
+            cover: TAG_COVER[tag] || TAG_COVER["其他"],
+            url: `${BLOG_CONFIG.postsDir}/${encodeURIComponent(file.name)}`
+          };
+        }
+        const mdRes = await fetch(file.download_url);
+        const markdown = await mdRes.text();
+        return parseFrontMatter(markdown, file);
+      }));
+      return posts.filter(Boolean).sort((a,b) => postTime(b) - postTime(a));
+    }
+
+    function render(posts){
+      const params = new URLSearchParams(location.search);
+      const tag = params.get("tag") || "全部";
+      const title = document.getElementById("pageTitle");
+      const hint = document.getElementById("pageHint");
+      const list = document.getElementById("noteList");
+
+      title.textContent = tag === "全部" ? "全部笔记" : `${tag}笔记`;
+      hint.textContent = tag === "全部"
+        ? "这里按时间顺序显示 posts 文件夹里的全部笔记。"
+        : `这里显示 posts 文件夹里 tag 为「${tag}」的笔记。`;
+
+      const filtered = tag === "全部"
+        ? posts
+        : posts.filter(post => normalizeTag(post.tag) === tag);
+
+      if(!filtered.length){
+        list.innerHTML = `<div class="empty">这个分类还没有笔记。<br>在仓库根目录 <code>posts/</code> 里上传带 <code>tag: ${escapeHTML(tag)}</code> 的 Markdown 文件后，这里会自动显示。</div>`;
+        return;
+      }
+
+      list.innerHTML = filtered.map(post => `
+        <a class="note" href="${escapeHTML(post.url)}">
+          <img src="${escapeHTML(post.cover || TAG_COVER[post.tag] || TAG_COVER["其他"])}" alt="">
+          <div>
+            <h2>${escapeHTML(post.title)}</h2>
+            <p>${escapeHTML(post.summary)}</p>
+          </div>
+          <time>${escapeHTML(formatDate(post.date))}</time>
+        </a>
+      `).join("");
+    }
+
+    async function init(){
+      const posts = await loadPostsFromGitHub();
+      render(posts);
+    }
+    init();
+  </script>
+</body>
+</html>
