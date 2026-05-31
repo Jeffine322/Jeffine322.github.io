@@ -17,9 +17,9 @@
       --theme-soft:#efe5ff;
       --theme-deep:#7f65ad;
       --theme-table:#9a7fc4;
-      --code-title:#e7dcf8;
-      --code-bg:#faf7ff;
-      --table-head:#d7c7f0;
+      --code-title:#e6ddf6;
+      --code-bg:#f5f2fb;
+      --table-head:#d8cdeb;
       --table-head:#d7c7f0;
       --font-title:"Ma Shan Zheng","Long Cang","Microsoft YaHei",cursive;
       --font-body:"Microsoft YaHei","PingFang SC","Noto Sans SC",Arial,sans-serif;
@@ -29,36 +29,36 @@
       --theme-soft:#fde8ee;
       --theme-deep:#b75f72;
       --theme-table:#d7798b;
-      --code-title:#f5dbe4;
-      --code-bg:#fff7fa;
-      --table-head:#e8c5d1;
+      --code-title:#f4dce4;
+      --code-bg:#fbf3f6;
+      --table-head:#e8cad4;
     }
     body[data-theme="渗透"]{
       --theme:#77aede;
       --theme-soft:#e7f2ff;
       --theme-deep:#4c84b6;
       --theme-table:#6e9fcf;
-      --code-title:#d8edf8;
+      --code-title:#c9e4f3;
       --code-bg:#f4f9ff;
-      --table-head:#c9e4f3;
+      --table-head:#d5e9f3;
     }
     body[data-theme="开源"]{
       --theme:#e3bc46;
       --theme-soft:#fff2bd;
       --theme-deep:#ae8422;
       --theme-table:#d2a93a;
-      --code-title:#f6e7b5;
-      --code-bg:#fffdf3;
-      --table-head:#eedc97;
+      --code-title:#f4e8bd;
+      --code-bg:#fbf8ed;
+      --table-head:#eadca9;
     }
     body[data-theme="其他"]{
       --theme:#a98ad5;
       --theme-soft:#efe5ff;
       --theme-deep:#7f65ad;
       --theme-table:#9a7fc4;
-      --code-title:#e7dcf8;
-      --code-bg:#faf7ff;
-      --table-head:#d7c7f0;
+      --code-title:#e6ddf6;
+      --code-bg:#f5f2fb;
+      --table-head:#d8cdeb;
     }
 
     *{box-sizing:border-box;margin:0;padding:0}
@@ -75,7 +75,7 @@
       padding:28px 16px 46px;
     }
     .wrap{
-      max-width:960px;
+      max-width:1280px;
       margin:0 auto;
     }
     .top{
@@ -91,6 +91,89 @@
       border-bottom:3px solid rgba(232,141,157,.55);
       padding-bottom:3px;
     }
+
+    .article-layout{
+      display:grid;
+      grid-template-columns:260px minmax(0, 1fr);
+      gap:28px;
+      align-items:start;
+    }
+
+    .toc-card{
+      position:sticky;
+      top:24px;
+      max-height:calc(100vh - 48px);
+      overflow:auto;
+      padding:22px 18px 24px;
+      background:rgba(255,253,246,.88);
+      border:1px solid rgba(120,95,65,.10);
+      border-radius:22px;
+      box-shadow:0 12px 24px rgba(86,66,42,.10);
+    }
+
+    .toc-title{
+      position:relative;
+      display:inline-block;
+      margin:0 0 16px;
+      font-family:var(--font-title);
+      font-size:30px;
+      letter-spacing:3px;
+      color:#2c2118;
+      z-index:1;
+    }
+
+    .toc-title::after{
+      content:"";
+      position:absolute;
+      left:-2px;
+      right:-8px;
+      bottom:2px;
+      height:6px;
+      background:color-mix(in srgb, var(--theme) 55%, white);
+      border-radius:999px;
+      z-index:-1;
+    }
+
+    .toc-list{
+      list-style:none;
+      padding:0;
+      margin:0;
+      display:grid;
+      gap:6px;
+      font-size:14px;
+      line-height:1.55;
+    }
+
+    .toc-list a{
+      display:block;
+      padding:7px 9px;
+      border-radius:10px;
+      color:#53483f;
+      text-decoration:none;
+      border-left:3px solid transparent;
+      transition:.16s ease;
+    }
+
+    .toc-list a:hover,
+    .toc-list a.active{
+      background:var(--code-bg);
+      border-left-color:var(--code-title);
+      color:#1f1a16;
+      transform:translateX(2px);
+    }
+
+    .toc-list .toc-h3 a{
+      padding-left:22px;
+      font-size:13px;
+      color:#6a5e55;
+    }
+
+    .toc-empty{
+      color:#8a7f74;
+      font-size:14px;
+      line-height:1.7;
+    }
+
     article{
       background:rgba(255,253,246,.96);
       color:var(--ink);
@@ -99,7 +182,7 @@
       box-shadow:0 14px 28px rgba(86,66,42,.12);
       line-height:1.9;
       font-size:17px;
-      overflow:hidden;
+      overflow:visible;
     }
     .article-meta{
       display:flex;
@@ -241,7 +324,7 @@
     table{
       width:100%;
       border-collapse:collapse;
-      min-width:680px;
+      min-width:720px;
       font-size:15px;
       line-height:1.7;
     }
@@ -287,6 +370,17 @@
       text-align:center;
     }
 
+    @media (max-width:900px){
+      .article-layout{
+        grid-template-columns:1fr;
+      }
+      .toc-card{
+        position:relative;
+        top:auto;
+        max-height:none;
+      }
+    }
+
     @media (max-width:700px){
       article{padding:30px 22px}
       h1{font-size:36px}
@@ -300,9 +394,19 @@
       <a href="./index.html">← 返回首页</a>
       <span>Scholar's Notes</span>
     </div>
-    <article id="article">
-      <p>正在读取文章...</p>
-    </article>
+
+    <div class="article-layout">
+      <aside class="toc-card" id="tocCard">
+        <h2 class="toc-title">文档导航</h2>
+        <ul class="toc-list" id="tocList">
+          <li class="toc-empty">正在生成目录...</li>
+        </ul>
+      </aside>
+
+      <article id="article">
+        <p>正在读取文章...</p>
+      </article>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -391,6 +495,68 @@
       });
     }
 
+
+    function slugify(text, index){
+      return "section-" + index + "-" + String(text || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[^\w\u4e00-\u9fa5]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
+    function buildTOC(){
+      const article = document.getElementById("article");
+      const tocList = document.getElementById("tocList");
+      if(!article || !tocList) return;
+
+      const headings = Array.from(article.querySelectorAll("h1, h2, h3"))
+        .filter(h => h.textContent.trim());
+
+      if(!headings.length){
+        tocList.innerHTML = '<li class="toc-empty">这篇文章还没有标题目录。</li>';
+        return;
+      }
+
+      headings.forEach((h, index) => {
+        if(!h.id){
+          h.id = slugify(h.textContent, index);
+        }
+      });
+
+      tocList.innerHTML = headings.map(h => {
+        const level = h.tagName.toLowerCase();
+        return `<li class="toc-${level}"><a href="#${h.id}">${escapeHTML(h.textContent.trim())}</a></li>`;
+      }).join("");
+
+      const links = Array.from(tocList.querySelectorAll("a"));
+
+      links.forEach(link => {
+        link.addEventListener("click", event => {
+          const target = document.querySelector(link.getAttribute("href"));
+          if(target){
+            event.preventDefault();
+            target.scrollIntoView({behavior:"smooth", block:"start"});
+            history.replaceState(null, "", link.getAttribute("href"));
+          }
+        });
+      });
+
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if(entry.isIntersecting){
+            links.forEach(a => a.classList.remove("active"));
+            const active = tocList.querySelector(`a[href="#${entry.target.id}"]`);
+            if(active) active.classList.add("active");
+          }
+        });
+      }, {
+        rootMargin:"-20% 0px -70% 0px",
+        threshold:0
+      });
+
+      headings.forEach(h => observer.observe(h));
+    }
+
     function renderArticle(markdown){
       const {meta, body} = parseFrontMatter(markdown);
       const tag = normalizeTag(meta.tag || meta.category || "其他");
@@ -407,6 +573,7 @@
       `;
 
       article.innerHTML = metaHTML + marked.parse(body);
+      buildTOC();
 
       if(window.mermaid){
         mermaid.initialize({
