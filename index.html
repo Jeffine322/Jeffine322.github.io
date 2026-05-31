@@ -1107,6 +1107,70 @@ footer > *{
   margin-left: -10px !important;
 }
 
+
+/* ===============================
+   v52 紧急修正
+   1. 近期更新列表文字放大
+   2. 强制修正小猫头位置，不再留在左侧
+   =============================== */
+
+/* 近期更新文字放大 */
+.recent-card .side-title{
+  font-size: 34px !important;
+  letter-spacing: 4px !important;
+  margin-bottom: 16px !important;
+}
+
+.recent-list li{
+  grid-template-columns: 18px minmax(0,1fr) 50px !important;
+  gap: 10px !important;
+  padding: 8px 0 9px !important;
+  font-size: 15.5px !important;
+  line-height: 1.75 !important;
+  font-weight: 600 !important;
+}
+
+.recent-list li::before{
+  font-size: 18px !important;
+  margin-top: 0 !important;
+}
+
+.recent-list time{
+  font-size: 14px !important;
+  font-weight: 800 !important;
+}
+
+/* 近期更新右上角猫头位置也微调 */
+.recent-card .side-cat{
+  right: 18px !important;
+  top: 16px !important;
+  width: 72px !important;
+  height: 54px !important;
+}
+
+/* hero 小猫头强制放到右边，避免还停在左侧 */
+.hero .hero-peek,
+.hero-peek{
+  position: absolute !important;
+  left: auto !important;
+  right: 10px !important;
+  top: 138px !important;
+  width: 70px !important;
+  height: 52px !important;
+  object-fit: contain !important;
+  transform: rotate(3deg) !important;
+  z-index: 20 !important;
+  display: block !important;
+  pointer-events: none !important;
+}
+
+/* 如果之前有 left 样式或 transform 残留，继续强制覆盖 */
+section.hero > img.hero-peek{
+  left: auto !important;
+  right: 10px !important;
+  top: 138px !important;
+}
+
 </style>
 </head>
 <body>
@@ -1486,6 +1550,30 @@ footer > *{
 
 
 
+
+
+<script>
+/* v52：强制把 hero 小猫头挪到右边，避免缓存或旧 CSS 继续把它放左边 */
+(function(){
+  function fixHeroPeek(){
+    document.querySelectorAll(".hero-peek").forEach(function(img){
+      img.style.setProperty("position", "absolute", "important");
+      img.style.setProperty("left", "auto", "important");
+      img.style.setProperty("right", "10px", "important");
+      img.style.setProperty("top", "138px", "important");
+      img.style.setProperty("width", "70px", "important");
+      img.style.setProperty("height", "52px", "important");
+      img.style.setProperty("z-index", "20", "important");
+      img.style.setProperty("transform", "rotate(3deg)", "important");
+    });
+  }
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", fixHeroPeek);
+  }else{
+    fixHeroPeek();
+  }
+})();
+</script>
 
 </body>
 </html>
