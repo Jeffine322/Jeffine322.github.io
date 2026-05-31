@@ -13,10 +13,38 @@
       --paper:#fffdf6;
       --ink:#2c2118;
       --muted:#786d60;
-      --pink:#e88d9d;
+      --theme:#e88d9d;
+      --theme-soft:#fde8ee;
+      --theme-deep:#b75f72;
+      --theme-table:#d7798b;
       --font-title:"Ma Shan Zheng","Long Cang","Microsoft YaHei",cursive;
       --font-body:"Microsoft YaHei","PingFang SC","Noto Sans SC",Arial,sans-serif;
     }
+    body[data-theme="免杀"]{
+      --theme:#e88d9d;
+      --theme-soft:#fde8ee;
+      --theme-deep:#b75f72;
+      --theme-table:#d7798b;
+    }
+    body[data-theme="渗透"]{
+      --theme:#77aede;
+      --theme-soft:#e7f2ff;
+      --theme-deep:#4c84b6;
+      --theme-table:#6e9fcf;
+    }
+    body[data-theme="开源"]{
+      --theme:#e3bc46;
+      --theme-soft:#fff2bd;
+      --theme-deep:#ae8422;
+      --theme-table:#d2a93a;
+    }
+    body[data-theme="其他"]{
+      --theme:#a98ad5;
+      --theme-soft:#efe5ff;
+      --theme-deep:#7f65ad;
+      --theme-table:#9a7fc4;
+    }
+
     *{box-sizing:border-box;margin:0;padding:0}
     body{
       min-height:100vh;
@@ -31,7 +59,7 @@
       padding:28px 16px 46px;
     }
     .wrap{
-      max-width:900px;
+      max-width:960px;
       margin:0 auto;
     }
     .top{
@@ -48,12 +76,31 @@
       padding-bottom:3px;
     }
     article{
-      background:rgba(255,253,246,.94);
+      background:rgba(255,253,246,.95);
       border-radius:22px;
       padding:42px 48px;
       box-shadow:0 14px 28px rgba(86,66,42,.12);
       line-height:1.9;
       font-size:17px;
+      overflow:hidden;
+    }
+    .article-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      margin:0 0 18px;
+      color:#746a61;
+      font-size:14px;
+    }
+    .article-tag{
+      display:inline-flex;
+      align-items:center;
+      padding:4px 11px;
+      border-radius:999px;
+      background:var(--theme-soft);
+      color:var(--theme-deep);
+      font-weight:700;
     }
     h1{
       font-family:var(--font-title);
@@ -62,6 +109,7 @@
       margin-bottom:18px;
       position:relative;
       display:inline-block;
+      line-height:1.25;
     }
     h1::after{
       content:"";
@@ -70,39 +118,155 @@
       right:-8px;
       bottom:2px;
       height:8px;
-      background:rgba(232,141,157,.55);
+      background:color-mix(in srgb, var(--theme) 62%, white);
       z-index:-1;
       border-radius:999px;
     }
-    h2{font-size:26px;margin:28px 0 10px}
-    h3{font-size:22px;margin:22px 0 8px}
+    h2{font-size:26px;margin:30px 0 10px}
+    h3{font-size:22px;margin:24px 0 8px}
     p{margin:12px 0;color:#3f372f}
     ul,ol{padding-left:28px;margin:12px 0}
     li{margin:6px 0}
     code{
-      background:#f3eadc;
+      background:var(--theme-soft);
+      color:#3a2b22;
       padding:2px 6px;
       border-radius:5px;
-      font-family:Consolas,monospace;
+      font-family:Consolas,"JetBrains Mono","Courier New",monospace;
+    }
+
+    /* 代码块：按分类变色 */
+    .code-card{
+      margin:18px 0 24px;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid color-mix(in srgb, var(--theme) 28%, transparent);
+      box-shadow:0 10px 18px rgba(86,66,42,.10);
+      background:linear-gradient(180deg, color-mix(in srgb, var(--theme-soft) 72%, white), #fffdf7);
+    }
+    .code-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:10px 18px;
+      background:color-mix(in srgb, var(--theme) 72%, white);
+      color:#fff;
+      font-family:"Times New Roman", Times, serif;
+      font-weight:700;
+      letter-spacing:.8px;
+      text-transform:lowercase;
+    }
+    .code-title::after{
+      content:"copy";
+      opacity:.75;
+      font-size:12px;
+      letter-spacing:1px;
     }
     pre{
+      margin:0;
+      padding:18px 20px 20px;
       background:#2f2924;
       color:#fff8ef;
-      padding:18px;
-      border-radius:14px;
       overflow:auto;
-      margin:16px 0;
+      line-height:1.75;
+      font-size:15px;
     }
-    pre code{background:transparent;padding:0}
+    body[data-theme="免杀"] pre{
+      background:#3b252c;
+    }
+    body[data-theme="渗透"] pre{
+      background:#243244;
+    }
+    body[data-theme="开源"] pre{
+      background:#3a321f;
+    }
+    body[data-theme="其他"] pre{
+      background:#2f293b;
+    }
+    pre code{
+      background:transparent;
+      color:inherit;
+      padding:0;
+      border-radius:0;
+      font-family:Consolas,"JetBrains Mono","Courier New",monospace;
+    }
+
     blockquote{
-      border-left:5px solid rgba(232,141,157,.68);
-      padding-left:16px;
+      border-left:5px solid var(--theme);
+      padding:10px 14px 10px 16px;
       color:#66594f;
       margin:18px 0;
+      background:color-mix(in srgb, var(--theme-soft) 65%, white);
+      border-radius:0 12px 12px 0;
+    }
+
+    /* Markdown 表格：按分类统一配色，类似你图三那种处理 */
+    .table-wrap{
+      margin:20px 0 26px;
+      overflow:auto;
+      border-radius:10px;
+      box-shadow:0 10px 18px rgba(86,66,42,.08);
+      border:1px solid rgba(120,95,65,.10);
+      background:rgba(255,253,246,.9);
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:680px;
+      font-size:15px;
+      line-height:1.7;
+    }
+    thead th{
+      background:var(--theme-table);
+      color:#fff;
+      text-align:left;
+      font-weight:700;
+      padding:12px 16px;
+      border-right:1px solid rgba(255,255,255,.26);
+      white-space:nowrap;
+    }
+    thead th:last-child{border-right:none}
+    tbody td{
+      padding:12px 16px;
+      border-bottom:1px solid rgba(120,95,65,.08);
+      border-right:1px solid rgba(120,95,65,.06);
+      color:#322820;
+      vertical-align:top;
+    }
+    tbody td:last-child{border-right:none}
+    tbody tr:nth-child(even){
+      background:color-mix(in srgb, var(--theme-soft) 42%, white);
+    }
+    tbody tr:nth-child(odd){
+      background:rgba(255,253,246,.72);
+    }
+    tbody tr:hover{
+      background:color-mix(in srgb, var(--theme-soft) 70%, white);
+    }
+
+    /* Mermaid 流程图 */
+    .mermaid-wrap{
+      margin:20px 0 26px;
+      padding:18px;
+      border-radius:16px;
+      background:linear-gradient(180deg, color-mix(in srgb, var(--theme-soft) 80%, white), #fffdf7);
+      border:1px solid color-mix(in srgb, var(--theme) 28%, transparent);
+      box-shadow:0 10px 18px rgba(86,66,42,.08);
+      overflow:auto;
+    }
+    .mermaid{
+      min-width:520px;
+      text-align:center;
+    }
+
+    @media (max-width:700px){
+      article{padding:30px 22px}
+      h1{font-size:36px}
+      table{min-width:620px}
     }
   </style>
 </head>
-<body>
+<body data-theme="其他">
   <div class="wrap">
     <div class="top">
       <a href="./index.html">← 返回首页</a>
@@ -113,6 +277,7 @@
     </article>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <script>
     function escapeHTML(text){
       return String(text ?? "").replace(/[&<>"']/g, s => ({
@@ -120,58 +285,211 @@
       }[s]));
     }
 
-    function stripFrontMatter(md){
-      return md.replace(/^---\s*[\s\S]*?\s*---\s*/, "");
+    function normalizeTag(tag){
+      const raw = String(tag || "").trim();
+      if(["免杀","bypass","Bypass","免杀学习"].includes(raw)) return "免杀";
+      if(["渗透","渗透测试","SRC","src","信息收集","Web","web"].includes(raw)) return "渗透";
+      if(["开源","项目","工具","工具项目"].includes(raw)) return "开源";
+      return raw || "其他";
+    }
+
+    function parseFrontMatter(md){
+      const text = md || "";
+      const meta = {};
+      let body = text;
+      const fm = text.match(/^---\s*([\s\S]*?)\s*---\s*/);
+      if(fm){
+        fm[1].split(/\r?\n/).forEach(line => {
+          const idx = line.indexOf(":");
+          if(idx > -1){
+            const key = line.slice(0, idx).trim();
+            const value = line.slice(idx + 1).trim().replace(/^["']|["']$/g, "");
+            meta[key] = value;
+          }
+        });
+        body = text.slice(fm[0].length);
+      }
+      return {meta, body};
+    }
+
+    function inlineFormat(text){
+      return escapeHTML(text)
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+        .replace(/`([^`]+)`/g, "<code>$1</code>");
+    }
+
+    function isTableSeparator(line){
+      return /^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(line);
+    }
+
+    function splitTableRow(line){
+      return line.trim()
+        .replace(/^\|/, "")
+        .replace(/\|$/, "")
+        .split("|")
+        .map(cell => cell.trim());
+    }
+
+    function tableToHTML(lines){
+      const header = splitTableRow(lines[0]);
+      const body = lines.slice(2).filter(Boolean).map(splitTableRow);
+      const th = header.map(cell => `<th>${inlineFormat(cell)}</th>`).join("");
+      const rows = body.map(row => {
+        const tds = header.map((_, i) => `<td>${inlineFormat(row[i] || "")}</td>`).join("");
+        return `<tr>${tds}</tr>`;
+      }).join("");
+      return `<div class="table-wrap"><table><thead><tr>${th}</tr></thead><tbody>${rows}</tbody></table></div>`;
+    }
+
+    function blockToHTML(block){
+      const trimmed = block.trim();
+      if(!trimmed) return "";
+
+      if(/^<h[1-3]|^<div class="code-card"|^<div class="mermaid-wrap"|^<div class="table-wrap"|^<blockquote/.test(trimmed)){
+        return trimmed;
+      }
+
+      const lines = trimmed.split(/\n/).filter(Boolean);
+
+      if(lines.every(l => /^[-*]\s+/.test(l))){
+        return "<ul>" + lines.map(l => `<li>${inlineFormat(l.replace(/^[-*]\s+/, ""))}</li>`).join("") + "</ul>";
+      }
+
+      if(lines.every(l => /^\d+\.\s+/.test(l))){
+        return "<ol>" + lines.map(l => `<li>${inlineFormat(l.replace(/^\d+\.\s+/, ""))}</li>`).join("") + "</ol>";
+      }
+
+      return `<p>${lines.map(inlineFormat).join("<br>")}</p>`;
     }
 
     function mdToHTML(md){
-      md = stripFrontMatter(md || "");
       const blocks = [];
-      md = md.replace(/```([\s\S]*?)```/g, (_, code) => {
-        const id = `@@CODE${blocks.length}@@`;
-        blocks.push(`<pre><code>${escapeHTML(code.trim())}</code></pre>`);
+      md = md || "";
+
+      md = md.replace(/```(\w+)?\s*([\s\S]*?)```/g, (_, langRaw, codeRaw) => {
+        const lang = (langRaw || "txt").trim().toLowerCase();
+        const code = codeRaw.trim();
+        const id = `@@BLOCK${blocks.length}@@`;
+
+        if(lang === "mermaid"){
+          blocks.push(`<div class="mermaid-wrap"><div class="mermaid">${escapeHTML(code)}</div></div>`);
+        }else{
+          blocks.push(`<div class="code-card"><div class="code-title">${escapeHTML(lang)}</div><pre><code>${escapeHTML(code)}</code></pre></div>`);
+        }
         return id;
       });
 
-      let html = escapeHTML(md)
-        .replace(/^### (.*)$/gm, "<h3>$1</h3>")
-        .replace(/^## (.*)$/gm, "<h2>$1</h2>")
-        .replace(/^# (.*)$/gm, "<h1>$1</h1>")
-        .replace(/^&gt; (.*)$/gm, "<blockquote>$1</blockquote>")
-        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-        .replace(/`([^`]+)`/g, "<code>$1</code>");
+      const lines = md.split(/\r?\n/);
+      const out = [];
+      let i = 0;
 
-      html = html.split(/\n{2,}/).map(part => {
-        if(/^<h[1-3]|^<pre|^<blockquote/.test(part.trim())) return part;
-        const lines = part.split(/\n/).filter(Boolean);
-        if(lines.every(l => /^[-*]\s+/.test(l))){
-          return "<ul>" + lines.map(l => `<li>${l.replace(/^[-*]\s+/, "")}</li>`).join("") + "</ul>";
+      while(i < lines.length){
+        const line = lines[i];
+
+        if(/^@@BLOCK\d+@@$/.test(line.trim())){
+          out.push(line.trim());
+          i++;
+          continue;
         }
-        return `<p>${part.replace(/\n/g, "<br>")}</p>`;
-      }).join("\n");
 
-      blocks.forEach((block, i) => {
-        html = html.replace(`@@CODE${i}@@`, block);
+        if(/^###\s+/.test(line)){
+          out.push(`<h3>${inlineFormat(line.replace(/^###\s+/, ""))}</h3>`);
+          i++;
+          continue;
+        }
+        if(/^##\s+/.test(line)){
+          out.push(`<h2>${inlineFormat(line.replace(/^##\s+/, ""))}</h2>`);
+          i++;
+          continue;
+        }
+        if(/^#\s+/.test(line)){
+          out.push(`<h1>${inlineFormat(line.replace(/^#\s+/, ""))}</h1>`);
+          i++;
+          continue;
+        }
+        if(/^>\s+/.test(line)){
+          const quote = [];
+          while(i < lines.length && /^>\s+/.test(lines[i])){
+            quote.push(lines[i].replace(/^>\s+/, ""));
+            i++;
+          }
+          out.push(`<blockquote>${quote.map(inlineFormat).join("<br>")}</blockquote>`);
+          continue;
+        }
+
+        if(i + 1 < lines.length && /\|/.test(lines[i]) && isTableSeparator(lines[i+1])){
+          const tableLines = [lines[i], lines[i+1]];
+          i += 2;
+          while(i < lines.length && /\|/.test(lines[i]) && lines[i].trim()){
+            tableLines.push(lines[i]);
+            i++;
+          }
+          out.push(tableToHTML(tableLines));
+          continue;
+        }
+
+        out.push(line);
+        i++;
+      }
+
+      let html = out.join("\n");
+      blocks.forEach((block, idx) => {
+        html = html.replace(`@@BLOCK${idx}@@`, block);
       });
+
+      html = html.split(/\n{2,}/).map(blockToHTML).join("\n");
       return html;
+    }
+
+    function renderArticle(markdown){
+      const {meta, body} = parseFrontMatter(markdown);
+      const tag = normalizeTag(meta.tag || meta.category || "其他");
+      document.body.dataset.theme = tag;
+
+      const article = document.getElementById("article");
+      const metaHTML = `
+        <div class="article-meta">
+          <span class="article-tag">${escapeHTML(tag)}</span>
+          ${meta.date ? `<time>${escapeHTML(meta.date)}</time>` : ""}
+        </div>
+      `;
+
+      article.innerHTML = metaHTML + mdToHTML(body);
+
+      if(window.mermaid){
+        mermaid.initialize({
+          startOnLoad:false,
+          theme:"base",
+          themeVariables:{
+            primaryColor:getComputedStyle(document.body).getPropertyValue("--theme-soft").trim(),
+            primaryBorderColor:getComputedStyle(document.body).getPropertyValue("--theme").trim(),
+            primaryTextColor:"#2c2118",
+            lineColor:getComputedStyle(document.body).getPropertyValue("--theme-deep").trim()
+          }
+        });
+        mermaid.run({querySelector: ".mermaid"});
+      }
     }
 
     async function init(){
       const params = new URLSearchParams(location.search);
       const src = params.get("src");
       const article = document.getElementById("article");
+
       if(!src){
         article.innerHTML = "<h1>没有找到文章</h1><p>请从首页点击文章进入。</p>";
         return;
       }
+
       try{
         const res = await fetch(src);
         const text = await res.text();
-        article.innerHTML = mdToHTML(text);
+        renderArticle(text);
       }catch(e){
         article.innerHTML = "<h1>文章读取失败</h1><p>可能是文章链接还没部署完成，稍等一会儿再刷新。</p>";
       }
     }
+
     init();
   </script>
 </body>
