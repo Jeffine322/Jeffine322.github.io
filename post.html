@@ -17,6 +17,8 @@
       --theme-soft:#fde8ee;
       --theme-deep:#b75f72;
       --theme-table:#d7798b;
+      --code-title:#efb4c0;
+      --code-bg:#3b2b32;
       --font-title:"Ma Shan Zheng","Long Cang","Microsoft YaHei",cursive;
       --font-body:"Microsoft YaHei","PingFang SC","Noto Sans SC",Arial,sans-serif;
     }
@@ -25,24 +27,34 @@
       --theme-soft:#fde8ee;
       --theme-deep:#b75f72;
       --theme-table:#d7798b;
+      --code-title:#efb4c0;
+      --code-bg:#3b2b32;
     }
     body[data-theme="渗透"]{
       --theme:#77aede;
       --theme-soft:#e7f2ff;
       --theme-deep:#4c84b6;
       --theme-table:#6e9fcf;
+      --code-title:#a9cdea;
+      --code-bg:#243446;
     }
     body[data-theme="开源"]{
       --theme:#e3bc46;
       --theme-soft:#fff2bd;
       --theme-deep:#ae8422;
       --theme-table:#d2a93a;
+      --code-title:#e8cc6e;
+      --code-bg:#3a321f;
     }
     body[data-theme="其他"]{
       --theme:#a98ad5;
       --theme-soft:#efe5ff;
       --theme-deep:#7f65ad;
       --theme-table:#9a7fc4;
+      --code-title:#c4b0e5;
+      --code-bg:#302b42;
+      --code-title:#c4b0e5;
+      --code-bg:#302b42;
     }
 
     *{box-sizing:border-box;margin:0;padding:0}
@@ -142,58 +154,63 @@
       font-family:Consolas,"JetBrains Mono","Courier New",monospace;
     }
 
-    /* 代码块：按分类变色 */
+    /* 代码块：只作用于 .code-card 内部，不影响后面的普通正文 */
     .code-card{
       margin:18px 0 24px;
       border-radius:14px;
       overflow:hidden;
       border:1px solid rgba(180,205,226,.85);
       box-shadow:0 10px 18px rgba(86,66,42,.08);
-      background:#243446;
+      background:var(--code-bg);
+      color:#fff;
+      clear:both;
     }
     .code-title{
       display:flex;
       align-items:center;
       justify-content:space-between;
       padding:10px 18px;
-      background:#a9cdea;
+      background:var(--code-title);
       color:#fff;
       font-family:"Times New Roman", Times, serif;
       font-weight:700;
       letter-spacing:.8px;
       text-transform:lowercase;
     }
-    body[data-theme="免杀"] .code-title{background:#efb4c0;}
-    body[data-theme="渗透"] .code-title{background:#a9cdea;}
-    body[data-theme="开源"] .code-title{background:#e8cc6e;}
-    body[data-theme="其他"] .code-title{background:#c4b0e5;}
     .code-title::after{
       content:"copy";
       opacity:.82;
       font-size:12px;
       letter-spacing:1px;
     }
-    pre{
+    .code-card pre{
       margin:0;
       padding:18px 20px 20px;
-      background:#243446;
+      background:var(--code-bg);
       color:#fff;
       overflow:auto;
       line-height:1.78;
       font-size:15px;
       font-weight:600;
     }
-    body[data-theme="免杀"] pre{background:#3b2b32;}
-    body[data-theme="渗透"] pre{background:#243446;}
-    body[data-theme="开源"] pre{background:#3a321f;}
-    body[data-theme="其他"] pre{background:#302b42;}
-    pre code{
+    .code-card pre code{
+      display:block;
       background:transparent !important;
       color:#fff !important;
       padding:0;
       border-radius:0;
       font-family:Consolas,"JetBrains Mono","Courier New",monospace;
       white-space:pre;
+      text-shadow:none;
+    }
+    article > p,
+    article > h1,
+    article > h2,
+    article > h3,
+    article > ul,
+    article > ol,
+    article > blockquote{
+      background:transparent !important;
     }
 
     blockquote{
@@ -340,113 +357,140 @@
 
     function tableToHTML(lines){
       const header = splitTableRow(lines[0]);
-      const body = lines.slice(2).filter(Boolean).map(splitTableRow);
-      const th = header.map(cell => `<th>${inlineFormat(cell)}</th>`).join("");
-      const rows = body.map(row => {
-        const tds = header.map((_, i) => `<td>${inlineFormat(row[i] || "")}</td>`).join("");
-        return `<tr>${tds}</tr>`;
-      }).join("");
-      return `<div class="table-wrap"><table><thead><tr>${th}</tr></thead><tbody>${rows}</tbody></table></div>`;
+      const rows = lines.slice(2).filter(Boolean).map(splitTableRow);
+
+      return `
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>${header.map(cell => `<th>${inlineFormat(cell)}</th>`).join("")}</tr>
+            </thead>
+            <tbody>
+              ${rows.map(row => `<tr>${header.map((_, i) => `<td>${inlineFormat(row[i] || "")}</td>`).join("")}</tr>`).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
     }
 
-    function blockToHTML(block){
-      const trimmed = block.trim();
-      if(!trimmed) return "";
+    function flushParagraph(lines, output){
+      const text = lines.join("\n").trim();
+      if(!text) return;
 
-      if(/^<h[1-3]/.test(trimmed) || /^<div class="code-card"/.test(trimmed) || /^<div class="mermaid-wrap"/.test(trimmed) || /^<div class="table-wrap"/.test(trimmed) || /^<blockquote/.test(trimmed)){
-        return trimmed;
+      const cleanLines = text.split(/\n/).filter(Boolean);
+
+      if(cleanLines.every(line => /^[-*]\s+/.test(line))){
+        output.push("<ul>" + cleanLines.map(line => `<li>${inlineFormat(line.replace(/^[-*]\s+/, ""))}</li>`).join("") + "</ul>");
+        return;
       }
 
-      const lines = trimmed.split(/\n/).filter(Boolean);
-
-      if(lines.every(l => /^[-*]\s+/.test(l))){
-        return "<ul>" + lines.map(l => `<li>${inlineFormat(l.replace(/^[-*]\s+/, ""))}</li>`).join("") + "</ul>";
+      if(cleanLines.every(line => /^\d+\.\s+/.test(line))){
+        output.push("<ol>" + cleanLines.map(line => `<li>${inlineFormat(line.replace(/^\d+\.\s+/, ""))}</li>`).join("") + "</ol>");
+        return;
       }
 
-      if(lines.every(l => /^\d+\.\s+/.test(l))){
-        return "<ol>" + lines.map(l => `<li>${inlineFormat(l.replace(/^\d+\.\s+/, ""))}</li>`).join("") + "</ol>";
-      }
-
-      return `<p>${lines.map(inlineFormat).join("<br>")}</p>`;
+      output.push(`<p>${cleanLines.map(inlineFormat).join("<br>")}</p>`);
     }
 
-    function mdToHTML(md){
-      const blocks = [];
-      md = md || "";
-
-      md = md.replace(/```(\w+)?\s*([\s\S]*?)```/g, (_, langRaw, codeRaw) => {
-        const lang = (langRaw || "txt").trim().toLowerCase();
-        const code = codeRaw.trim();
-        const id = `@@BLOCK${blocks.length}@@`;
-
-        if(lang === "mermaid"){
-          blocks.push(`<div class="mermaid-wrap"><div class="mermaid">${escapeHTML(code)}</div></div>`);
-        }else{
-          blocks.push(`<div class="code-card"><div class="code-title">${escapeHTML(lang)}</div><pre><code>${escapeHTML(code)}</code></pre></div>`);
-        }
-        return id;
-      });
-
-      const lines = md.split(/\r?\n/);
-      const out = [];
+    function mdToHTML(markdown){
+      const lines = (markdown || "").replace(/\r\n/g, "\n").split("\n");
+      const output = [];
+      let paragraph = [];
       let i = 0;
 
       while(i < lines.length){
         const line = lines[i];
+        const trimmed = line.trim();
 
-        if(/^@@BLOCK\d+@@$/.test(line.trim())){
-          out.push(line.trim());
+        // 代码块：从 ```lang 开始，只吃到闭合 ```，后面的正文不会再被包进代码块
+        const fence = trimmed.match(/^```([A-Za-z0-9_-]*)\s*$/);
+        if(fence){
+          flushParagraph(paragraph, output);
+          paragraph = [];
+
+          const lang = (fence[1] || "txt").toLowerCase();
+          const codeLines = [];
           i++;
+
+          while(i < lines.length && !lines[i].trim().match(/^```\s*$/)){
+            codeLines.push(lines[i]);
+            i++;
+          }
+
+          if(i < lines.length && lines[i].trim().match(/^```\s*$/)){
+            i++;
+          }
+
+          const code = codeLines.join("\n");
+          if(lang === "mermaid"){
+            output.push(`<div class="mermaid-wrap"><div class="mermaid">${escapeHTML(code)}</div></div>`);
+          }else{
+            output.push(`<div class="code-card"><div class="code-title">${escapeHTML(lang || "txt")}</div><pre><code>${escapeHTML(code)}</code></pre></div>`);
+          }
+          continue;
+        }
+
+        // 表格
+        if(i + 1 < lines.length && /\|/.test(line) && isTableSeparator(lines[i + 1])){
+          flushParagraph(paragraph, output);
+          paragraph = [];
+          const tableLines = [lines[i], lines[i + 1]];
+          i += 2;
+          while(i < lines.length && lines[i].trim() && /\|/.test(lines[i])){
+            tableLines.push(lines[i]);
+            i++;
+          }
+          output.push(tableToHTML(tableLines));
           continue;
         }
 
         if(/^###\s+/.test(line)){
-          out.push(`<h3>${inlineFormat(line.replace(/^###\s+/, ""))}</h3>`);
+          flushParagraph(paragraph, output);
+          paragraph = [];
+          output.push(`<h3>${inlineFormat(line.replace(/^###\s+/, ""))}</h3>`);
           i++;
           continue;
         }
         if(/^##\s+/.test(line)){
-          out.push(`<h2>${inlineFormat(line.replace(/^##\s+/, ""))}</h2>`);
+          flushParagraph(paragraph, output);
+          paragraph = [];
+          output.push(`<h2>${inlineFormat(line.replace(/^##\s+/, ""))}</h2>`);
           i++;
           continue;
         }
         if(/^#\s+/.test(line)){
-          out.push(`<h1>${inlineFormat(line.replace(/^#\s+/, ""))}</h1>`);
+          flushParagraph(paragraph, output);
+          paragraph = [];
+          output.push(`<h1>${inlineFormat(line.replace(/^#\s+/, ""))}</h1>`);
           i++;
           continue;
         }
+
         if(/^>\s+/.test(line)){
+          flushParagraph(paragraph, output);
+          paragraph = [];
           const quote = [];
           while(i < lines.length && /^>\s+/.test(lines[i])){
             quote.push(lines[i].replace(/^>\s+/, ""));
             i++;
           }
-          out.push(`<blockquote>${quote.map(inlineFormat).join("<br>")}</blockquote>`);
+          output.push(`<blockquote>${quote.map(inlineFormat).join("<br>")}</blockquote>`);
           continue;
         }
 
-        if(i + 1 < lines.length && /\|/.test(lines[i]) && isTableSeparator(lines[i+1])){
-          const tableLines = [lines[i], lines[i+1]];
-          i += 2;
-          while(i < lines.length && /\|/.test(lines[i]) && lines[i].trim()){
-            tableLines.push(lines[i]);
-            i++;
-          }
-          out.push(tableToHTML(tableLines));
+        if(trimmed === ""){
+          flushParagraph(paragraph, output);
+          paragraph = [];
+          i++;
           continue;
         }
 
-        out.push(line);
+        paragraph.push(line);
         i++;
       }
 
-      let html = out.join("\n");
-      blocks.forEach((block, idx) => {
-        html = html.replace(`@@BLOCK${idx}@@`, block);
-      });
-
-      html = html.split(/\n{2,}/).map(blockToHTML).join("\n");
-      return html;
+      flushParagraph(paragraph, output);
+      return output.join("\n");
     }
 
     function renderArticle(markdown){
