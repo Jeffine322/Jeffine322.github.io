@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     /*
-      Scholar's Notes v23
+      Scholar's Notes v25
       只需要把这个 index.html 放在仓库根目录。
       图片全部读取 ./assets/ 里的固定文件名：
       cat-alert.png / cat-angry.png / cat-cry.png / cat-head.png / cat-mini.png
@@ -441,7 +441,7 @@
       position:relative;
       min-height:165px;
       display:grid;
-      grid-template-columns:145px minmax(0,1fr);
+      grid-template-columns:152px minmax(0,1fr);
       gap:12px;
       padding:24px 22px 20px;
       border-radius:16px;
@@ -478,19 +478,21 @@
       transform:rotate(-6deg);
     }
     .post-img{
-      width:128px;
-      height:118px;
+      width:142px;
+      height:130px;
       object-fit:contain;
       align-self:center;
       justify-self:center;
       filter:drop-shadow(0 6px 5px rgba(80,60,45,.12));
+      image-rendering:auto;
     }
-    /* 第三张文章卡片的猫图原图视觉偏小，单独放大一点 */
+    /* 三张文章卡片统一视觉大小，不再单独把第三张拉大 */
+    .post:nth-child(1) .post-img,
+    .post:nth-child(2) .post-img,
     .post:nth-child(3) .post-img{
-      width:150px;
-      height:136px;
-      transform:translateX(-4px) scale(1.08);
-      transform-origin:center center;
+      width:142px;
+      height:130px;
+      transform:none;
     }
     .post-body{min-width:0}
     .tag{
@@ -818,6 +820,34 @@
       letter-spacing:1px;
     }
 
+
+    /* 点击体验 */
+    .topic-card,
+    .post,
+    .recent-list a{
+      cursor:pointer;
+    }
+    .post{
+      color:inherit;
+      text-decoration:none;
+    }
+    .post:focus-visible,
+    .topic-card:focus-visible{
+      outline:3px solid rgba(232,141,157,.65);
+      outline-offset:4px;
+    }
+    .recent-list a{
+      color:inherit;
+      text-decoration:none;
+      display:contents;
+    }
+    .loading-text{
+      font-family:var(--font-body);
+      color:#786d60;
+      font-size:15px;
+      padding:18px 0;
+    }
+
     @media (max-width: 900px){
       .site{min-width:0;width:calc(100% - 20px)}
       .topbar{height:auto;min-height:92px;padding:16px;gap:18px;flex-wrap:wrap}
@@ -891,36 +921,8 @@
             <a class="more" href="#archive">查看更多 〉</a>
           </div>
 
-          <div class="post-grid">
-            <article class="post">
-              <img class="post-img" src="./assets/cat-angry.png" alt="">
-              <div class="post-body">
-                <span class="tag kill">免杀</span>
-                <h3>第一次整理免杀学习路线</h3>
-                <p>从基础概念到常见方法，整理一条适合自己的学习路径。</p>
-                <div class="post-foot"><time>2024-05-12</time><span>💬 12</span></div>
-              </div>
-            </article>
-
-            <article class="post">
-              <img class="post-img" src="./assets/cat-cry.png" alt="">
-              <div class="post-body">
-                <span class="tag pentest">渗透</span>
-                <h3>信息收集阶段的笔记</h3>
-                <p>整理信息收集的常用技巧与工具，打好渗透测试的第一步。</p>
-                <div class="post-foot"><time>2024-05-10</time><span>💬 18</span></div>
-              </div>
-            </article>
-
-            <article class="post">
-              <img class="post-img" src="./assets/cat-smile.png" alt="">
-              <div class="post-body">
-                <span class="tag open">开源</span>
-                <h3>最近在看的几个安全开源项目</h3>
-                <p>记录近期关注的几个安全开源项目及核心功能。</p>
-                <div class="post-foot"><time>2024-05-08</time><span>💬 15</span></div>
-              </div>
-            </article>
+          <div class="post-grid" id="postGrid">
+            <p class="loading-text">正在读取文章列表...</p>
           </div>
 
           <div class="topic-sections" id="archive">
@@ -960,7 +962,7 @@
           <img class="side-cat" src="./assets/cat-head.png" alt="">
           <h2 class="side-title">近期更新</h2>
 
-          <ul class="recent-list">
+          <ul class="recent-list" id="recentList">
             <li>
               <span>第一次整理免杀学习路线</span>
               <time>05/12</time>
@@ -1004,5 +1006,215 @@
       </div>
     </footer>
   </div>
+
+  <script>
+    /*
+      自动读取文章说明：
+      1. 在仓库根目录新建 posts 文件夹。
+      2. 把文章放进去，建议用 .md 文件。
+      3. 文章开头可写：
+         ---
+         title: 我的文章标题
+         date: 2026-05-31
+         tag: 免杀
+         summary: 一句话摘要
+         cover: ./assets/cat-angry.png
+         ---
+      4. 上传/Commit 后，首页会自动读取 posts 文件夹里的文章。
+    */
+
+    const BLOG_CONFIG = {
+      owner: "Jeffine322",
+      repo: "Jeffine322.github.io",
+      branch: "main",
+      postsDir: "posts"
+    };
+
+    const FALLBACK_POSTS = [
+      {
+        title: "第一次整理免杀学习路线",
+        date: "2024-05-12",
+        tag: "免杀",
+        summary: "从基础概念到常见方法，整理一条适合自己的学习路径。",
+        cover: "./assets/cat-angry.png",
+        url: "#kill"
+      },
+      {
+        title: "信息收集阶段的笔记",
+        date: "2024-05-10",
+        tag: "渗透",
+        summary: "整理信息收集的常用技巧与工具，打好渗透测试的第一步。",
+        cover: "./assets/cat-cry.png",
+        url: "#pentest"
+      },
+      {
+        title: "最近在看的几个安全开源项目",
+        date: "2024-05-08",
+        tag: "开源",
+        summary: "记录近期关注的几个安全开源项目及核心功能。",
+        cover: "./assets/cat-smile.png",
+        url: "#open"
+      }
+    ];
+
+    const TAG_CLASS = {
+      "免杀": "kill",
+      "渗透": "pentest",
+      "开源": "open",
+      "其他": "other"
+    };
+
+    const TAG_COVER = {
+      "免杀": "./assets/cat-angry.png",
+      "渗透": "./assets/cat-cry.png",
+      "开源": "./assets/cat-smile.png",
+      "其他": "./assets/cat-note.png"
+    };
+
+    function escapeHTML(text){
+      return String(text ?? "").replace(/[&<>"']/g, s => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+      }[s]));
+    }
+
+    function formatDate(date){
+      if(!date) return "";
+      const d = new Date(date);
+      if(Number.isNaN(d.getTime())) return String(date);
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    }
+
+    function formatShortDate(date){
+      if(!date) return "";
+      const d = new Date(date);
+      if(Number.isNaN(d.getTime())){
+        const m = String(date).match(/(\d{1,2})[-/.](\d{1,2})$/);
+        return m ? `${m[1].padStart(2,"0")}/${m[2].padStart(2,"0")}` : String(date);
+      }
+      return `${String(d.getMonth()+1).padStart(2,"0")}/${String(d.getDate()).padStart(2,"0")}`;
+    }
+
+    function parseFrontMatter(markdown, file){
+      const text = markdown || "";
+      const meta = {};
+      let body = text;
+
+      const fm = text.match(/^---\s*([\s\S]*?)\s*---\s*/);
+      if(fm){
+        fm[1].split(/\r?\n/).forEach(line => {
+          const idx = line.indexOf(":");
+          if(idx > -1){
+            const key = line.slice(0, idx).trim();
+            const value = line.slice(idx + 1).trim().replace(/^["']|["']$/g, "");
+            meta[key] = value;
+          }
+        });
+        body = text.slice(fm[0].length);
+      }
+
+      const firstTitle = body.match(/^#\s+(.+)$/m);
+      const title = meta.title || (firstTitle ? firstTitle[1].trim() : file.name.replace(/\.(md|markdown|html?)$/i, ""));
+      const tag = meta.tag || meta.category || "其他";
+      const summary = meta.summary || meta.description || body
+        .replace(/^# .+$/m, "")
+        .replace(/```[\s\S]*?```/g, "")
+        .replace(/[#>*_\-\[\]()`]/g, "")
+        .trim()
+        .slice(0, 58) || "这篇文章还没有摘要。";
+
+      return {
+        title,
+        date: meta.date || file.name.match(/\d{4}-\d{2}-\d{2}/)?.[0] || "",
+        tag,
+        summary,
+        cover: meta.cover || TAG_COVER[tag] || TAG_COVER["其他"],
+        url: file.download_url
+          ? `post.html?src=${encodeURIComponent(file.download_url)}`
+          : (file.path || "#")
+      };
+    }
+
+    async function loadPostsFromGitHub(){
+      const api = `https://api.github.com/repos/${BLOG_CONFIG.owner}/${BLOG_CONFIG.repo}/contents/${BLOG_CONFIG.postsDir}?ref=${BLOG_CONFIG.branch}`;
+      const res = await fetch(api, {headers: {"Accept":"application/vnd.github+json"}});
+      if(!res.ok) throw new Error("posts folder not available");
+      const files = await res.json();
+
+      const articleFiles = files
+        .filter(file => file.type === "file" && /\.(md|markdown|html?)$/i.test(file.name))
+        .slice(0, 20);
+
+      const posts = await Promise.all(articleFiles.map(async file => {
+        if(/\.(html?)$/i.test(file.name)){
+          return {
+            title: file.name.replace(/\.(html?)$/i, ""),
+            date: file.name.match(/\d{4}-\d{2}-\d{2}/)?.[0] || "",
+            tag: "其他",
+            summary: "点击查看这篇文章。",
+            cover: TAG_COVER["其他"],
+            url: `${BLOG_CONFIG.postsDir}/${encodeURIComponent(file.name)}`
+          };
+        }
+        const mdRes = await fetch(file.download_url);
+        const markdown = await mdRes.text();
+        return parseFrontMatter(markdown, file);
+      }));
+
+      return posts
+        .filter(Boolean)
+        .sort((a,b) => new Date(b.date || 0) - new Date(a.date || 0));
+    }
+
+    function postCard(post, index){
+      const cls = TAG_CLASS[post.tag] || "other";
+      return `
+        <a class="post" href="${escapeHTML(post.url || "#")}" aria-label="阅读文章：${escapeHTML(post.title)}">
+          <img class="post-img" src="${escapeHTML(post.cover || TAG_COVER['其他'])}" alt="">
+          <div class="post-body">
+            <span class="tag ${cls}">${escapeHTML(post.tag || "其他")}</span>
+            <h3>${escapeHTML(post.title)}</h3>
+            <p>${escapeHTML(post.summary)}</p>
+            <div class="post-foot"><time>${escapeHTML(formatDate(post.date))}</time><span>💬 ${index === 0 ? 12 : index === 1 ? 18 : 15}</span></div>
+          </div>
+        </a>
+      `;
+    }
+
+    function renderPosts(posts){
+      const list = posts && posts.length ? posts : FALLBACK_POSTS;
+      const grid = document.getElementById("postGrid");
+      const recent = document.getElementById("recentList");
+
+      if(grid){
+        grid.innerHTML = list.slice(0, 3).map(postCard).join("");
+      }
+
+      if(recent){
+        recent.innerHTML = list.slice(0, 5).map(post => `
+          <li>
+            <a href="${escapeHTML(post.url || "#")}">
+              <span>${escapeHTML(post.title)}</span>
+              <time>${escapeHTML(formatShortDate(post.date))}</time>
+            </a>
+          </li>
+        `).join("");
+      }
+    }
+
+    async function initBlog(){
+      try{
+        const posts = await loadPostsFromGitHub();
+        renderPosts(posts);
+      }catch(err){
+        renderPosts(FALLBACK_POSTS);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", initBlog);
+  </script>
+
 </body>
 </html>
