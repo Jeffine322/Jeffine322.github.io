@@ -330,14 +330,39 @@
       const renderer = new marked.Renderer();
 
       renderer.code = function(code, lang){
-        const language = String(lang || "txt").trim().toLowerCase() || "txt";
-        if(language === "mermaid"){
-          return `<div class="mermaid-wrap"><div class="mermaid">${escapeHTML(code)}</div></div>`;
+        // marked.js 新版本会把 code 参数传成 token 对象。
+        // 旧写法 String(code) 会变成 [object Object]，所以这里兼容两种格式。
+        let rawCode = "";
+        let language = "txt";
+
+        if(code && typeof code === "object"){
+          rawCode = code.text || code.raw || "";
+          language = code.lang || lang || "txt";
+        }else{
+          rawCode = code || "";
+          language = lang || "txt";
         }
-        return `<div class="code-card"><div class="code-title">${escapeHTML(language)}</div><pre><code>${escapeHTML(code)}</code></pre></div>`;
+
+        language = String(language || "txt").trim().toLowerCase() || "txt";
+
+        if(language === "mermaid"){
+          return `<div class="mermaid-wrap"><div class="mermaid">${escapeHTML(rawCode)}</div></div>`;
+        }
+
+        return `<div class="code-card"><div class="code-title">${escapeHTML(language)}</div><pre><code>${escapeHTML(rawCode)}</code></pre></div>`;
       };
 
       renderer.table = function(header, body){
+        // 兼容 marked.js 新旧版本。
+        // 新版本可能传 token 对象，这种情况下直接交给默认渲染器不稳定，所以做保护。
+        if(header && typeof header === "object"){
+          const token = header;
+          const headers = (token.header || []).map(cell => `<th>${escapeHTML(cell.text || "")}</th>`).join("");
+          const rows = (token.rows || []).map(row => {
+            return `<tr>${row.map(cell => `<td>${escapeHTML(cell.text || "")}</td>`).join("")}</tr>`;
+          }).join("");
+          return `<div class="table-wrap"><table><thead><tr>${headers}</tr></thead><tbody>${rows}</tbody></table></div>`;
+        }
         return `<div class="table-wrap"><table><thead>${header}</thead><tbody>${body}</tbody></table></div>`;
       };
 
