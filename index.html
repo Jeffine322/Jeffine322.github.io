@@ -906,13 +906,15 @@
 
 
 
+
 /* ===============================
-   v45 纸张背景素材落位修正
-   hero-main-paper-bg 只放在顶部主视觉白色大框后面
-   不再铺到四个分类纸片后面
+   v47 正确纸张素材位置
+   1. hero-main-paper-bg：只放首页主视觉红框区域背后
+   2. right-updates-paper-bg：不默认叠加，避免近期更新背景叠背景
+   3. footer-torn-strip-bg：只放 footer 底层
    =============================== */
 
-/* 首页主视觉：自动标记出来的 .hero-paper-target 才挂大纸背景 */
+/* 自动定位到红框区域的主视觉整体模块 */
 .hero-paper-target{
   position:relative !important;
   isolation:isolate;
@@ -921,30 +923,41 @@
   overflow:visible !important;
 }
 
+/* hero 底图：铺满红框圈出的整个区域，放最底层，不压内容 */
 .hero-paper-target::before{
   content:"";
   position:absolute;
-  inset:-26px -22px -20px -22px;
+  inset:-18px -18px -18px -18px;
   z-index:-1;
   pointer-events:none;
   background:url("./assets/hero-main-paper-bg.png") center center / 100% 100% no-repeat;
 }
 
-/* 主视觉内部内容永远在纸张上层 */
+/* 确保 hero 里的标题、猫图、四个主题卡片、说明文字都在背景上面 */
 .hero-paper-target > *{
   position:relative;
   z-index:1;
 }
 
-/* 右侧近期更新纸张背景 */
-.recent-updates{
+/* 近期更新：默认不额外叠纸张背景，避免背景叠背景 */
+.recent-updates::before,
+.updates-card::before,
+.sidebar-updates::before,
+.update-card::before,
+.recent-list::before,
+.aside-updates::before{
+  content:none !important;
+  display:none !important;
+}
+
+/* 如以后你想完全替换近期更新背景，再手动给模块加 class="use-paper-bg" */
+.use-paper-bg{
   position:relative;
   isolation:isolate;
   background:transparent !important;
   box-shadow:none !important;
 }
-
-.recent-updates::before{
+.use-paper-bg::before{
   content:"";
   position:absolute;
   inset:-12px -10px -12px -16px;
@@ -952,13 +965,12 @@
   pointer-events:none;
   background:url("./assets/right-updates-paper-bg.png") center center / 100% 100% no-repeat;
 }
-
-.recent-updates > *{
+.use-paper-bg > *{
   position:relative;
   z-index:1;
 }
 
-/* 底部横向撕纸条：作为 footer 背景层，不压文字和图片 */
+/* 底部横向撕纸条：只放 footer 背景层，不压文字和图片 */
 .site-footer,
 .footer,
 footer{
@@ -973,7 +985,7 @@ footer{
 footer::before{
   content:"";
   position:absolute;
-  inset:-14px -24px -12px -24px;
+  inset:-10px -18px -8px -18px;
   z-index:-1;
   pointer-events:none;
   background:url("./assets/footer-torn-strip-bg.png") center center / 100% 100% no-repeat;
@@ -1357,21 +1369,46 @@ footer > *{
 
 
 
+
+
+
 <script>
-/* v45：只给“思考·记录·成长”所在的顶部主视觉大框加纸张背景 */
+/* v47：只给首页红框主视觉区域挂 hero-main-paper-bg */
 (function(){
-  function findHeroTarget(){
-    var candidates = Array.from(document.querySelectorAll("section, div, header, main"));
-    var matched = candidates.filter(function(el){
-      var t = (el.innerText || "").replace(/\s+/g, "");
-      return t.includes("思考·记录·成长") && t.includes("Ch.1");
+  function norm(el){
+    return (el.innerText || "").replace(/\s+/g, "");
+  }
+
+  function findHeroPaperTarget(){
+    var nodes = Array.from(document.querySelectorAll("section, div, header, main"));
+    var candidates = nodes.filter(function(el){
+      var t = norm(el);
+      return t.includes("思考·记录·成长")
+        && t.includes("免杀")
+        && t.includes("渗透")
+        && t.includes("开源")
+        && t.includes("其他")
+        && t.includes("点击进入各主题");
     });
 
-    if(!matched.length) return null;
+    if(!candidates.length){
+      return null;
+    }
 
-    // 选一个“刚好包住标题和猫图”的容器：
-    // 面积不要太大，避免把四个分类纸片也包进去。
-    matched.sort(function(a,b){
+    // 选“包含红框所有内容但尽量不包含最近文章”的容器
+    candidates = candidates.filter(function(el){
+      var t = norm(el);
+      return !t.includes("最近文章") && !t.includes("近期更新");
+    });
+
+    if(!candidates.length){
+      candidates = nodes.filter(function(el){
+        var t = norm(el);
+        return t.includes("思考·记录·成长") && t.includes("点击进入各主题");
+      });
+    }
+
+    candidates.sort(function(a,b){
       var ar = a.getBoundingClientRect();
       var br = b.getBoundingClientRect();
       var aa = ar.width * ar.height;
@@ -1379,30 +1416,20 @@ footer > *{
       return aa - ba;
     });
 
-    // 过滤太小的，取第一个合适的
-    for(var i=0;i<matched.length;i++){
-      var r = matched[i].getBoundingClientRect();
-      if(r.width > 500 && r.height > 120 && r.height < 360){
-        return matched[i];
+    for(var i=0;i<candidates.length;i++){
+      var r = candidates[i].getBoundingClientRect();
+      if(r.width > 650 && r.height > 220 && r.height < 520){
+        return candidates[i];
       }
     }
-    return matched[0];
+
+    return candidates[0] || null;
   }
 
-  function addRecentClass(){
-    document.querySelectorAll("section, aside, div").forEach(function(el){
-      var t = (el.innerText || "").replace(/\s+/g, "");
-      if(t.includes("近期更新") && t.length < 260){
-        el.classList.add("recent-updates");
-      }
-    });
-  }
-
-  var hero = findHeroTarget();
+  var hero = findHeroPaperTarget();
   if(hero){
     hero.classList.add("hero-paper-target");
   }
-  addRecentClass();
 })();
 </script>
 
