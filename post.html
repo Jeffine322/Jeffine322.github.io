@@ -239,7 +239,7 @@
     .code-card{
       margin:18px 0 24px;
       border-radius:22px;
-      overflow:hidden;
+      overflow:visible;
       border:1px solid rgba(120,95,65,.14);
       box-shadow:0 10px 20px rgba(86,66,42,.08);
       background:var(--code-bg);
@@ -303,6 +303,40 @@
     }
     .code-card pre{
       background:var(--code-bg) !important;
+    }
+
+
+    /* Markdown 图片自适应：防止大截图撑破页面 */
+    article img{
+      display:block;
+      max-width:100%;
+      height:auto;
+      margin:18px auto 24px;
+      border-radius:14px;
+      box-shadow:0 10px 22px rgba(86,66,42,.10);
+      object-fit:contain;
+    }
+
+    article p:has(img){
+      margin:18px 0 24px;
+      text-align:center;
+      overflow:hidden;
+    }
+
+    article a img{
+      cursor:zoom-in;
+    }
+
+    /* 超宽内容也不能溢出正文区域 */
+    article,
+    .article-layout{
+      min-width:0;
+    }
+
+    .code-card,
+    .table-wrap,
+    .mermaid-wrap{
+      max-width:100%;
     }
 
     blockquote{
