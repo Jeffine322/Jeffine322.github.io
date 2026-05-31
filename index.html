@@ -902,7 +902,122 @@
       .footer{grid-template-columns:1fr;height:auto;padding:20px 0;text-align:center}
       .footer-left,.footer-right{justify-content:center}
     }
-  </style>
+  
+/* ===============================
+   v44 纸张背景素材落位
+   图片文件：
+   assets/hero-main-paper-bg.png
+   assets/right-updates-paper-bg.png
+   assets/footer-torn-strip-bg.png
+   =============================== */
+
+/* 主视觉大纸张背景：放在首页中间 hero 区域下面，不压文字和猫图 */
+.hero,
+.hero-section,
+.banner,
+.hero-card,
+.main-hero,
+.intro,
+.home-hero {
+  position: relative;
+  isolation: isolate;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.hero::before,
+.hero-section::before,
+.banner::before,
+.hero-card::before,
+.main-hero::before,
+.intro::before,
+.home-hero::before {
+  content: "";
+  position: absolute;
+  inset: -18px -18px -14px -18px;
+  z-index: -1;
+  pointer-events: none;
+  background: url("./assets/hero-main-paper-bg.png") center center / 100% 100% no-repeat;
+}
+
+/* 防止 hero 里的文字、猫图、主题卡片被背景压住 */
+.hero > *,
+.hero-section > *,
+.banner > *,
+.hero-card > *,
+.main-hero > *,
+.intro > *,
+.home-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* 右侧近期更新纸张背景 */
+.updates-card,
+.recent-updates,
+.update-card,
+.sidebar-updates,
+.recent-list,
+.aside-updates {
+  position: relative;
+  isolation: isolate;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.updates-card::before,
+.recent-updates::before,
+.update-card::before,
+.sidebar-updates::before,
+.recent-list::before,
+.aside-updates::before {
+  content: "";
+  position: absolute;
+  inset: -12px -10px -12px -16px;
+  z-index: -1;
+  pointer-events: none;
+  background: url("./assets/right-updates-paper-bg.png") center center / 100% 100% no-repeat;
+}
+
+.updates-card > *,
+.recent-updates > *,
+.update-card > *,
+.sidebar-updates > *,
+.recent-list > *,
+.aside-updates > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* 底部横向撕纸条：作为 footer 背景层，不压文字和图片 */
+.site-footer,
+.footer,
+footer {
+  position: relative;
+  isolation: isolate;
+  background: transparent !important;
+  overflow: visible;
+}
+
+.site-footer::before,
+.footer::before,
+footer::before {
+  content: "";
+  position: absolute;
+  inset: -14px -24px -12px -24px;
+  z-index: -1;
+  pointer-events: none;
+  background: url("./assets/footer-torn-strip-bg.png") center center / 100% 100% no-repeat;
+}
+
+.site-footer > *,
+.footer > *,
+footer > * {
+  position: relative;
+  z-index: 1;
+}
+
+</style>
 </head>
 <body>
   <div class="site">
@@ -1268,6 +1383,24 @@
 
     document.addEventListener("DOMContentLoaded", initBlog);
   </script>
+
+
+<script>
+/* v44：给首页关键模块补充背景类名，避免原 HTML 类名不同导致背景没有挂上 */
+(function(){
+  function addClassByText(text, className){
+    document.querySelectorAll("section, aside, div").forEach(function(el){
+      if(el.children.length > 12) return;
+      var t = (el.innerText || "").replace(/\s+/g, "");
+      if(t.includes(text) && !el.classList.contains(className)){
+        el.classList.add(className);
+      }
+    });
+  }
+  addClassByText("思考·记录·成长", "home-hero");
+  addClassByText("近期更新", "recent-updates");
+})();
+</script>
 
 </body>
 </html>
