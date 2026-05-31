@@ -908,107 +908,53 @@
 
 
 
+
 /* ===============================
-   v48 精确修正：hero-main-paper-bg 只铺红框区域
-   关键点：
-   - 不再用 JS 猜容器
-   - 不再把背景挂到标题那一小块
-   - 直接给首页 hero 主区做底层背景
+   v49 修正：hero 背景直接挂到 .hero 本体
+   原因：原代码 .hero::before 已经用来做左侧孔洞，
+   不能再拿 ::before 放大纸背景，否则会冲突。
+   这版直接把 hero-main-paper-bg.png 作为 .hero 的 background-image，
+   覆盖整个红框区域，不会只挂到标题小块。
    =============================== */
 
-/* 先清掉旧版本可能残留的伪元素 */
-.hero-paper-target::before,
-.home-hero::before,
-.hero-section::before,
-.main-hero::before,
-.banner::before,
-.intro::before,
-.recent-updates::before,
-.updates-card::before,
-.sidebar-updates::before,
-.update-card::before,
-.recent-list::before,
-.aside-updates::before{
+/* 首页红框主视觉整块 */
+.hero{
+  position:relative !important;
+  isolation:isolate;
+  overflow:visible !important;
+  background-color:transparent !important;
+  background-image:url("./assets/hero-main-paper-bg.png") !important;
+  background-repeat:no-repeat !important;
+  background-position:center center !important;
+  background-size:100% 100% !important;
+  box-shadow:none !important;
+  clip-path:none !important;
+}
+
+/* 这张素材本身已经带左侧孔洞和胶带，所以关掉旧 CSS 画出来的孔洞/胶带，避免叠两层 */
+.hero::before,
+.hero::after{
   content:none !important;
   display:none !important;
 }
 
-/* 首页顶部主视觉整块：这块对应你红框圈起来的范围 */
-.hero,
-.home-hero,
-.hero-section,
-.main-hero{
-  position:relative !important;
-  isolation:isolate;
-  background:transparent !important;
-  box-shadow:none !important;
-  overflow:visible !important;
-}
-
-/*
-  强制把纸张背景放到 hero 整块后面。
-  用 min-height 保证能覆盖：
-  标题 + 猫图 + 四个主题卡片 + 下面说明文字。
-*/
-.hero::before{
-  content:"";
-  position:absolute;
-  left:-18px;
-  right:-18px;
-  top:-18px;
-  bottom:-24px;
-  z-index:-1;
-  pointer-events:none;
-  display:block !important;
-  background:url("./assets/hero-main-paper-bg.png") center center / 100% 100% no-repeat;
-}
-
-/* 兼容如果你的主区类名不是 .hero */
-.home-hero::before,
-.hero-section::before,
-.main-hero::before{
-  content:"";
-  position:absolute;
-  left:-18px;
-  right:-18px;
-  top:-18px;
-  bottom:-24px;
-  z-index:-1;
-  pointer-events:none;
-  display:block !important;
-  background:url("./assets/hero-main-paper-bg.png") center center / 100% 100% no-repeat;
-}
-
-/* hero 里面所有内容必须在纸张上面 */
-.hero > *,
-.home-hero > *,
-.hero-section > *,
-.main-hero > *{
+/* hero 内所有内容保持在背景上层 */
+.hero > *{
   position:relative;
   z-index:1;
 }
 
-/*
-  如果你原来的 hero 内层还有白色背景，把它去掉，
-  避免出现“背景只在标题背后、下面露出网格”的割裂感。
-*/
+/* 去掉 hero 里面可能残留的白色内层底，避免挡住大纸背景 */
 .hero .hero-card,
 .hero .banner,
 .hero .intro,
-.home-hero .hero-card,
-.home-hero .banner,
-.home-hero .intro,
-.hero-section .hero-card,
-.hero-section .banner,
-.hero-section .intro,
-.main-hero .hero-card,
-.main-hero .banner,
-.main-hero .intro{
+.hero .hero-grid,
+.hero .hero-copy{
   background:transparent !important;
   box-shadow:none !important;
 }
 
-/* 近期更新不叠加背景 */
+/* 近期更新不再叠加新背景，保留原本样式 */
 .recent-updates::before,
 .updates-card::before,
 .sidebar-updates::before,
@@ -1019,7 +965,7 @@
   display:none !important;
 }
 
-/* footer 只保留底层撕纸条 */
+/* footer 纸条保留在底层 */
 .site-footer,
 .footer,
 footer{
@@ -1422,37 +1368,7 @@ footer > *{
 
 
 
-<script>
-/* v48 兜底：如果页面没有 .hero，就把包含四个主题的最小合适容器标记为 .hero */
-(function(){
-  if(document.querySelector(".hero")) return;
 
-  function norm(el){ return (el.innerText || "").replace(/\s+/g, ""); }
-
-  var candidates = Array.from(document.querySelectorAll("section, div")).filter(function(el){
-    var t = norm(el);
-    return t.includes("思考·记录·成长")
-      && t.includes("免杀")
-      && t.includes("渗透")
-      && t.includes("开源")
-      && t.includes("其他")
-      && t.includes("点击进入各主题")
-      && !t.includes("最近文章");
-  });
-
-  candidates.sort(function(a,b){
-    var ar=a.getBoundingClientRect(), br=b.getBoundingClientRect();
-    return (ar.width*ar.height) - (br.width*br.height);
-  });
-
-  var target = candidates.find(function(el){
-    var r=el.getBoundingClientRect();
-    return r.width > 700 && r.height > 260 && r.height < 620;
-  }) || candidates[0];
-
-  if(target) target.classList.add("hero");
-})();
-</script>
 
 </body>
 </html>
