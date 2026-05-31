@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     /*
-      Scholar's Notes v18
+      Scholar's Notes v20
       只需要把这个 index.html 放在仓库根目录。
       图片全部读取 ./assets/ 里的固定文件名：
       cat-alert.png / cat-angry.png / cat-cry.png / cat-head.png / cat-mini.png
@@ -41,9 +41,9 @@
       --purple:#9a7bd1;
       --purple-soft:#eee3ff;
       --shadow:0 14px 28px rgba(86,66,42,.12);
-      --font-title:"Ma Shan Zheng","Long Cang","ZCOOL XiaoWei",cursive;
+      --font-title:"Ma Shan Zheng","Long Cang","Microsoft YaHei",cursive;
       --font-hand:"Caveat","Long Cang","Ma Shan Zheng",cursive;
-      --font-body:"ZCOOL XiaoWei","Microsoft YaHei","PingFang SC",sans-serif;
+      --font-body:"Microsoft YaHei","PingFang SC","Noto Sans SC",Arial,sans-serif;
     }
 
     *{box-sizing:border-box;margin:0;padding:0}
@@ -52,6 +52,10 @@
       min-height:100vh;
       color:var(--ink);
       font-family:var(--font-body);
+      font-size:16px;
+      letter-spacing:.2px;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
       background-color:var(--bg);
       background-image:
         radial-gradient(circle at 12px 12px, rgba(120,95,65,.07) 1.2px, transparent 1.3px),
@@ -279,8 +283,8 @@
     }
     .hero-desc{
       margin-top:25px;
-      font-size:20px;
-      color:#5c554e;
+      font-size:22px;
+      color:#4f463e;
       letter-spacing:2px;
     }
     .hero-en{
@@ -391,9 +395,9 @@
     .hero-note{
       margin-top:22px;
       text-align:center;
-      font-size:20px;
-      color:#5a5048;
-      letter-spacing:4px;
+      font-size:22px;
+      color:#4f463e;
+      letter-spacing:2px;
     }
 
     /* 标题 */
@@ -481,36 +485,48 @@
       justify-self:center;
       filter:drop-shadow(0 6px 5px rgba(80,60,45,.12));
     }
+    /* 第三张文章卡片的猫图原图视觉偏小，单独放大一点 */
+    .post:nth-child(3) .post-img{
+      width:150px;
+      height:136px;
+      transform:translateX(-4px) scale(1.08);
+      transform-origin:center center;
+    }
     .post-body{min-width:0}
     .tag{
       display:inline-block;
       padding:5px 13px;
       border-radius:7px;
       color:#fff;
-      font-size:14px;
+      font-size:15px;
       font-weight:800;
-      margin-bottom:8px;
+      margin-bottom:9px;
     }
     .tag.kill{background:#ec91a0}
     .tag.pentest{background:#77aadb}
     .tag.open{background:#dbad30}
     .post h3{
-      font-size:21px;
-      line-height:1.42;
-      letter-spacing:1px;
-      margin-bottom:8px;
+      font-family:var(--font-body);
+      font-size:24px;
+      line-height:1.45;
+      letter-spacing:.4px;
+      margin-bottom:10px;
+      font-weight:800;
     }
     .post p{
-      font-size:15px;
-      color:#5e554e;
-      line-height:1.75;
+      font-family:var(--font-body);
+      font-size:17px;
+      color:#4f463e;
+      line-height:1.85;
+      letter-spacing:.2px;
     }
     .post-foot{
       display:flex;
       justify-content:space-between;
-      margin-top:13px;
-      color:#80766d;
-      font-size:13px;
+      margin-top:14px;
+      color:#70675f;
+      font-size:15px;
+      font-family:var(--font-body);
     }
 
     /* 分类区块：保证卡片点击能动 */
@@ -537,9 +553,11 @@
       margin-bottom:8px;
     }
     .topic-section p{
-      color:#635950;
-      font-size:14px;
-      line-height:1.7;
+      font-family:var(--font-body);
+      color:#4f463e;
+      font-size:16px;
+      line-height:1.8;
+      letter-spacing:.2px;
     }
 
     /* 侧边栏 */
@@ -645,14 +663,17 @@
     }
     .recent-list li{
       display:grid;
-      grid-template-columns:18px minmax(0,1fr) 48px;
+      grid-template-columns:18px minmax(0,1fr) 52px;
       gap:10px;
       align-items:start;
       padding-bottom:10px;
       border-bottom:1px dashed rgba(80,60,45,.14);
-      font-size:15px;
-      color:#433930;
-      line-height:1.68;
+      font-family:var(--font-body);
+      font-size:16px;
+      font-weight:500;
+      color:#3f372f;
+      line-height:1.75;
+      letter-spacing:.2px;
     }
     .recent-list li::before{
       content:"○";
@@ -667,8 +688,9 @@
     .recent-list time{
       text-align:right;
       color:#70665d;
-      font-size:13px;
+      font-size:14px;
       font-weight:700;
+      font-family:var(--font-body);
     }
 
     .self-card{
@@ -697,12 +719,13 @@
       margin-bottom:20px;
     }
     .self-card p{
-      font-family:var(--font-title);
-      font-size:23px;
-      line-height:1.85;
-      letter-spacing:4px;
-      color:#8a4d55;
-      max-width:250px;
+      font-family:var(--font-body);
+      font-size:21px;
+      line-height:1.9;
+      letter-spacing:1px;
+      color:#7f4650;
+      max-width:260px;
+      font-weight:600;
       text-shadow:0 1px 0 rgba(255,255,255,.55);
     }
     .note-cat{
@@ -724,9 +747,9 @@
       gap:18px;
       align-items:center;
       border-top:1.5px dashed rgba(111,153,206,.33);
-      font-family:var(--font-hand);
+      font-family:var(--font-body);
       color:#355f91;
-      font-size:21px;
+      font-size:19px;
       letter-spacing:2px;
       position:relative;
       overflow:visible;
