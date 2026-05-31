@@ -19,7 +19,7 @@ cover: ./assets/cat-angry.png
 go build -o ss-server.exe .
 ```
 
-![image-20260518183647713](./assets/posts/ai_evasion学习—Claude code开发c2/image-20260518183647713.png)
+![image-20260518183647713](./assets/posts/ai_evasion学习—Claude%20code开发c2/image-20260518183647713.png)
 
 然后启动服务端，这里带一个 token，当成后台连接用的口令。
 
