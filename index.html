@@ -16,13 +16,13 @@
       cat-note.png / cat-peek.png / cat-small.png / cat-smile.png
       clip-pink.png / clip-blue.png / clip-yellow.png / clip-purple.png
       footer-ribbon-cat.png / hero-cat.png / keep-note-sticker.png / logo-cat.png
-      note-self-bg.png / paper-left-edge.png / sidebar-updates-bg.png
+      note-self-bg.png / paper-left-edge.png / right-updates-paper-bg.png
       tape-pink.png / tape-blue.png / tape-yellow.png / tape-purple.png
 
       本版调整：
       1. 最近文章三张卡片顶部仍使用 clip-pink / clip-blue / clip-yellow。
       2. 首页四个主题入口改为直接使用 topic-paper-pink/blue/yellow/purple 四张手撕纸素材。
-      3. 近期更新与 Note to self 继续读取对应背景图 assets/sidebar-updates-bg.png 与 assets/note-self-bg.png。
+      3. 近期更新与 Note to self 继续读取对应背景图 assets/right-updates-paper-bg.png 与 assets/note-self-bg.png。
       4. 提高“近期更新”文字可读性，增加柔和底色。
     */
 
@@ -638,7 +638,7 @@
       color:#4c2e20;
       background-image:url("./assets/topic-paper-purple.png");
     }
-    /* 近期更新：使用素材库里的 sidebar-updates-bg.png，做成参考图那种撕边记事纸效果 */
+    /* 近期更新：使用素材库里的 right-updates-paper-bg.png，做成参考图那种撕边记事纸效果 */
     .recent-card{
       position:relative;
       min-height:0;
@@ -654,7 +654,7 @@
       content:"";
       position:absolute;
       inset:-10px -8px -12px -34px;
-      background:url("./assets/sidebar-updates-bg.png") center/100% 100% no-repeat;
+      background:url("./assets/right-updates-paper-bg.png") center/100% 100% no-repeat;
       z-index:0;
       pointer-events:none;
       filter:drop-shadow(0 12px 16px rgba(86,66,42,.10));
@@ -991,6 +991,80 @@ footer > *{
   z-index:1;
 }
 
+
+/* ===============================
+   v50 修正
+   1. hero 红框内容整体上移一点
+   2. 右侧“近期更新”改为直接使用 right-updates-paper-bg.png
+   3. hero 里的小猫位置改到右侧，贴近参考图
+   =============================== */
+
+/* 主视觉整块：整体内容上移 */
+.hero{
+  padding-top: 30px !important;
+  padding-bottom: 22px !important;
+  min-height: 430px !important;
+}
+.hero-grid{
+  margin-top: -8px !important;
+  gap: 6px !important;
+}
+.hero-copy{
+  padding-left: 34px !important;
+}
+.hero-title{
+  margin-top: 6px !important;
+}
+.hero-desc{
+  margin-top: 16px !important;
+}
+.hero-en{
+  margin-top: 10px !important;
+}
+.hero-cat{
+  margin-top: -4px !important;
+  margin-left: -22px !important;
+}
+.topic-grid{
+  margin-top: 8px !important;
+  margin-left: 28px !important;
+}
+.hero-note{
+  margin-top: 6px !important;
+}
+
+/* 小猫按参考图放到右上偏中的位置，不放左边 */
+.hero-peek{
+  right: 18px !important;
+  top: 92px !important;
+  left: auto !important;
+  width: 68px !important;
+  height: 50px !important;
+  transform: rotate(2deg) !important;
+}
+
+/* 近期更新：使用你给的素材 right-updates-paper-bg.png，不再用错误素材名 */
+.recent-card{
+  padding: 38px 24px 24px 54px !important;
+}
+.recent-card::before{
+  inset: -6px -8px -10px -30px !important;
+  background: url("./assets/right-updates-paper-bg.png") center / 100% 100% no-repeat !important;
+  filter: drop-shadow(0 10px 14px rgba(86,66,42,.10)) !important;
+}
+.recent-card .side-cat{
+  right: 14px !important;
+  top: 18px !important;
+  width: 74px !important;
+  height: 56px !important;
+}
+.recent-card .side-title{
+  margin-bottom: 12px !important;
+}
+.recent-list li{
+  padding: 7px 0 8px !important;
+}
+
 </style>
 </head>
 <body>
@@ -1018,6 +1092,7 @@ footer > *{
     <div class="layout">
       <main class="main">
 
+        <!-- v50: hero 上移 + 更新区素材修正 + 小猫位置修正 -->
         <section class="hero paper torn">
           <span class="doodle d1">♡</span>
           <span class="doodle d2">〃</span>
