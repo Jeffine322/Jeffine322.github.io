@@ -13,12 +13,12 @@
       --paper:#fffdf6;
       --ink:#2c2118;
       --muted:#786d60;
-      --theme:#e88d9d;
-      --theme-soft:#fde8ee;
-      --theme-deep:#b75f72;
-      --theme-table:#d7798b;
-      --code-title:#efb4c0;
-      --code-bg:#3b2b32;
+      --theme:#a98ad5;
+      --theme-soft:#efe5ff;
+      --theme-deep:#7f65ad;
+      --theme-table:#9a7fc4;
+      --code-title:#c4b0e5;
+      --code-bg:#302b42;
       --font-title:"Ma Shan Zheng","Long Cang","Microsoft YaHei",cursive;
       --font-body:"Microsoft YaHei","PingFang SC","Noto Sans SC",Arial,sans-serif;
     }
@@ -51,8 +51,6 @@
       --theme-soft:#efe5ff;
       --theme-deep:#7f65ad;
       --theme-table:#9a7fc4;
-      --code-title:#c4b0e5;
-      --code-bg:#302b42;
       --code-title:#c4b0e5;
       --code-bg:#302b42;
     }
@@ -88,7 +86,8 @@
       padding-bottom:3px;
     }
     article{
-      background:rgba(255,253,246,.95);
+      background:rgba(255,253,246,.96);
+      color:var(--ink);
       border-radius:22px;
       padding:42px 48px;
       box-shadow:0 14px 28px rgba(86,66,42,.12);
@@ -118,10 +117,11 @@
       font-family:var(--font-title);
       font-size:44px;
       letter-spacing:2px;
-      margin-bottom:18px;
+      margin:0 0 18px;
       position:relative;
       display:inline-block;
       line-height:1.25;
+      color:var(--ink);
     }
     h1::after{
       content:"";
@@ -134,17 +134,10 @@
       z-index:-1;
       border-radius:999px;
     }
-    h2{font-size:26px;margin:30px 0 10px}
-    h3{font-size:22px;margin:24px 0 8px}
+    h2{font-size:26px;margin:30px 0 10px;color:var(--ink)}
+    h3{font-size:22px;margin:24px 0 8px;color:var(--ink)}
     p{margin:12px 0;color:#3f372f}
-    article > p,
-    article li,
-    article h1,
-    article h2,
-    article h3{
-      color:var(--ink);
-    }
-    ul,ol{padding-left:28px;margin:12px 0}
+    ul,ol{padding-left:28px;margin:12px 0;color:#3f372f}
     li{margin:6px 0}
     code{
       background:var(--theme-soft);
@@ -154,7 +147,6 @@
       font-family:Consolas,"JetBrains Mono","Courier New",monospace;
     }
 
-    /* 代码块：只作用于 .code-card 内部，不影响后面的普通正文 */
     .code-card{
       margin:18px 0 24px;
       border-radius:14px;
@@ -203,15 +195,6 @@
       white-space:pre;
       text-shadow:none;
     }
-    article > p,
-    article > h1,
-    article > h2,
-    article > h3,
-    article > ul,
-    article > ol,
-    article > blockquote{
-      background:transparent !important;
-    }
 
     blockquote{
       border-left:5px solid var(--theme);
@@ -221,8 +204,6 @@
       background:color-mix(in srgb, var(--theme-soft) 65%, white);
       border-radius:0 12px 12px 0;
     }
-
-    /* Markdown 表格：按分类统一配色，类似你图三那种处理 */
     .table-wrap{
       margin:20px 0 26px;
       overflow:auto;
@@ -262,11 +243,7 @@
     tbody tr:nth-child(odd){
       background:rgba(255,253,246,.82);
     }
-    tbody tr:hover{
-      background:color-mix(in srgb, var(--theme-soft) 70%, white);
-    }
 
-    /* Mermaid 流程图 */
     .mermaid-wrap{
       margin:20px 0 26px;
       padding:18px;
@@ -302,7 +279,9 @@
     </article>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
   <script>
     function escapeHTML(text){
       return String(text ?? "").replace(/[&<>"']/g, s => ({
@@ -337,166 +316,36 @@
       return {meta, body};
     }
 
-    function inlineFormat(text){
-      return escapeHTML(text)
-        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-        .replace(/`([^`]+)`/g, "<code>$1</code>");
-    }
+    function setupMarked(){
+      const renderer = new marked.Renderer();
 
-    function isTableSeparator(line){
-      return /^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(line);
-    }
-
-    function splitTableRow(line){
-      return line.trim()
-        .replace(/^\|/, "")
-        .replace(/\|$/, "")
-        .split("|")
-        .map(cell => cell.trim());
-    }
-
-    function tableToHTML(lines){
-      const header = splitTableRow(lines[0]);
-      const rows = lines.slice(2).filter(Boolean).map(splitTableRow);
-
-      return `
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>${header.map(cell => `<th>${inlineFormat(cell)}</th>`).join("")}</tr>
-            </thead>
-            <tbody>
-              ${rows.map(row => `<tr>${header.map((_, i) => `<td>${inlineFormat(row[i] || "")}</td>`).join("")}</tr>`).join("")}
-            </tbody>
-          </table>
-        </div>
-      `;
-    }
-
-    function flushParagraph(lines, output){
-      const text = lines.join("\n").trim();
-      if(!text) return;
-
-      const cleanLines = text.split(/\n/).filter(Boolean);
-
-      if(cleanLines.every(line => /^[-*]\s+/.test(line))){
-        output.push("<ul>" + cleanLines.map(line => `<li>${inlineFormat(line.replace(/^[-*]\s+/, ""))}</li>`).join("") + "</ul>");
-        return;
-      }
-
-      if(cleanLines.every(line => /^\d+\.\s+/.test(line))){
-        output.push("<ol>" + cleanLines.map(line => `<li>${inlineFormat(line.replace(/^\d+\.\s+/, ""))}</li>`).join("") + "</ol>");
-        return;
-      }
-
-      output.push(`<p>${cleanLines.map(inlineFormat).join("<br>")}</p>`);
-    }
-
-    function mdToHTML(markdown){
-      const lines = (markdown || "").replace(/\r\n/g, "\n").split("\n");
-      const output = [];
-      let paragraph = [];
-      let i = 0;
-
-      while(i < lines.length){
-        const line = lines[i];
-        const trimmed = line.trim();
-
-        // 代码块：从 ```lang 开始，只吃到闭合 ```，后面的正文不会再被包进代码块
-        const fence = trimmed.match(/^```([A-Za-z0-9_-]*)\s*$/);
-        if(fence){
-          flushParagraph(paragraph, output);
-          paragraph = [];
-
-          const lang = (fence[1] || "txt").toLowerCase();
-          const codeLines = [];
-          i++;
-
-          while(i < lines.length && !lines[i].trim().match(/^```\s*$/)){
-            codeLines.push(lines[i]);
-            i++;
-          }
-
-          if(i < lines.length && lines[i].trim().match(/^```\s*$/)){
-            i++;
-          }
-
-          const code = codeLines.join("\n");
-          if(lang === "mermaid"){
-            output.push(`<div class="mermaid-wrap"><div class="mermaid">${escapeHTML(code)}</div></div>`);
-          }else{
-            output.push(`<div class="code-card"><div class="code-title">${escapeHTML(lang || "txt")}</div><pre><code>${escapeHTML(code)}</code></pre></div>`);
-          }
-          continue;
+      renderer.code = function(code, lang){
+        const language = String(lang || "txt").trim().toLowerCase() || "txt";
+        if(language === "mermaid"){
+          return `<div class="mermaid-wrap"><div class="mermaid">${escapeHTML(code)}</div></div>`;
         }
+        return `<div class="code-card"><div class="code-title">${escapeHTML(language)}</div><pre><code>${escapeHTML(code)}</code></pre></div>`;
+      };
 
-        // 表格
-        if(i + 1 < lines.length && /\|/.test(line) && isTableSeparator(lines[i + 1])){
-          flushParagraph(paragraph, output);
-          paragraph = [];
-          const tableLines = [lines[i], lines[i + 1]];
-          i += 2;
-          while(i < lines.length && lines[i].trim() && /\|/.test(lines[i])){
-            tableLines.push(lines[i]);
-            i++;
-          }
-          output.push(tableToHTML(tableLines));
-          continue;
-        }
+      renderer.table = function(header, body){
+        return `<div class="table-wrap"><table><thead>${header}</thead><tbody>${body}</tbody></table></div>`;
+      };
 
-        if(/^###\s+/.test(line)){
-          flushParagraph(paragraph, output);
-          paragraph = [];
-          output.push(`<h3>${inlineFormat(line.replace(/^###\s+/, ""))}</h3>`);
-          i++;
-          continue;
-        }
-        if(/^##\s+/.test(line)){
-          flushParagraph(paragraph, output);
-          paragraph = [];
-          output.push(`<h2>${inlineFormat(line.replace(/^##\s+/, ""))}</h2>`);
-          i++;
-          continue;
-        }
-        if(/^#\s+/.test(line)){
-          flushParagraph(paragraph, output);
-          paragraph = [];
-          output.push(`<h1>${inlineFormat(line.replace(/^#\s+/, ""))}</h1>`);
-          i++;
-          continue;
-        }
-
-        if(/^>\s+/.test(line)){
-          flushParagraph(paragraph, output);
-          paragraph = [];
-          const quote = [];
-          while(i < lines.length && /^>\s+/.test(lines[i])){
-            quote.push(lines[i].replace(/^>\s+/, ""));
-            i++;
-          }
-          output.push(`<blockquote>${quote.map(inlineFormat).join("<br>")}</blockquote>`);
-          continue;
-        }
-
-        if(trimmed === ""){
-          flushParagraph(paragraph, output);
-          paragraph = [];
-          i++;
-          continue;
-        }
-
-        paragraph.push(line);
-        i++;
-      }
-
-      flushParagraph(paragraph, output);
-      return output.join("\n");
+      marked.setOptions({
+        renderer,
+        gfm:true,
+        breaks:false,
+        mangle:false,
+        headerIds:false
+      });
     }
 
     function renderArticle(markdown){
       const {meta, body} = parseFrontMatter(markdown);
       const tag = normalizeTag(meta.tag || meta.category || "其他");
       document.body.dataset.theme = tag;
+
+      setupMarked();
 
       const article = document.getElementById("article");
       const metaHTML = `
@@ -506,7 +355,7 @@
         </div>
       `;
 
-      article.innerHTML = metaHTML + mdToHTML(body);
+      article.innerHTML = metaHTML + marked.parse(body);
 
       if(window.mermaid){
         mermaid.initialize({
