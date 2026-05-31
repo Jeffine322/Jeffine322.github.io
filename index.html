@@ -902,7 +902,91 @@
       .footer{grid-template-columns:1fr;height:auto;padding:20px 0;text-align:center}
       .footer-left,.footer-right{justify-content:center}
     }
-  </style>
+  
+
+
+
+/* ===============================
+   v45 纸张背景素材落位修正
+   hero-main-paper-bg 只放在顶部主视觉白色大框后面
+   不再铺到四个分类纸片后面
+   =============================== */
+
+/* 首页主视觉：自动标记出来的 .hero-paper-target 才挂大纸背景 */
+.hero-paper-target{
+  position:relative !important;
+  isolation:isolate;
+  background:transparent !important;
+  box-shadow:none !important;
+  overflow:visible !important;
+}
+
+.hero-paper-target::before{
+  content:"";
+  position:absolute;
+  inset:-26px -22px -20px -22px;
+  z-index:-1;
+  pointer-events:none;
+  background:url("./assets/hero-main-paper-bg.png") center center / 100% 100% no-repeat;
+}
+
+/* 主视觉内部内容永远在纸张上层 */
+.hero-paper-target > *{
+  position:relative;
+  z-index:1;
+}
+
+/* 右侧近期更新纸张背景 */
+.recent-updates{
+  position:relative;
+  isolation:isolate;
+  background:transparent !important;
+  box-shadow:none !important;
+}
+
+.recent-updates::before{
+  content:"";
+  position:absolute;
+  inset:-12px -10px -12px -16px;
+  z-index:-1;
+  pointer-events:none;
+  background:url("./assets/right-updates-paper-bg.png") center center / 100% 100% no-repeat;
+}
+
+.recent-updates > *{
+  position:relative;
+  z-index:1;
+}
+
+/* 底部横向撕纸条：作为 footer 背景层，不压文字和图片 */
+.site-footer,
+.footer,
+footer{
+  position:relative;
+  isolation:isolate;
+  background:transparent !important;
+  overflow:visible;
+}
+
+.site-footer::before,
+.footer::before,
+footer::before{
+  content:"";
+  position:absolute;
+  inset:-14px -24px -12px -24px;
+  z-index:-1;
+  pointer-events:none;
+  background:url("./assets/footer-torn-strip-bg.png") center center / 100% 100% no-repeat;
+}
+
+.site-footer > *,
+.footer > *,
+footer > *{
+  position:relative;
+  z-index:1;
+}
+
+</style>
 </head>
 <body>
   <div class="site">
@@ -1268,6 +1352,59 @@
 
     document.addEventListener("DOMContentLoaded", initBlog);
   </script>
+
+
+
+
+
+<script>
+/* v45：只给“思考·记录·成长”所在的顶部主视觉大框加纸张背景 */
+(function(){
+  function findHeroTarget(){
+    var candidates = Array.from(document.querySelectorAll("section, div, header, main"));
+    var matched = candidates.filter(function(el){
+      var t = (el.innerText || "").replace(/\s+/g, "");
+      return t.includes("思考·记录·成长") && t.includes("Ch.1");
+    });
+
+    if(!matched.length) return null;
+
+    // 选一个“刚好包住标题和猫图”的容器：
+    // 面积不要太大，避免把四个分类纸片也包进去。
+    matched.sort(function(a,b){
+      var ar = a.getBoundingClientRect();
+      var br = b.getBoundingClientRect();
+      var aa = ar.width * ar.height;
+      var ba = br.width * br.height;
+      return aa - ba;
+    });
+
+    // 过滤太小的，取第一个合适的
+    for(var i=0;i<matched.length;i++){
+      var r = matched[i].getBoundingClientRect();
+      if(r.width > 500 && r.height > 120 && r.height < 360){
+        return matched[i];
+      }
+    }
+    return matched[0];
+  }
+
+  function addRecentClass(){
+    document.querySelectorAll("section, aside, div").forEach(function(el){
+      var t = (el.innerText || "").replace(/\s+/g, "");
+      if(t.includes("近期更新") && t.length < 260){
+        el.classList.add("recent-updates");
+      }
+    });
+  }
+
+  var hero = findHeroTarget();
+  if(hero){
+    hero.classList.add("hero-paper-target");
+  }
+  addRecentClass();
+})();
+</script>
 
 </body>
 </html>
