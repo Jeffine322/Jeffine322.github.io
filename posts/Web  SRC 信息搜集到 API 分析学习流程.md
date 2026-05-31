@@ -31,7 +31,7 @@ domain="domain="hljedu.gov.cn""
 ksubdomain.exe v -f hosts.txt -o result.txt
 ```
 
- 得到result.txt之后，把它整理成纯域名列表，方便后续给OneForAll或者其他工具使用![image-20260515200941998](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260515200941998.png)
+ 得到result.txt之后，把它整理成纯域名列表，方便后续给OneForAll或者其他工具使用![image-20260515200941998](./assets/posts/WebSRC信息搜集到API分析学习流程/image-20260515200941998.png)
 
 PowerShell 处理示例：
 
