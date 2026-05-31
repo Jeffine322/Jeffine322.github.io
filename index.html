@@ -1065,6 +1065,48 @@ footer > *{
   padding: 7px 0 8px !important;
 }
 
+
+/* ===============================
+   v51 修正
+   1. hero 大背景下边缘继续向下延长，到用户红线位置附近
+   2. hero 小猫头从左边移到右边，贴近大猫右侧区域
+   =============================== */
+.hero{
+  min-height: 505px !important;
+  padding-top: 26px !important;
+  padding-bottom: 54px !important;
+  background-position: center top !important;
+  background-size: 100% 100% !important;
+}
+.hero-grid{
+  margin-top: -6px !important;
+}
+.hero-copy{
+  padding-left: 30px !important;
+}
+.topic-grid{
+  margin-top: 12px !important;
+  margin-left: 24px !important;
+}
+.hero-note{
+  margin-top: 18px !important;
+}
+/* 小猫头真正移到右侧 */
+.hero-peek{
+  left: auto !important;
+  right: 18px !important;
+  top: 150px !important;
+  width: 72px !important;
+  height: 54px !important;
+  transform: rotate(0deg) !important;
+  z-index: 3 !important;
+}
+/* 主猫微调，避免和小猫头打架 */
+.hero-cat{
+  margin-top: -2px !important;
+  margin-left: -10px !important;
+}
+
 </style>
 </head>
 <body>
@@ -1092,7 +1134,7 @@ footer > *{
     <div class="layout">
       <main class="main">
 
-        <!-- v50: hero 上移 + 更新区素材修正 + 小猫位置修正 -->
+        <!-- v51: hero 底部延长 + 小猫移到右侧 -->
         <section class="hero paper torn">
           <span class="doodle d1">♡</span>
           <span class="doodle d2">〃</span>
