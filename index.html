@@ -907,39 +907,22 @@
 
 
 
+
 /* ===============================
-   v47 正确纸张素材位置
-   1. hero-main-paper-bg：只放首页主视觉红框区域背后
-   2. right-updates-paper-bg：不默认叠加，避免近期更新背景叠背景
-   3. footer-torn-strip-bg：只放 footer 底层
+   v48 精确修正：hero-main-paper-bg 只铺红框区域
+   关键点：
+   - 不再用 JS 猜容器
+   - 不再把背景挂到标题那一小块
+   - 直接给首页 hero 主区做底层背景
    =============================== */
 
-/* 自动定位到红框区域的主视觉整体模块 */
-.hero-paper-target{
-  position:relative !important;
-  isolation:isolate;
-  background:transparent !important;
-  box-shadow:none !important;
-  overflow:visible !important;
-}
-
-/* hero 底图：铺满红框圈出的整个区域，放最底层，不压内容 */
-.hero-paper-target::before{
-  content:"";
-  position:absolute;
-  inset:-18px -18px -18px -18px;
-  z-index:-1;
-  pointer-events:none;
-  background:url("./assets/hero-main-paper-bg.png") center center / 100% 100% no-repeat;
-}
-
-/* 确保 hero 里的标题、猫图、四个主题卡片、说明文字都在背景上面 */
-.hero-paper-target > *{
-  position:relative;
-  z-index:1;
-}
-
-/* 近期更新：默认不额外叠纸张背景，避免背景叠背景 */
+/* 先清掉旧版本可能残留的伪元素 */
+.hero-paper-target::before,
+.home-hero::before,
+.hero-section::before,
+.main-hero::before,
+.banner::before,
+.intro::before,
 .recent-updates::before,
 .updates-card::before,
 .sidebar-updates::before,
@@ -950,27 +933,93 @@
   display:none !important;
 }
 
-/* 如以后你想完全替换近期更新背景，再手动给模块加 class="use-paper-bg" */
-.use-paper-bg{
-  position:relative;
+/* 首页顶部主视觉整块：这块对应你红框圈起来的范围 */
+.hero,
+.home-hero,
+.hero-section,
+.main-hero{
+  position:relative !important;
   isolation:isolate;
   background:transparent !important;
   box-shadow:none !important;
+  overflow:visible !important;
 }
-.use-paper-bg::before{
+
+/*
+  强制把纸张背景放到 hero 整块后面。
+  用 min-height 保证能覆盖：
+  标题 + 猫图 + 四个主题卡片 + 下面说明文字。
+*/
+.hero::before{
   content:"";
   position:absolute;
-  inset:-12px -10px -12px -16px;
+  left:-18px;
+  right:-18px;
+  top:-18px;
+  bottom:-24px;
   z-index:-1;
   pointer-events:none;
-  background:url("./assets/right-updates-paper-bg.png") center center / 100% 100% no-repeat;
+  display:block !important;
+  background:url("./assets/hero-main-paper-bg.png") center center / 100% 100% no-repeat;
 }
-.use-paper-bg > *{
+
+/* 兼容如果你的主区类名不是 .hero */
+.home-hero::before,
+.hero-section::before,
+.main-hero::before{
+  content:"";
+  position:absolute;
+  left:-18px;
+  right:-18px;
+  top:-18px;
+  bottom:-24px;
+  z-index:-1;
+  pointer-events:none;
+  display:block !important;
+  background:url("./assets/hero-main-paper-bg.png") center center / 100% 100% no-repeat;
+}
+
+/* hero 里面所有内容必须在纸张上面 */
+.hero > *,
+.home-hero > *,
+.hero-section > *,
+.main-hero > *{
   position:relative;
   z-index:1;
 }
 
-/* 底部横向撕纸条：只放 footer 背景层，不压文字和图片 */
+/*
+  如果你原来的 hero 内层还有白色背景，把它去掉，
+  避免出现“背景只在标题背后、下面露出网格”的割裂感。
+*/
+.hero .hero-card,
+.hero .banner,
+.hero .intro,
+.home-hero .hero-card,
+.home-hero .banner,
+.home-hero .intro,
+.hero-section .hero-card,
+.hero-section .banner,
+.hero-section .intro,
+.main-hero .hero-card,
+.main-hero .banner,
+.main-hero .intro{
+  background:transparent !important;
+  box-shadow:none !important;
+}
+
+/* 近期更新不叠加背景 */
+.recent-updates::before,
+.updates-card::before,
+.sidebar-updates::before,
+.update-card::before,
+.recent-list::before,
+.aside-updates::before{
+  content:none !important;
+  display:none !important;
+}
+
+/* footer 只保留底层撕纸条 */
 .site-footer,
 .footer,
 footer{
@@ -979,7 +1028,6 @@ footer{
   background:transparent !important;
   overflow:visible;
 }
-
 .site-footer::before,
 .footer::before,
 footer::before{
@@ -990,7 +1038,6 @@ footer::before{
   pointer-events:none;
   background:url("./assets/footer-torn-strip-bg.png") center center / 100% 100% no-repeat;
 }
-
 .site-footer > *,
 .footer > *,
 footer > *{
@@ -1372,64 +1419,38 @@ footer > *{
 
 
 
+
+
+
 <script>
-/* v47：只给首页红框主视觉区域挂 hero-main-paper-bg */
+/* v48 兜底：如果页面没有 .hero，就把包含四个主题的最小合适容器标记为 .hero */
 (function(){
-  function norm(el){
-    return (el.innerText || "").replace(/\s+/g, "");
-  }
+  if(document.querySelector(".hero")) return;
 
-  function findHeroPaperTarget(){
-    var nodes = Array.from(document.querySelectorAll("section, div, header, main"));
-    var candidates = nodes.filter(function(el){
-      var t = norm(el);
-      return t.includes("思考·记录·成长")
-        && t.includes("免杀")
-        && t.includes("渗透")
-        && t.includes("开源")
-        && t.includes("其他")
-        && t.includes("点击进入各主题");
-    });
+  function norm(el){ return (el.innerText || "").replace(/\s+/g, ""); }
 
-    if(!candidates.length){
-      return null;
-    }
+  var candidates = Array.from(document.querySelectorAll("section, div")).filter(function(el){
+    var t = norm(el);
+    return t.includes("思考·记录·成长")
+      && t.includes("免杀")
+      && t.includes("渗透")
+      && t.includes("开源")
+      && t.includes("其他")
+      && t.includes("点击进入各主题")
+      && !t.includes("最近文章");
+  });
 
-    // 选“包含红框所有内容但尽量不包含最近文章”的容器
-    candidates = candidates.filter(function(el){
-      var t = norm(el);
-      return !t.includes("最近文章") && !t.includes("近期更新");
-    });
+  candidates.sort(function(a,b){
+    var ar=a.getBoundingClientRect(), br=b.getBoundingClientRect();
+    return (ar.width*ar.height) - (br.width*br.height);
+  });
 
-    if(!candidates.length){
-      candidates = nodes.filter(function(el){
-        var t = norm(el);
-        return t.includes("思考·记录·成长") && t.includes("点击进入各主题");
-      });
-    }
+  var target = candidates.find(function(el){
+    var r=el.getBoundingClientRect();
+    return r.width > 700 && r.height > 260 && r.height < 620;
+  }) || candidates[0];
 
-    candidates.sort(function(a,b){
-      var ar = a.getBoundingClientRect();
-      var br = b.getBoundingClientRect();
-      var aa = ar.width * ar.height;
-      var ba = br.width * br.height;
-      return aa - ba;
-    });
-
-    for(var i=0;i<candidates.length;i++){
-      var r = candidates[i].getBoundingClientRect();
-      if(r.width > 650 && r.height > 220 && r.height < 520){
-        return candidates[i];
-      }
-    }
-
-    return candidates[0] || null;
-  }
-
-  var hero = findHeroPaperTarget();
-  if(hero){
-    hero.classList.add("hero-paper-target");
-  }
+  if(target) target.classList.add("hero");
 })();
 </script>
 
