@@ -1,3 +1,10 @@
+---
+title: AI Evasion 学习：Claude Code 开发 C2
+date: 2026-06-01
+tag: 免杀
+summary: 记录 AI Evasion 学习过程，以及使用 Claude Code 辅助开发 C2 的思路。
+cover: ./assets/cat-angry.png
+---
 # ai_evasion学习—Claude code开发c2
 
 搭建并测试一个简单的C2，整体效果是：先启动服务端程序，然后让客户端接入到服务端，最后通过浏览器打开管理后台，在页面里查看当前在线的终端设备，并进行一些基础的运维操作，比如查看连接状态、执行简单指令、上传下载文件、查看截图等。
