@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     /*
-      Scholar's Notes v25
+      Scholar's Notes v26
       只需要把这个 index.html 放在仓库根目录。
       图片全部读取 ./assets/ 里的固定文件名：
       cat-alert.png / cat-angry.png / cat-cry.png / cat-head.png / cat-mini.png
@@ -593,38 +593,55 @@
     .tag-cloud{
       display:grid;
       grid-template-columns:1fr 1fr;
-      gap:15px 16px;
+      gap:12px 14px;
+      align-items:center;
     }
     .tag-cloud a{
-      height:54px;
+      height:72px;
       display:flex;
       align-items:center;
       justify-content:center;
-      border-radius:11px;
-      border:2px dashed currentColor;
+      padding:6px 10px 10px;
+      border:none;
+      border-radius:0;
       font-family:var(--font-title);
-      font-size:23px;
+      font-size:24px;
       letter-spacing:4px;
-      background:rgba(255,255,255,.35);
       position:relative;
-      box-shadow:0 6px 12px rgba(82,62,38,.08);
-      transition:.18s ease;
+      background-position:center;
+      background-repeat:no-repeat;
+      background-size:100% 100%;
+      box-shadow:none;
+      text-shadow:0 1px 0 rgba(255,255,255,.72);
+      transition:transform .18s ease, filter .18s ease;
+      filter:drop-shadow(0 8px 10px rgba(82,62,38,.10));
     }
-    .tag-cloud a:hover{transform:translateY(-2px) rotate(-1deg)}
-    .tag-cloud a::after{
-      content:"";
-      position:absolute;
-      inset:6px;
-      border:1px dashed rgba(255,255,255,.9);
-      border-radius:8px;
-      pointer-events:none;
+    .tag-cloud a:hover{
+      transform:translateY(-2px) rotate(-1deg);
+      filter:drop-shadow(0 12px 14px rgba(82,62,38,.14));
     }
-
-    /* 近期更新：直接使用素材库里的 sidebar-updates-bg.png，保持图二那种纸张效果 */
+    .tag-cloud a::after{content:none;}
+    .tag-cloud a.tag-kill{
+      color:#4c2e20;
+      background-image:url("./assets/topic-paper-pink.png");
+    }
+    .tag-cloud a.tag-pentest{
+      color:#4c2e20;
+      background-image:url("./assets/topic-paper-blue.png");
+    }
+    .tag-cloud a.tag-open{
+      color:#4c2e20;
+      background-image:url("./assets/topic-paper-yellow.png");
+    }
+    .tag-cloud a.tag-other{
+      color:#4c2e20;
+      background-image:url("./assets/topic-paper-purple.png");
+    }
+    /* 近期更新：使用素材库里的 sidebar-updates-bg.png，做成参考图那种撕边记事纸效果 */
     .recent-card{
       position:relative;
-      min-height:300px;
-      padding:48px 34px 34px 62px;
+      min-height:0;
+      padding:38px 26px 26px 56px;
       background:transparent;
       border:none;
       border-radius:0;
@@ -635,11 +652,11 @@
     .recent-card::before{
       content:"";
       position:absolute;
-      inset:-18px -20px -20px -42px;
+      inset:-10px -8px -12px -34px;
       background:url("./assets/sidebar-updates-bg.png") center/100% 100% no-repeat;
       z-index:0;
       pointer-events:none;
-      filter:drop-shadow(0 14px 18px rgba(86,66,42,.13));
+      filter:drop-shadow(0 12px 16px rgba(86,66,42,.10));
     }
 
     .recent-card::after{
@@ -654,30 +671,36 @@
     }
 
     .recent-card .side-title{
-      font-size:33px;
-      margin-bottom:22px;
+      font-size:29px;
+      letter-spacing:3px;
+      margin-bottom:14px;
       color:#2f2218;
+      transform:rotate(-1deg);
     }
 
     .recent-card .side-title::after{
+      left:-4px;
+      right:-6px;
+      bottom:-5px;
+      height:6px;
       background:rgba(232,141,157,.68);
     }
 
     .recent-card .side-cat{
       position:absolute;
-      right:18px;
-      top:34px;
-      width:82px;
-      height:62px;
+      right:16px;
+      top:20px;
+      width:76px;
+      height:58px;
       object-fit:contain;
-      filter:drop-shadow(0 4px 5px rgba(80,60,45,.12));
+      filter:drop-shadow(0 4px 5px rgba(80,60,45,.10));
     }
 
     .recent-list{
       display:grid;
-      gap:8px;
+      gap:4px;
       list-style:none;
-      padding:4px 4px 0 2px;
+      padding:2px 0 0 0;
       margin:0;
       background:transparent;
       box-shadow:none;
@@ -685,24 +708,26 @@
 
     .recent-list li{
       display:grid;
-      grid-template-columns:18px minmax(0,1fr) 52px;
-      gap:10px;
+      grid-template-columns:16px minmax(0,1fr) 44px;
+      gap:8px;
       align-items:start;
-      padding:7px 0 8px;
+      padding:6px 0 7px;
       border-bottom:1px dashed rgba(80,60,45,.10);
       font-family:"Microsoft YaHei","PingFang SC","Noto Sans SC",Arial,sans-serif;
-      font-size:15px;
+      font-size:13px;
       font-weight:500;
       color:#3f372f;
       line-height:1.65;
-      letter-spacing:.2px;
+      letter-spacing:.15px;
     }
 
     .recent-list li::before{
-      content:"○";
+      content:"•";
       color:#e88d9d;
       font-weight:900;
-      margin-top:1px;
+      font-size:16px;
+      margin-top:-1px;
+      text-align:center;
     }
 
     .recent-list span{
@@ -713,7 +738,7 @@
     .recent-list time{
       text-align:right;
       color:#6f6258;
-      font-size:13px;
+      font-size:12px;
       font-weight:700;
       font-family:"Times New Roman", Times, serif;
     }
@@ -951,10 +976,10 @@
           <img class="side-cat" src="./assets/cat-alert.png" alt="">
           <h2 class="side-title">主题 Tags ♥</h2>
           <div class="tag-cloud">
-            <a href="#kill" style="color:#c96a78;background:#ffe8eb;">免杀</a>
-            <a href="#pentest" style="color:#5d94cf;background:#e5f1ff;">渗透</a>
-            <a href="#open" style="color:#b48a1d;background:#fff1b9;">开源</a>
-            <a href="#other" style="color:#8f74be;background:#eee3ff;">其他</a>
+            <a class="tag-kill" href="#kill">免杀</a>
+            <a class="tag-pentest" href="#pentest">渗透</a>
+            <a class="tag-open" href="#open">开源</a>
+            <a class="tag-other" href="#other">其他</a>
           </div>
         </section>
 
