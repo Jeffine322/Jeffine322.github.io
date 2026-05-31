@@ -17,8 +17,10 @@
       --theme-soft:#efe5ff;
       --theme-deep:#7f65ad;
       --theme-table:#9a7fc4;
-      --code-title:#c4b0e5;
-      --code-bg:#efe5ff;
+      --code-title:#e7dcf8;
+      --code-bg:#faf7ff;
+      --table-head:#d7c7f0;
+      --table-head:#d7c7f0;
       --font-title:"Ma Shan Zheng","Long Cang","Microsoft YaHei",cursive;
       --font-body:"Microsoft YaHei","PingFang SC","Noto Sans SC",Arial,sans-serif;
     }
@@ -27,32 +29,36 @@
       --theme-soft:#fde8ee;
       --theme-deep:#b75f72;
       --theme-table:#d7798b;
-      --code-title:#efb4c0;
-      --code-bg:#fde8ee;
+      --code-title:#f5dbe4;
+      --code-bg:#fff7fa;
+      --table-head:#e8c5d1;
     }
     body[data-theme="渗透"]{
       --theme:#77aede;
       --theme-soft:#e7f2ff;
       --theme-deep:#4c84b6;
       --theme-table:#6e9fcf;
-      --code-title:#6fa3cf;
-      --code-bg:#d8edf8;
+      --code-title:#d8edf8;
+      --code-bg:#f4f9ff;
+      --table-head:#c9e4f3;
     }
     body[data-theme="开源"]{
       --theme:#e3bc46;
       --theme-soft:#fff2bd;
       --theme-deep:#ae8422;
       --theme-table:#d2a93a;
-      --code-title:#e8cc6e;
-      --code-bg:#fff2bd;
+      --code-title:#f6e7b5;
+      --code-bg:#fffdf3;
+      --table-head:#eedc97;
     }
     body[data-theme="其他"]{
       --theme:#a98ad5;
       --theme-soft:#efe5ff;
       --theme-deep:#7f65ad;
       --theme-table:#9a7fc4;
-      --code-title:#c4b0e5;
-      --code-bg:#efe5ff;
+      --code-title:#e7dcf8;
+      --code-bg:#faf7ff;
+      --table-head:#d7c7f0;
     }
 
     *{box-sizing:border-box;margin:0;padding:0}
@@ -149,12 +155,12 @@
 
     .code-card{
       margin:18px 0 24px;
-      border-radius:14px;
+      border-radius:22px;
       overflow:hidden;
-      border:1px solid color-mix(in srgb, var(--code-title) 72%, #fff);
-      box-shadow:0 10px 18px rgba(86,66,42,.08);
+      border:1px solid rgba(120,95,65,.14);
+      box-shadow:0 10px 20px rgba(86,66,42,.08);
       background:var(--code-bg);
-      color:#1f1a16;
+      color:#1b232b;
       clear:both;
     }
     .code-title{
@@ -163,7 +169,7 @@
       justify-content:space-between;
       padding:10px 18px;
       background:var(--code-title);
-      color:#fff;
+      color:#32414f;
       font-family:"Times New Roman", Times, serif;
       font-weight:700;
       letter-spacing:.8px;
@@ -171,15 +177,26 @@
     }
     .code-title::after{
       content:"copy";
-      opacity:.9;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:58px;
+      height:26px;
+      padding:0 13px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid rgba(120,145,165,.22);
+      color:#617c94;
+      opacity:1;
       font-size:12px;
-      letter-spacing:1px;
+      letter-spacing:.8px;
+      box-shadow:0 2px 5px rgba(80,60,45,.06);
     }
     .code-card pre{
       margin:0;
       padding:18px 20px 20px;
       background:var(--code-bg);
-      color:#1f1a16;
+      color:#1b232b;
       overflow:auto;
       line-height:1.78;
       font-size:15px;
@@ -188,24 +205,23 @@
     .code-card pre code{
       display:block;
       background:transparent !important;
-      color:#1f1a16 !important;
+      color:#1b232b !important;
       padding:0;
       border-radius:0;
       font-family:Consolas,"JetBrains Mono","Courier New",monospace;
       white-space:pre;
       text-shadow:none;
     }
-
-
     .code-card code,
     .code-card pre,
     .code-card pre *{
-      color:#1f1a16 !important;
+      color:#1b232b !important;
       background:transparent !important;
     }
     .code-card pre{
       background:var(--code-bg) !important;
     }
+
     blockquote{
       border-left:5px solid var(--theme);
       padding:10px 14px 10px 16px;
@@ -230,8 +246,8 @@
       line-height:1.7;
     }
     thead th{
-      background:var(--theme-table);
-      color:#fff;
+      background:var(--table-head);
+      color:#384451;
       text-align:left;
       font-weight:700;
       padding:12px 16px;
@@ -248,10 +264,10 @@
     }
     tbody td:last-child{border-right:none}
     tbody tr:nth-child(even){
-      background:color-mix(in srgb, var(--theme-soft) 46%, white);
+      background:var(--code-bg);
     }
     tbody tr:nth-child(odd){
-      background:rgba(255,253,246,.82);
+      background:#fffdf8;
     }
 
     .mermaid-wrap{
