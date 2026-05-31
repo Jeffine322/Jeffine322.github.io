@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     /*
-      Scholar's Notes v22
+      Scholar's Notes v23
       只需要把这个 index.html 放在仓库根目录。
       图片全部读取 ./assets/ 里的固定文件名：
       cat-alert.png / cat-angry.png / cat-cry.png / cat-head.png / cat-mini.png
@@ -618,108 +618,102 @@
       pointer-events:none;
     }
 
+    /* 近期更新：直接使用素材库里的 sidebar-updates-bg.png，保持图二那种纸张效果 */
     .recent-card{
+      position:relative;
       min-height:300px;
-      padding:42px 34px 30px 58px;
-      background:
-        radial-gradient(circle at 12px 12px, rgba(122,96,58,.055) 1.1px, transparent 1.2px),
-        linear-gradient(135deg, rgba(255,255,255,.44), rgba(255,245,224,.20)),
-        #fff4dd;
-      background-size:16px 16px, auto, auto;
-      border-radius:22px;
-      box-shadow:0 14px 24px rgba(86,66,42,.10);
-      border:1px solid rgba(120,95,65,.08);
+      padding:48px 34px 34px 62px;
+      background:transparent;
+      border:none;
+      border-radius:0;
+      box-shadow:none;
       overflow:visible;
     }
+
     .recent-card::before{
       content:"";
       position:absolute;
-      inset:-10px -10px -12px -20px;
-      background:rgba(255,246,225,.76);
-      border-radius:24px 22px 28px 20px;
+      inset:-18px -20px -20px -42px;
+      background:url("./assets/sidebar-updates-bg.png") center/100% 100% no-repeat;
       z-index:0;
       pointer-events:none;
-      filter:drop-shadow(0 14px 18px rgba(86,66,42,.12));
-      clip-path:polygon(
-        0 1%,4% 0,8% 1.5%,12% .3%,16% 1.6%,20% .4%,24% 1.5%,28% .2%,32% 1.7%,
-        36% .3%,40% 1.5%,44% .2%,48% 1.7%,52% .3%,56% 1.5%,60% .2%,64% 1.6%,
-        68% .4%,72% 1.5%,76% .2%,80% 1.7%,84% .3%,88% 1.5%,92% .2%,96% 1.5%,100% .5%,
-        100% 96%,96% 98%,92% 96.5%,88% 98%,84% 96.5%,80% 98.2%,76% 96.6%,72% 98%,
-        68% 96.4%,64% 98.1%,60% 96.6%,56% 98%,52% 96.4%,48% 98.1%,44% 96.6%,
-        40% 98%,36% 96.4%,32% 98.2%,28% 96.7%,24% 98%,20% 96.5%,16% 98.1%,
-        12% 96.6%,8% 98%,4% 96.5%,0 98%
-      );
+      filter:drop-shadow(0 14px 18px rgba(86,66,42,.13));
     }
-    .recent-card .side-title,.recent-list,.recent-card .side-cat{
+
+    .recent-card::after{
+      content:none !important;
+    }
+
+    .recent-card .side-title,
+    .recent-list,
+    .recent-card .side-cat{
       position:relative;
       z-index:2;
     }
+
     .recent-card .side-title{
       font-size:33px;
       margin-bottom:22px;
+      color:#2f2218;
     }
+
+    .recent-card .side-title::after{
+      background:rgba(232,141,157,.68);
+    }
+
     .recent-card .side-cat{
       position:absolute;
-      right:14px;
-      top:30px;
-      width:84px;
+      right:18px;
+      top:34px;
+      width:82px;
       height:62px;
       object-fit:contain;
       filter:drop-shadow(0 4px 5px rgba(80,60,45,.12));
     }
-    .recent-card::after{
-      content:"";
-      position:absolute;
-      left:92px;
-      top:-14px;
-      width:170px;
-      height:30px;
-      background:url("./assets/tape-pink.png") center/100% 100% no-repeat;
-      opacity:.72;
-      transform:rotate(3deg);
-      z-index:1;
-      pointer-events:none;
-    }
+
     .recent-list{
       display:grid;
-      gap:9px;
+      gap:8px;
       list-style:none;
-      padding:8px 10px 8px 6px;
-      padding-right:6px;
-      border-radius:14px;
-      background:rgba(255,248,231,.42);
-      box-shadow:inset 0 0 0 1px rgba(120,95,65,.035);
+      padding:4px 4px 0 2px;
+      margin:0;
+      background:transparent;
+      box-shadow:none;
     }
+
     .recent-list li{
       display:grid;
       grid-template-columns:18px minmax(0,1fr) 52px;
       gap:10px;
       align-items:start;
-      padding-bottom:10px;
-      border-bottom:1px dashed rgba(80,60,45,.09);
-      font-family:var(--font-body);
-      font-size:16px;
+      padding:7px 0 8px;
+      border-bottom:1px dashed rgba(80,60,45,.10);
+      font-family:"Microsoft YaHei","PingFang SC","Noto Sans SC",Arial,sans-serif;
+      font-size:15px;
       font-weight:500;
       color:#3f372f;
-      line-height:1.75;
+      line-height:1.65;
       letter-spacing:.2px;
     }
+
     .recent-list li::before{
       content:"○";
-      color:var(--pink);
+      color:#e88d9d;
       font-weight:900;
       margin-top:1px;
     }
+
     .recent-list span{
       white-space:normal;
       word-break:break-word;
     }
+
     .recent-list time{
       text-align:right;
-      color:#70665d;
-      font-size:14px;
+      color:#6f6258;
+      font-size:13px;
       font-weight:700;
-      font-family:var(--font-body);
+      font-family:"Times New Roman", Times, serif;
     }
 
     .self-card{
@@ -965,12 +959,28 @@
         <section class="side-card recent-card">
           <img class="side-cat" src="./assets/cat-head.png" alt="">
           <h2 class="side-title">近期更新</h2>
+
           <ul class="recent-list">
-            <li><span>第一次整理免杀学习路线</span><time>05/12</time></li>
-            <li><span>信息收集阶段的笔记</span><time>05/10</time></li>
-            <li><span>最近在看的几个安全开源项目</span><time>05/08</time></li>
-            <li><span>渗透测试中的信息收集思路</span><time>05/05</time></li>
-            <li><span>一篇文章值得反复阅读</span><time>05/02</time></li>
+            <li>
+              <span>第一次整理免杀学习路线</span>
+              <time>05/12</time>
+            </li>
+            <li>
+              <span>信息收集阶段的笔记</span>
+              <time>05/10</time>
+            </li>
+            <li>
+              <span>最近在看的几个安全开源项目</span>
+              <time>05/08</time>
+            </li>
+            <li>
+              <span>渗透测试中的信息收集思路</span>
+              <time>05/05</time>
+            </li>
+            <li>
+              <span>一篇文章值得反复阅读</span>
+              <time>05/02</time>
+            </li>
           </ul>
         </section>
 
