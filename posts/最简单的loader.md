@@ -474,7 +474,8 @@ iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 - 我要 TCP 连接；
 - 我要流式 socket。
 
- 流程图：![ChatGPT Image 2026年6月5日 16_16_15](E:\浏览器下载\csdn文章下载\ChatGPT Image 2026年6月5日 16_16_15.png)
+ 流程图：
+ ![image-20260604211407592](./assets/posts/最简单的Loader/image-20260604211407592.png)
 
 ## Using WinHttp shellcode
 
