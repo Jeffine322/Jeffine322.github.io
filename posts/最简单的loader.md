@@ -30,7 +30,7 @@ cover: ./assets/cat-angry.png
 
 shellcode 定义
 
-![image-20260604104959759](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260604104959759.png)
+![image-20260604104959759](./assets/posts/最简单的Loader/image-20260604104959759.png)
 
 看注释可知是`Metasploit`生成的`payload.c`
 
@@ -38,7 +38,7 @@ shellcode 定义
 
 分配可写内存
 
-![image-20260604111334742](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260604111334742.png)
+![image-20260604111334742](./assets/posts/最简单的Loader/image-20260604111334742.png)
 
 - `LPVOID alloc_mem = void* alloc_mem`  是一个通用指针，用来保存`VirtualAlloc`申请的内存地址
 - `VirtualAlloc` 是`Windows API`用来在进程地址空间中申请一块内存
@@ -48,7 +48,7 @@ shellcode 定义
 
 写入`shellcode`，将`shellcode`字节组复制到刚分配的内存区域
 
-![image-20260604170244347](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260604170244347.png)
+![image-20260604170244347](./assets/posts/最简单的Loader/image-20260604170244347.png)
 
 声明变量：
 
@@ -78,7 +78,7 @@ VirtualProtect(alloc_mem, sizeof(payload), PAGE_EXECUTE_READ, &oldProtect);
 
 创建线程执行`Shellcode`
 
-![image-20260604211407591](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260604211407591.png)
+![image-20260604211407591](./assets/posts/最简单的Loader/image-20260604211407591.png)
 
 将`shellcode`地址强转为函数指针，作为线程入口点
 
@@ -88,7 +88,7 @@ VirtualProtect(alloc_mem, sizeof(payload), PAGE_EXECUTE_READ, &oldProtect);
 
 ## Base64 Loading 
 
-![image-20260604221200444](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260604221200444.png)
+![image-20260604221200444](./assets/posts/最简单的Loader/image-20260604221200444.png)
 
 不直接把`shellcode`写进代码，而是进行`base64`编码
 
@@ -100,33 +100,33 @@ VirtualProtect(alloc_mem, sizeof(payload), PAGE_EXECUTE_READ, &oldProtect);
 
 解码`base64`字符串
 
- 这一步将原来的`MoveMemory`复制`payload` 改成`CryptStringToBinaryA`解码`base64`到内存![image-20260604221739056](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260604221739056.png)
+ 这一步将原来的`MoveMemory`复制`payload` 改成`CryptStringToBinaryA`解码`base64`到内存![image-20260604221739056](./assets/posts/最简单的Loader/image-20260604221739056.png)
 
 ## CustomEncoding
 
- 不在直接放真实的payload![image-20260604223442244](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260604223442244.png)
+ 不在直接放真实的payload![image-20260604223442244](./assets/posts/最简单的Loader/image-20260604223442244.png)
 
 运行的时候再`Decode(payload)`
 
 再复制到内存执行（`CopyMemory`）
 
-![image-20260604223836174](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260604223836174.png)
+![image-20260604223836174](./assets/posts/最简单的Loader/image-20260604223836174.png)
 
 ## UUID shellcode
 
 把`payload`拆成很多段之后用UUID表示
 
-![image-20260604224708941](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260604224708941.png)
+![image-20260604224708941](./assets/posts/最简单的Loader/image-20260604224708941.png)
 
 创建可执行堆`hHeap`
 
-![image-20260604224839866](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260604224839866.png)
+![image-20260604224839866](./assets/posts/最简单的Loader/image-20260604224839866.png)
 
 但是和之前不同的是这里的`HEAP_CREATE_ENABLE_EXECUTE`是一个可执行的堆之前都是申请读写的内存然后将其改成可执行的，所以这一版不需要再单独调用`VirtualProtect`将内存改为可执行
 
 **从堆里申请内存：**
 
-![image-20260604225142266](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260604225142266.png)
+![image-20260604225142266](./assets/posts/最简单的Loader/image-20260604225142266.png)
 
 把指针转成整数类型，方便后面做地址加法，后面每写入一个UUID就要往后移动16字节
 
@@ -151,11 +151,11 @@ DWORD_PTR ptr = (DWORD_PTR)alloc_mem;
 `sizeof(uuids)` 是整个数组大小。
  `sizeof(uuids[0])` 是一个元素的大小，也就是一个 `char*` 指针的大小。
 
-![image-20260604225312322](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260604225312322.png)
+![image-20260604225312322](./assets/posts/最简单的Loader/image-20260604225312322.png)
 
  **UUID 还原 payload**
 
-![image-20260604225806142](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260604225806142.png)
+![image-20260604225806142](./assets/posts/最简单的Loader/image-20260604225806142.png)
 
 ```
 从第一个 UUID 开始，一个个处理：
@@ -172,7 +172,7 @@ DWORD_PTR ptr = (DWORD_PTR)alloc_mem;
 
 上面是把shellcode伪装成UUID这个是伪装成一堆IPV4的地址字符串
 
-![image-20260604231418593](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260604231418593.png)
+![image-20260604231418593](./assets/posts/最简单的Loader/image-20260604231418593.png)
 
 比如第一个252.72.131.228 对应十六进制就是
 
@@ -187,11 +187,11 @@ DWORD_PTR ptr = (DWORD_PTR)alloc_mem;
 
 观察到多出来一些变量
 
-![image-20260604231627725](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260604231627725.png)
+![image-20260604231627725](./assets/posts/最简单的Loader/image-20260604231627725.png)
 
 `Terminator` 是给 `RtlIpv4StringToAddressA` 用的，它可以接收解析停止的位置。
 
- 核心循环：![image-20260604231842223](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260604231842223.png)
+ 核心循环：![image-20260604231842223](./assets/posts/最简单的Loader/image-20260604231842223.png)
 
 把每一个 IPv4 字符串转成 4 字节，然后连续写入 alloc_mem。
 
@@ -231,7 +231,7 @@ RtlEthernetStringToAddressA((PCSTR)MAC[i], &Terminator, (DL_EUI48*)ptr);
 > Win32 API 是更常见、更上层的接口
 > Nt* API 更接近 ntdll 层，属于 Native API
 
-![image-20260605102133618](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260605102133618.png)
+![image-20260605102133618](./assets/posts/最简单的Loader/image-20260605102133618.png)
 
 用 key 派生出 `AES-256` 密钥。然后把 `AESshellcode` 原地解密成原始 payload
 
@@ -239,7 +239,7 @@ RtlEthernetStringToAddressA((PCSTR)MAC[i], &Terminator, (DL_EUI48*)ptr);
 - `hHash`负责把`key`做`SHA-256`
 - `hKey`负责把真正用于`AES`解密
 
-![image-20260605103652689](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260605103652689.png)
+![image-20260605103652689](./assets/posts/最简单的Loader/image-20260605103652689.png)
 
 获取加密上下文
 
@@ -247,29 +247,29 @@ RtlEthernetStringToAddressA((PCSTR)MAC[i], &Terminator, (DL_EUI48*)ptr);
 
 `CRYPT_VERIFYCONTEXT`表示临时用途，不需要访问持久密钥容器
 
-![image-20260605103915324](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260605103915324.png)
+![image-20260605103915324](./assets/posts/最简单的Loader/image-20260605103915324.png)
 
 创建`SHA-256`的哈希对象
 
 不是直接拿`AESkey`做AES密钥，而是对它先做`SHA-256`
 
-![image-20260605104107978](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260605104107978.png)
+![image-20260605104107978](./assets/posts/最简单的Loader/image-20260605104107978.png)
 
 把传进来的key喂给SHA-256 哈希对象
 
-![image-20260605104210819](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260605104210819.png)
+![image-20260605104210819](./assets/posts/最简单的Loader/image-20260605104210819.png)
 
 根据前面的SHA-256哈希结果，派生出一个AES-256密钥
 
-![image-20260605104658792](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260605104658792.png)
+![image-20260605104658792](./assets/posts/最简单的Loader/image-20260605104658792.png)
 
 核心解密步骤，把shellcode指向的数据进行AES解密
 
-![image-20260605105327227](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260605105327227.png)
+![image-20260605105327227](./assets/posts/最简单的Loader/image-20260605105327227.png)
 
 AES解密：
 
-![image-20260605105507335](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260605105507335.png)
+![image-20260605105507335](./assets/posts/最简单的Loader/image-20260605105507335.png)
 
 ## Using Sockets
 
@@ -277,7 +277,7 @@ AES解密：
 
 前面的版本都是在main里执行：申请内存、写入shellcode、修改权限、创建线程、等待线程
 
- 而void RunShellcode 不管shellcode是从数组来的、AES解密来的还是socket网络接收来的，只要把shellcode的地址和长度传进来，这个函数就可以执行它![image-20260605105925386](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260605105925386.png)
+ 而void RunShellcode 不管shellcode是从数组来的、AES解密来的还是socket网络接收来的，只要把shellcode的地址和长度传进来，这个函数就可以执行它![image-20260605105925386](./assets/posts/最简单的Loader/image-20260605105925386.png)
 
 接收的两个参数：从shellcode这个地址开始一共有shellcodelen个字节需要处理
 
