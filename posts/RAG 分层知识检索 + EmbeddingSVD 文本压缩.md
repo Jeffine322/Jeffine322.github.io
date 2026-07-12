@@ -1,4 +1,10 @@
-[TOC]
+---
+title: RAG分层知识检索 + EmbeddingSVD文本压缩
+date: 2026-07-12
+tag: 其他
+summary: 让 Agent 从海量知识中，更准确地找到真正需要的内容
+cover: ./assets/cat-smile.png
+---
 
 
 
