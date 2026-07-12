@@ -158,7 +158,7 @@ Rerank 再从 100 个中选择 10 个
 
 # 代码实现
 
-![image-20260710222118624](./assets/image-20260710222118624.png)
+![image-20260710222118624](./assets/posts/RAG分层知识检索和EmbeddingSVD文本压缩/image-20260710222118624.png)
 
 首先是调用embeding模型
 
