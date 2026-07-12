@@ -164,31 +164,31 @@ Rerank 再从 100 个中选择 10 个
 
 
 
-![image-20260710222036511](./assets/image-20260710222036511.png)
+![image-20260710222036511](./assets/posts/RAG分层知识检索和EmbeddingSVD文本压缩/image-20260710222036511.png)
 
 得到了一个向量
 
 
 
-![image-20260710222539350](./assets/image-20260710222539350.png)
+![image-20260710222539350](./assets/posts/RAG分层知识检索和EmbeddingSVD文本压缩/image-20260710222539350.png)
 
 封装成一个函数
 
 
 
-![image-20260710223147732](./assets/image-20260710223147732.png)
+![image-20260710223147732](./assets/posts/RAG分层知识检索和EmbeddingSVD文本压缩/image-20260710223147732.png)
 
 然后使用pysbd对文本进行分句
 
 
 
-![image-20260710223758380](./assets/image-20260710223758380.png)
+![image-20260710223758380](./assets/posts/RAG分层知识检索和EmbeddingSVD文本压缩/image-20260710223758380.png)
 
 再把句子embeding一遍后得到一个矩阵。
 
 
 
-![image-20260710224216902](./assets/image-20260710224216902.png)
+![image-20260710224216902](./assets/posts/RAG分层知识检索和EmbeddingSVD文本压缩/image-20260710224216902.png)
 
 然后对得到的矩阵进行SVD奇异值分解，选取top-k的句子，k的选取为总奇异值之和比上top-k给奇异值之和大于95%,来确定top-k。将k个句子作为摘要，发现这段话都很重要，文本太短了，都比较重要。换一个超长文本
 
@@ -196,7 +196,7 @@ Rerank 再从 100 个中选择 10 个
 
 # 效果
 
-![image-20260710224713380](./assets/image-20260710224713380.png)
+![image-20260710224713380](./assets/posts/RAG分层知识检索和EmbeddingSVD文本压缩/image-20260710224713380.png)
 
 在 86 个句子中，算法最终保留了 79 个句子。结果表明，该方法能够保留原文中的主要信息和大部分细节，但压缩幅度较小，生成结果仍然偏长。
 
@@ -204,19 +204,19 @@ Rerank 再从 100 个中选择 10 个
 
 
 
-![image-20260710225158133](./assets/image-20260710225158133.png)
+![image-20260710225158133](./assets/posts/RAG分层知识检索和EmbeddingSVD文本压缩/image-20260710225158133.png)
 
 文本越长效果越明显
 
 
 
-![image-20260710225445796](./assets/image-20260710225445796.png)
+![image-20260710225445796](./assets/posts/RAG分层知识检索和EmbeddingSVD文本压缩/image-20260710225445796.png)
 
 找了一个小说的前6章复制进去
 
 
 
-![image-20260710225556988](./assets/image-20260710225556988.png)
+![image-20260710225556988](./assets/posts/RAG分层知识检索和EmbeddingSVD文本压缩/image-20260710225556988.png)
 
 对于长文本的效果会显著很多，971句提取出来702句
 
