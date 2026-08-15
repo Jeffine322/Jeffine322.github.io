@@ -1,6 +1,6 @@
 ---
 title: 最简单的Loader
-date: 2026-06-022
+date: 2026-06-22
 tag: 免杀
 summary: 读懂工作原理
 cover: ./assets/cat-angry.png
