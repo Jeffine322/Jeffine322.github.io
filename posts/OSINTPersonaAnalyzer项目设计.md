@@ -3,7 +3,7 @@ title: OSINTPersonaAnalyzer 项目设计
 date: 2025-04-28
 tag: 开源
 summary: 基于大模型的开源情报（OSINT）人物分析工具：项目结构、挖掘流程、提示词设计与数据采集。
-cover: ./assets/cat-cry.png
+cover: ./assets/cat-smile.png
 ---
 
 # OSINTPersonaAnalyzer 项目设计
