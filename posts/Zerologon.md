@@ -1,6 +1,14 @@
-# **ZeroLogon**
+---
+title: Zerologon
+date: 2026-11-14
+tag: 渗透
+summary: 靶场 
+cover: ./assets/cat-cry.png
+---
 
-搜索一下这个**ZeroLogon**，大概了解一下就是利用CVE-2020-1472
+# ZeroLogon
+
+搜索一下这个ZeroLogon，大概了解一下就是利用CVE-2020-1472
 
 （在不持有任何有效凭据的情况下直接将域控器的机器账户密码重置为空，然后以域控的身份导出域内所有密码哈希，最终接管整个域）![image-20261114215329514](./assets/posts/Zerologon.assets/image-20261114215329514.png)
 
