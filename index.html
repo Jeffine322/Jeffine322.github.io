@@ -8,23 +8,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
-    /*
-      Scholar's Notes v29
-      只需要把这个 index.html 放在仓库根目录。
-      图片全部读取 ./assets/ 里的固定文件名：
-      cat-alert.png / cat-angry.png / cat-cry.png / cat-head.png / cat-mini.png
-      cat-note.png / cat-peek.png / cat-small.png / cat-smile.png
-      clip-pink.png / clip-blue.png / clip-yellow.png / clip-purple.png
-      footer-ribbon-cat.png / hero-cat.png / keep-note-sticker.png / logo-cat.png
-      note-self-bg.png / paper-left-edge.png / right-updates-paper-bg.png
-      tape-pink.png / tape-blue.png / tape-yellow.png / tape-purple.png
-
-      本版调整：
-      1. 最近文章三张卡片顶部仍使用 clip-pink / clip-blue / clip-yellow。
-      2. 首页四个主题入口改为直接使用 topic-paper-pink/blue/yellow/purple 四张手撕纸素材。
-      3. 近期更新与 Note to self 继续读取对应背景图 assets/right-updates-paper-bg.png 与 assets/note-self-bg.png。
-      4. 提高“近期更新”文字可读性，增加柔和底色。
-    */
 
     :root{
       --bg:#f8f2e8;
@@ -76,7 +59,6 @@
       padding:14px 0 28px;
     }
 
-    /* 顶部 */
     .topbar{
       height:96px;
       display:flex;
@@ -638,7 +620,6 @@
       color:#4c2e20;
       background-image:url("./assets/topic-paper-purple.png");
     }
-    /* 近期更新：使用素材库里的 right-updates-paper-bg.png，做成参考图那种撕边记事纸效果 */
     .recent-card{
       position:relative;
       min-height:0;
@@ -905,18 +886,6 @@
   
 
 
-
-
-
-
-/* ===============================
-   v49 修正：hero 背景直接挂到 .hero 本体
-   原因：原代码 .hero::before 已经用来做左侧孔洞，
-   不能再拿 ::before 放大纸背景，否则会冲突。
-   这版直接把 hero-main-paper-bg.png 作为 .hero 的 background-image，
-   覆盖整个红框区域，不会只挂到标题小块。
-   =============================== */
-
 /* 首页红框主视觉整块 */
 .hero{
   position:relative !important;
@@ -931,7 +900,6 @@
   clip-path:none !important;
 }
 
-/* 这张素材本身已经带左侧孔洞和胶带，所以关掉旧 CSS 画出来的孔洞/胶带，避免叠两层 */
 .hero::before,
 .hero::after{
   content:none !important;
@@ -954,7 +922,6 @@
   box-shadow:none !important;
 }
 
-/* 近期更新不再叠加新背景，保留原本样式 */
 .recent-updates::before,
 .updates-card::before,
 .sidebar-updates::before,
@@ -992,13 +959,6 @@ footer > *{
 }
 
 
-/* ===============================
-   v50 修正
-   1. hero 红框内容整体上移一点
-   2. 右侧“近期更新”改为直接使用 right-updates-paper-bg.png
-   3. hero 里的小猫位置改到右侧，贴近参考图
-   =============================== */
-
 /* 主视觉整块：整体内容上移 */
 .hero{
   padding-top: 30px !important;
@@ -1033,7 +993,6 @@ footer > *{
   margin-top: 6px !important;
 }
 
-/* 小猫按参考图放到右上偏中的位置，不放左边 */
 .hero-peek{
   right: 18px !important;
   top: 92px !important;
@@ -1043,7 +1002,6 @@ footer > *{
   transform: rotate(2deg) !important;
 }
 
-/* 近期更新：使用你给的素材 right-updates-paper-bg.png，不再用错误素材名 */
 .recent-card{
   padding: 38px 24px 24px 54px !important;
 }
@@ -1065,12 +1023,6 @@ footer > *{
   padding: 7px 0 8px !important;
 }
 
-
-/* ===============================
-   v51 修正
-   1. hero 大背景下边缘继续向下延长，到用户红线位置附近
-   2. hero 小猫头从左边移到右边，贴近大猫右侧区域
-   =============================== */
 .hero{
   min-height: 505px !important;
   padding-top: 26px !important;
@@ -1108,13 +1060,6 @@ footer > *{
 }
 
 
-/* ===============================
-   v52 紧急修正
-   1. 近期更新列表文字放大
-   2. 强制修正小猫头位置，不再留在左侧
-   =============================== */
-
-/* 近期更新文字放大 */
 .recent-card .side-title{
   font-size: 34px !important;
   letter-spacing: 4px !important;
@@ -1148,7 +1093,6 @@ footer > *{
   height: 54px !important;
 }
 
-/* hero 小猫头强制放到右边，避免还停在左侧 */
 .hero .hero-peek,
 .hero-peek{
   position: absolute !important;
@@ -1164,7 +1108,6 @@ footer > *{
   pointer-events: none !important;
 }
 
-/* 如果之前有 left 样式或 transform 残留，继续强制覆盖 */
 section.hero > img.hero-peek{
   left: auto !important;
   right: 10px !important;
@@ -1208,7 +1151,7 @@ section.hero > img.hero-peek{
           <div class="hero-grid">
             <div class="hero-copy">
               <h1 class="hero-title">思考·记录·成长</h1>
-              <p class="hero-desc">记录学习路上的点滴，也记录每一次理解与卡住。</p>
+              <p class="hero-desc">sun.sun.sun</p>
               <p class="hero-en">Ch.1 —— My Learning Blog / 个人学习簿 ♡</p>
             </div>
             <img class="hero-cat" src="./assets/hero-cat.png" alt="hero cat">
@@ -1297,7 +1240,7 @@ section.hero > img.hero-peek{
 
         <section id="about" class="side-card self-card">
           <h2 class="side-title">Note to self ♥</h2>
-          <p>慢慢来<br>每天进步一点点，<br>未来会感谢现在的自己！</p>
+          <p>Good good study, day day up!</p>
           <img class="note-cat" src="./assets/cat-note.png" alt="">
         </section>
       </aside>
@@ -1317,25 +1260,6 @@ section.hero > img.hero-peek{
   </div>
 
   <script>
-    /*
-      自动读取文章说明：
-      1. 在仓库根目录新建 posts 文件夹。
-      2. 把笔记放进 posts 文件夹，建议用 .md 文件。
-      3. 每篇笔记开头写分类信息：
-         ---
-         title: Web / SRC 信息搜集到 API 分析学习流程
-         date: 2026-05-31
-         tag: 渗透
-         summary: 这里写一句摘要
-         cover: ./assets/cat-cry.png
-         ---
-      4. 首页会按 tag 分类显示：
-         - 免杀卡片：显示最新一篇 tag: 免杀
-         - 渗透卡片：显示最新一篇 tag: 渗透
-         - 开源卡片：显示最新一篇 tag: 开源
-      5. 如果某个分类没有笔记，卡片和猫图保留，文字留空。
-      6. 右侧“近期更新”按时间倒序显示最近 5 篇笔记标题。
-    */
 
     const BLOG_CONFIG = {
       owner: "Jeffine322",
@@ -1553,7 +1477,6 @@ section.hero > img.hero-peek{
 
 
 <script>
-/* v52：强制把 hero 小猫头挪到右边，避免缓存或旧 CSS 继续把它放左边 */
 (function(){
   function fixHeroPeek(){
     document.querySelectorAll(".hero-peek").forEach(function(img){
